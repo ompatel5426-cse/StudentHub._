@@ -1,0 +1,19 @@
+
+    Project name = StudentHub
+
+    pages names :
+
+    ------------------------
+
+    1. index
+    2. about
+    3. login
+    4. dashboard
+    5. profile
+    6. attendance
+    7. courses
+    8. study-materials
+    9. assignments
+    10. timetable
+    11. results
+    12. notices
