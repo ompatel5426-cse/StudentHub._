@@ -99,8 +99,10 @@ button:hover{
     line-height:30px;
 }
 
-.hero-image{
-    flex:1;
+.hero-image img{
+    width:100%;
+    max-width:500px;
+    height:auto;
 }
 
 /* Cards */
