@@ -1,3 +1,5 @@
+
+
 /* Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
@@ -270,4 +272,55 @@ footer{
     text-align:center;
     padding:30px;
     margin-top:60px;
+}
+
+/* ===== Login Page ===== */
+
+.login-section{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 60px;
+}
+
+.login-left{
+    width: 45%;
+}
+
+.login-left img{
+    width: 100%;
+}
+
+.login-right{
+    width: 35%;
+}
+
+.login-right form{
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px lightgray;
+}
+
+.login-right h2{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-right input{
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.options{
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+}
+
+.login-right button{
+    width: 100%;
 }
