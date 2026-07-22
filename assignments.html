@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentHub | Study Materials</title>
-    
+    <title>StudentHub | Assignments</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
 
-<!--========== HEADER ==========-->
+<!--================ HEADER ================-->
 
 <header>
 
@@ -31,139 +29,123 @@
 
 </header>
 
-<!--========== PAGE TITLE ==========-->
+<!--================ PAGE TITLE ================-->
 
 <section class="page-title">
 
-    <h1>Study Materials</h1>
+    <h1>Assignments</h1>
 
     <p>
 
-        Download notes, PDFs, presentations and video lectures.
+        View, upload and track all your assignments.
 
     </p>
 
 </section>
 
-<!--========== MATERIAL CARDS ==========-->
+<!--================ SUMMARY ================-->
 
-<section class="materials">
+<section class="cards">
 
-    <div class="material-card">
+    <div class="card">
 
-        <img src="images/pdf.png" alt="PDF">
+        <h2>8</h2>
 
-        <h2>Web Development Notes</h2>
-
-        <p>Complete HTML, CSS & JavaScript Notes.</p>
-
-        <button>Download PDF</button>
+        <p>Total Assignments</p>
 
     </div>
 
-    <div class="material-card">
+    <div class="card">
 
-        <img src="images/pdf.png" alt="PDF">
+        <h2>5</h2>
 
-        <h2>Java Programming</h2>
-
-        <p>Core Java Programming Notes.</p>
-
-        <button>Download PDF</button>
+        <p>Submitted</p>
 
     </div>
 
-    <div class="material-card">
+    <div class="card">
 
-        <img src="images/pdf.png" alt="PDF">
+        <h2>3</h2>
 
-        <h2>Database Management</h2>
-
-        <p>DBMS Complete Notes.</p>
-
-        <button>Download PDF</button>
+        <p>Pending</p>
 
     </div>
 
-    <div class="material-card">
+    <div class="card">
 
-        <img src="images/pdf.png" alt="PDF">
+        <h2>85%</h2>
 
-        <h2>Operating System</h2>
-
-        <p>OS Unit Wise Notes.</p>
-
-        <button>Download PDF</button>
-
-    </div>
-
-    <div class="material-card">
-
-        <img src="images/pdf.png" alt="PDF">
-
-        <h2>Computer Networks</h2>
-
-        <p>Networking Concepts PDF.</p>
-
-        <button>Download PDF</button>
-
-    </div>
-
-    <div class="material-card">
-
-        <img src="images/pdf.png" alt="PDF">
-
-        <h2>Python Programming</h2>
-
-        <p>Python Basics & Advanced Notes.</p>
-
-        <button>Download PDF</button>
+        <p>Average Marks</p>
 
     </div>
 
 </section>
 
-<!--========== VIDEO LECTURES ==========-->
+<!--================ ASSIGNMENT TABLE ================-->
 
-<section class="videos">
+<section class="assignment-table">
 
-    <h2>Video Lectures</h2>
+    <h2>Assignment List</h2>
 
     <table border="1" cellpadding="10">
 
         <tr>
 
             <th>Subject</th>
-            <th>Faculty</th>
-            <th>Duration</th>
-            <th>Watch</th>
+            <th>Assignment</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Marks</th>
 
         </tr>
 
         <tr>
 
             <td>Web Development</td>
-            <td>Prof. Sharma</td>
-            <td>45 Minutes</td>
-            <td><button>Watch</button></td>
+            <td>Create Portfolio Website</td>
+            <td>20 July 2026</td>
+            <td>Pending</td>
+            <td>-</td>
 
         </tr>
 
         <tr>
 
             <td>Java Programming</td>
-            <td>Prof. Patel</td>
-            <td>60 Minutes</td>
-            <td><button>Watch</button></td>
+            <td>Inheritance Program</td>
+            <td>18 July 2026</td>
+            <td>Submitted</td>
+            <td>18 / 20</td>
 
         </tr>
 
         <tr>
 
-            <td>DBMS</td>
-            <td>Prof. Mehta</td>
-            <td>50 Minutes</td>
-            <td><button>Watch</button></td>
+            <td>Database Management</td>
+            <td>Normalization Report</td>
+            <td>22 July 2026</td>
+            <td>Pending</td>
+            <td>-</td>
+
+        </tr>
+
+        <tr>
+
+            <td>Operating System</td>
+            <td>CPU Scheduling</td>
+            <td>15 July 2026</td>
+            <td>Submitted</td>
+            <td>20 / 20</td>
+
+        </tr>
+
+        <tr>
+
+            <td>Computer Networks</td>
+            <td>OSI Model</td>
+            <td>24 July 2026</td>
+            <td>Pending</td>
+            <td>-</td>
 
         </tr>
 
@@ -171,75 +153,78 @@
 
 </section>
 
-<!--========== RECOMMENDED BOOKS ==========-->
+<!--================ UPLOAD ================-->
 
-<section class="books">
+<section class="upload">
 
-    <h2>Recommended Books</h2>
+    <h2>Upload Assignment</h2>
+
+    <form>
+
+        <label>Select Subject</label><br><br>
+
+        <select>
+
+            <option>Web Development</option>
+            <option>Java Programming</option>
+            <option>Database Management</option>
+            <option>Operating System</option>
+            <option>Computer Networks</option>
+
+        </select>
+
+        <br><br>
+
+        <label>Select File</label><br><br>
+
+        <input type="file">
+
+        <br><br>
+
+        <button type="submit">
+
+            Upload Assignment
+
+        </button>
+
+    </form>
+
+</section>
+
+<!--================ RECENT SUBMISSIONS ================-->
+
+<section class="recent">
+
+    <h2>Recent Submissions</h2>
 
     <ul>
 
-        <li>📘 HTML & CSS – Jon Duckett</li>
+        <li>✔ Java Assignment - Submitted Successfully</li>
 
-        <li>📙 Head First Java</li>
+        <li>✔ Operating System Assignment - Submitted Successfully</li>
 
-        <li>📗 Database System Concepts</li>
-
-        <li>📕 Operating System Principles</li>
-
-        <li>📓 Computer Networks – Forouzan</li>
-
-        <li>📒 Python Crash Course</li>
+        <li>✔ Python Assignment - Submitted Successfully</li>
 
     </ul>
 
 </section>
 
-<!--========== DOWNLOAD HISTORY ==========-->
+<!--================ IMPORTANT NOTICE ================-->
 
-<section class="history">
+<section class="notice">
 
-    <h2>Recent Downloads</h2>
+    <h2>Important Notice</h2>
 
-    <table border="1" cellpadding="10">
+    <p>
 
-        <tr>
+        Submit your assignments before the due date.
+        Late submissions may result in mark deductions.
 
-            <th>Date</th>
-            <th>Material</th>
-            <th>Status</th>
-
-        </tr>
-
-        <tr>
-
-            <td>10 July 2026</td>
-            <td>HTML Notes</td>
-            <td>Downloaded</td>
-
-        </tr>
-
-        <tr>
-
-            <td>09 July 2026</td>
-            <td>Java Notes</td>
-            <td>Downloaded</td>
-
-        </tr>
-
-        <tr>
-
-            <td>08 July 2026</td>
-            <td>DBMS Notes</td>
-            <td>Downloaded</td>
-
-        </tr>
-
-    </table>
+    </p>
 
 </section>
 
-<!--========== QUICK LINKS ==========-->
+<!--================ QUICK LINKS ================-->
 
 <section class="quick-links">
 
@@ -249,8 +234,8 @@
         <button>Courses</button>
     </a>
 
-    <a href="assignments.html">
-        <button>Assignments</button>
+    <a href="study-materials.html">
+        <button>Study Materials</button>
     </a>
 
     <a href="results.html">
@@ -259,7 +244,7 @@
 
 </section>
 
-<!--========== FOOTER ==========-->
+<!--================ FOOTER ================-->
 
 <footer>
 
