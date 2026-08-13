@@ -246,6 +246,14 @@ table td{
     width:100%;
 }
 
+/* Course Icon */
+
+.course-icon{
+    font-size: 70px;      /* emoji ka size */
+    text-align: center;
+    margin-bottom: 15px;
+}
+
 /* ================= SUMMARY ================= */
 
 .summary h2,
@@ -415,6 +423,14 @@ footer{
     .materials{
         grid-template-columns: 1fr;
     }
+}
+
+/* Study Material Emoji */
+
+.pdf-emoji{
+    font-size: 70px;
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 /* ===== Menu Box ===== */
@@ -691,4 +707,115 @@ footer{
     .story-points {
         flex-direction: column;
     }
+}
+
+/* ===== Dark Theme ===== */
+
+body.dark{
+    background:#121212;
+    color:white;
+}
+
+body.dark header{
+    background:#1f1f1f;
+}
+
+body.dark nav a{
+    color:white;
+}
+
+body.dark .card,
+body.dark .box,
+body.dark table,
+body.dark footer{
+    background:#1f1f1f;
+    color:white;
+}
+
+body.dark table td,
+body.dark table th{
+    border:1px solid #444;
+}
+
+#themeBtn{
+    background:#6C63FF;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+#themeBtn:hover{
+    background:#5148d8;
+}
+
+/* ===== Notification Banner ===== */
+
+.banner{
+    background:#6C63FF;
+    color:white;
+    padding:12px 20px;
+    text-align:center;
+    font-weight:500;
+    position:relative;
+}
+
+#closeBanner{
+    position:absolute;
+    right:20px;
+    top:10px;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:bold;
+}
+
+#closeBanner:hover{
+    color:#ddd;
+}
+
+/* ===== Common Table Design ===== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Table Header */
+table th {
+    background: linear-gradient(135deg, #6c63ff, #5148d8);
+    color: white;
+    padding: 16px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Table Cells */
+table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
+    color: #333;
+}
+
+/* Alternate Rows */
+table tr:nth-child(even) {
+    background: #f8f8ff;
+}
+
+/* Hover Effect */
+table tbody tr:hover {
+    background: #eeeeff;
+    transition: 0.3s;
+}
+
+/* Last Row Border Remove */
+table tr:last-child td {
+    border-bottom: none;
 }

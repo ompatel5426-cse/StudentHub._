@@ -10,6 +10,12 @@
 </head>
 <body>
 
+    <!-- ================= NOTIFICATION BANNER ================= -->
+<div id="banner" class="banner">
+    📢 New Assignments Uploaded! Check the Assignments page.
+    <span id="closeBanner">✖</span>
+</div>
+
     <!-- ================= HEADER ================= -->
 
     <header>
@@ -32,8 +38,12 @@
 
             <a href="login.html">Login</a>
 
+            <a href="registration.html">Register</a>
+
         </nav>
 
+        <button id="themeBtn">🌙</button>
+        
     </header>
 
     <!-- ================= HERO ================= -->
@@ -57,7 +67,10 @@
             timetable, notices and results.
         </p>
 
-        <button>Explore Now →</button>
+        <a href="registration.html">
+            <button>Register Now →</button>
+        </a>
+
     </div>
 
     <div class="hero-image">
@@ -229,5 +242,6 @@
 
     </footer>
 
+    <script src="script.js"></script>
 </body>
 </html>
