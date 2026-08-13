@@ -17,3 +17,4 @@
     10. timetable
     11. results
     12. notices
+    13. registration
