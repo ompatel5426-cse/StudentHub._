@@ -852,3 +852,341 @@ table tr:last-child td {
     color: #555;
     font-size: 14px;
 }
+
+/* ================= COURSE SEARCH & FILTER ================= */
+
+.course-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.course-controls input,
+.course-controls select {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.course-controls input {
+    flex: 1;
+}
+
+.course-controls select {
+    width: 250px;
+}
+
+
+/* Mobile */
+
+@media(max-width:768px) {
+
+    .course-controls {
+        flex-direction: column;
+    }
+
+    .course-controls select {
+        width: 100%;
+    }
+
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+   ===================================================== */
+
+
+/* ================= TABLET ================= */
+
+@media (max-width: 1000px) {
+
+    header {
+        padding: 15px 30px;
+    }
+
+    nav {
+        gap: 12px;
+    }
+
+    nav a {
+        font-size: 14px;
+    }
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .courses {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .team-members {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    footer {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px) {
+
+    /* ---------- BODY ---------- */
+
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+
+    /* ---------- HEADER ---------- */
+
+    header {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .logo {
+        text-align: center;
+    }
+
+    nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 10px;
+    }
+
+    nav a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 8px;
+    }
+
+
+    /* ---------- PAGE TITLE ---------- */
+
+    .page-title {
+        padding: 35px 15px;
+        text-align: center;
+    }
+
+    .page-title h1 {
+        font-size: 32px;
+    }
+
+    .page-title p {
+        font-size: 15px;
+    }
+
+
+    /* ---------- HERO ---------- */
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .hero-text,
+    .hero-content,
+    .hero-image {
+        width: 100%;
+    }
+
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    .hero-image img {
+        max-width: 80%;
+    }
+
+
+    /* ---------- CARDS ---------- */
+
+    .cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .card {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    /* ---------- COURSES ---------- */
+
+    .courses {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .course-card {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    /* ---------- COURSE SEARCH ---------- */
+
+    .course-controls {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .course-controls input,
+    .course-controls select {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    /* ---------- TABLES ---------- */
+
+    table {
+        width: 100%;
+        min-width: 600px;
+    }
+
+    .assignment-table,
+    .attendance-table,
+    .monthly-record,
+    .summary,
+    .marks,
+    .top-subjects,
+    .videos,
+    .history,
+    .timetable,
+    .faculty,
+    .profile-details,
+    .academic,
+    .contact,
+    .latest-notices {
+        overflow-x: auto;
+    }
+
+
+    /* ---------- PROFILE ---------- */
+
+    .profile {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-card,
+    .profile-stats,
+    .profile-details {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .profile-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+
+    /* ---------- TEAM ---------- */
+
+    .team-members {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* ---------- LOGIN ---------- */
+
+    .login-section {
+        flex-direction: column;
+        padding: 30px 15px;
+    }
+
+    .login-left,
+    .login-right {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    /* ---------- MATERIALS ---------- */
+
+    .materials {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* ---------- FOOTER ---------- */
+
+    footer {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 25px;
+        padding: 30px 20px;
+    }
+
+    footer ul {
+        text-align: center;
+    }
+
+}
+
+
+/* ================= SMALL PHONE ================= */
+
+@media (max-width: 480px) {
+
+    header {
+        padding: 12px;
+    }
+
+    .logo h2 {
+        font-size: 22px;
+    }
+
+    nav a {
+        font-size: 14px;
+    }
+
+
+    .page-title h1 {
+        font-size: 28px;
+    }
+
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+
+    .profile-stats {
+        grid-template-columns: 1fr;
+    }
+
+
+    .card h2 {
+        font-size: 24px;
+    }
+
+
+    button {
+        width: 100%;
+    }
+
+
+    .quick-links button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+}
+

@@ -45,103 +45,33 @@
 
 <!--================ COURSE CARDS ================-->
 
-<section class="courses">
+<section class="course-section">
 
-    <div class="course-card">
+    <div class="course-controls">
 
-        <div class="course-icon">🌐</div>
+        <input
+            type="text"
+            id="searchCourse"
+            placeholder="Search course..."
+        >
 
+        <select id="filterCourse">
 
-        <h2>Web Development</h2>
+            <option value="all">All Courses</option>
 
-        <p><strong>Faculty:</strong> Prof. Sharma</p>
+            <option value="high">
+                Progress 80% or More
+            </option>
 
-        <p><strong>Duration:</strong> 16 Weeks</p>
+            <option value="low">
+                Progress Below 80%
+            </option>
 
-        <p><strong>Progress:</strong> 80%</p>
-
-        <button>View Details</button>
-
-    </div>
-
-    <div class="course-card">
-
-        <div class="course-icon">☕</div>
-
-        <h2>Java Programming</h2>
-
-        <p><strong>Faculty:</strong> Prof. Patel</p>
-
-        <p><strong>Duration:</strong> 18 Weeks</p>
-
-        <p><strong>Progress:</strong> 75%</p>
-
-        <button>View Details</button>
+        </select>
 
     </div>
 
-    <div class="course-card">
-
-        <div class="course-icon">🗄️</div>
-        
-        <h2>Database Management</h2>
-
-        <p><strong>Faculty:</strong> Prof. Mehta</p>
-
-        <p><strong>Duration:</strong> 14 Weeks</p>
-
-        <p><strong>Progress:</strong> 90%</p>
-
-        <button>View Details</button>
-
-    </div>
-
-    <div class="course-card">
-
-        <div class="course-icon">💻</div>
-
-        <h2>Operating System</h2>
-
-        <p><strong>Faculty:</strong> Prof. Shah</p>
-
-        <p><strong>Duration:</strong> 15 Weeks</p>
-
-        <p><strong>Progress:</strong> 70%</p>
-
-        <button>View Details</button>
-
-    </div>
-
-    <div class="course-card">
-
-        <div class="course-icon">📡</div>
-
-        <h2>Computer Networks</h2>
-
-        <p><strong>Faculty:</strong> Prof. Desai</p>
-
-        <p><strong>Duration:</strong> 16 Weeks</p>
-
-        <p><strong>Progress:</strong> 85%</p>
-
-        <button>View Details</button>
-
-    </div>
-
-    <div class="course-card">
-
-        <div class="course-icon">🐍</div>
-
-        <h2>Python Programming</h2>
-
-        <p><strong>Faculty:</strong> Prof. Joshi</p>
-
-        <p><strong>Duration:</strong> 12 Weeks</p>
-
-        <p><strong>Progress:</strong> 95%</p>
-
-        <button>View Details</button>
-
+    <div id="courseContainer" class="courses">
     </div>
 
 </section>
@@ -231,6 +161,8 @@
     </p>
 
 </footer>
+
+<script src="script.js"></script>
 
 </body>
 </html>

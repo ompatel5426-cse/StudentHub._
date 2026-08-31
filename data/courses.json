@@ -1,0 +1,44 @@
+[
+    {
+        "icon": "🌐",
+        "name": "Web Development",
+        "faculty": "Prof. Sharma",
+        "duration": "16 Weeks",
+        "progress": 80
+    },
+    {
+        "icon": "☕",
+        "name": "Java Programming",
+        "faculty": "Prof. Patel",
+        "duration": "18 Weeks",
+        "progress": 75
+    },
+    {
+        "icon": "🗄️",
+        "name": "Database Management",
+        "faculty": "Prof. Mehta",
+        "duration": "14 Weeks",
+        "progress": 90
+    },
+    {
+        "icon": "💻",
+        "name": "Operating System",
+        "faculty": "Prof. Shah",
+        "duration": "15 Weeks",
+        "progress": 70
+    },
+    {
+        "icon": "📡",
+        "name": "Computer Networks",
+        "faculty": "Prof. Desai",
+        "duration": "16 Weeks",
+        "progress": 85
+    },
+    {
+        "icon": "🐍",
+        "name": "Python Programming",
+        "faculty": "Prof. Joshi",
+        "duration": "12 Weeks",
+        "progress": 95
+    }
+]
