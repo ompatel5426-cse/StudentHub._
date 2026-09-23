@@ -1,19 +1,47 @@
 
-// ================= NOTIFICATION =================
+const themeBtn = document.getElementById("themeBtn");
 
-const closeBanner =
-    document.getElementById("closeBanner");
+// Saved theme check
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    themeBtn.textContent = "☀️";
+}
 
-if (closeBanner) {
+// Button click
+themeBtn.addEventListener("click", function () {
 
-    closeBanner.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
 
-        document.getElementById("banner").style.display =
-            "none";
+    if (document.body.classList.contains("dark")) {
+        themeBtn.textContent = "☀️";
+        localStorage.setItem("theme", "dark");
+    } else {
+        themeBtn.textContent = "🌙";
+        localStorage.setItem("theme", "light");
+    }
+
+});
+
+/* ================= NOTIFICATION ================= */
+
+const notification = document.getElementById(
+    "studenthubNotification"
+);
+
+const closeNotification = document.getElementById(
+    "closeStudenthubNotification"
+);
+
+if (closeNotification) {
+
+    closeNotification.addEventListener("click", function () {
+
+        notification.style.display = "none";
 
     });
 
 }
+
 
 // ================= LOGIN =================
 
@@ -263,3 +291,180 @@ if (filterCourse) {
     );
 
 }
+
+/* ================= MODAL ================= */
+
+const modal = document.getElementById(
+    "studenthubModal"
+);
+
+const openModal = document.getElementById(
+    "openStudenthubModal"
+);
+
+const closeModal = document.getElementById(
+    "closeStudenthubModal"
+);
+
+
+if (openModal) {
+
+    openModal.addEventListener("click", function () {
+
+        modal.classList.add("show");
+
+    });
+
+}
+
+
+if (closeModal) {
+
+    closeModal.addEventListener("click", function () {
+
+        modal.classList.remove("show");
+
+    });
+
+}
+
+
+/* Close modal when clicking outside */
+
+if (modal) {
+
+    modal.addEventListener("click", function(event) {
+
+        if (event.target === modal) {
+
+            modal.classList.remove("show");
+
+        }
+
+    });
+
+}
+
+
+/* ================= FAQ ================= */
+
+const faqQuestions = document.querySelectorAll(
+    ".faq-question"
+);
+
+faqQuestions.forEach(function(question) {
+
+    question.addEventListener("click", function() {
+
+        const answer = this.nextElementSibling;
+        const symbol = this.querySelector("span");
+
+        answer.classList.toggle("show");
+
+        if (answer.classList.contains("show")) {
+
+            symbol.textContent = "−";
+
+        } else {
+
+            symbol.textContent = "+";
+
+        }
+
+    });
+
+});
+
+
+/* ================= SLIDER ================= */
+
+const slides = document.querySelectorAll(
+    ".studenthub-slide"
+);
+
+const dots = document.querySelectorAll(
+    ".slider-dot"
+);
+
+const nextButton = document.getElementById(
+    "sliderNext"
+);
+
+const previousButton = document.getElementById(
+    "sliderPrev"
+);
+
+let currentSlide = 0;
+
+
+function showSlide(index) {
+
+    slides.forEach(function(slide) {
+
+        slide.classList.remove("active");
+
+    });
+
+    dots.forEach(function(dot) {
+
+        dot.classList.remove("active");
+
+    });
+
+    slides[index].classList.add("active");
+    dots[index].classList.add("active");
+
+}
+
+
+if (nextButton) {
+
+    nextButton.addEventListener("click", function() {
+
+        currentSlide++;
+
+        if (currentSlide >= slides.length) {
+
+            currentSlide = 0;
+
+        }
+
+        showSlide(currentSlide);
+
+    });
+
+}
+
+
+if (previousButton) {
+
+    previousButton.addEventListener("click", function() {
+
+        currentSlide--;
+
+        if (currentSlide < 0) {
+
+            currentSlide = slides.length - 1;
+
+        }
+
+        showSlide(currentSlide);
+
+    });
+
+}
+
+
+/* Slider dots */
+
+dots.forEach(function(dot, index) {
+
+    dot.addEventListener("click", function() {
+
+        currentSlide = index;
+
+        showSlide(currentSlide);
+
+    });
+
+});
