@@ -1,519 +1,625 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Registration Form</title>
+    <title>StudentHub | Create Account</title>
 
     <style>
 
-        /* =========================
-           GLOBAL STYLING
-        ========================== */
+/* ========================= GLOBAL ========================== */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --navy: #0f172a;
+        --text: #1e293b;
+        --muted: #64748b;
+        --border: #dbe3ef;
+        --light: #f8fafc;
+        --white: #ffffff;
+        --danger: #dc2626;
+        --success: #15803d;
+    }
+
+body {
+        min-height: 100vh;
+
+        font-family:
+        Inter,"Segoe UI",Arial,sans-serif;
+
+        background:
+            radial-gradient(circle at 10% 10%,rgba(37, 99, 235, 0.18),transparent 28%), radial-gradient(circle at 90% 90%, rgba(14, 165, 233, 0.14), transparent 30%), #f1f5f9;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 35px 18px;
         }
+
+
+/* ========================= MAIN CARD ========================== */
+
+.register-card {
+
+        width: min(100%, 1050px);
+        min-height: 650px;
+        display: grid;
+        grid-template-columns: 38% 62%;
+        background: white;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 26px;
+        overflow: hidden;
+        box-shadow: 0 25px 70px rgba(15, 23, 42, 0.14);
+        animation: cardIn 0.65s ease;
+    }
+
+
+@keyframes cardIn 
+{
+
+    from {
+            opacity: 0;
+            transform: translateY(22px) scale(0.98);
+        }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        }
+}
+
+
+/* ========================= LEFT PANEL ========================== */
+
+.intro {
+        position: relative;
+        padding: 45px 38px;
+        color: white;
+        background:
+        linear-gradient(145deg,rgba(15, 23, 42, 0.98),rgba(30, 64, 175, 0.96));
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+}
+
+
+.intro::before,.intro::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.intro::before {
+    width: 280px;
+    height: 280px;
+    right: -120px;
+    top: -100px;
+    background:rgba(96, 165, 250, 0.15);
+}
+
+
+.intro::after {
+
+    width: 230px;
+    height: 230px;
+    left: -110px;
+    bottom: -90px;
+    background:rgba(56, 189, 248, 0.12);
+}
+
+
+/* ========================= BRAND ========================== */
+
+.brand {
+
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.4px;
+}
+
+
+.brand-mark {
+
+     width: 39px;
+    height: 39px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    background: white;
+    color: var(--primary);
+    font-weight: 900;
+    box-shadow:0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+
+/* ========================= INTRO CONTENT ========================== */
+
+.intro-content {
+
+    position: relative;
+    z-index: 1;
+}
+
+.tag {
+
+    display: inline-block;
+    padding: 7px 11px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+
+.intro h1 {
+
+    font-size: clamp(34px, 4vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -1.7px;
+     margin-bottom: 17px;
+}
+
+
+.intro p {
+    max-width: 320px;
+    color:rgba(255,255,255,0.74);
+    line-height: 1.7;
+    font-size: 14px;
+}
+
+
+/* ========================= BENEFITS ========================== */
+
+.benefits {
+
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    display: grid;
+    gap: 13px;
+}
+
+
+.benefits li {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255,255,255,0.88);
+    font-size: 13px;
+}
+
+
+.check {
+
+    width: 25px;
+    height: 25px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background:rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.14);
+}
+
+
+/* ========================= FORM AREA ========================== */
+
+.form-area {
+    padding: 40px 45px;
+    background: white;
+}
+
+
+.form-head {
+    margin-bottom: 25px;
+}
+
+.form-head h2 {
+
+    color: var(--navy);
+    font-size: 28px;
+    letter-spacing: -0.8px;
+    margin-bottom: 7px;
+}
+
+
+.form-head p {
+
+    color: var(--muted);
+    font-size: 13px;
+}
+
+
+/* =========================  PROGRESS BAR  ========================== */
+
+.progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin:18px 0 27px;
+}
+
+
+.progress span {
+
+    height: 4px;
+    flex: 1;
+    border-radius: 99px;
+    background: #e2e8f0;
+}
+
+
+.progress span.active {
+    background:var(--primary);
+}
+
+
+/* ========================= SECTION TITLE ========================== */
+
+.section-title {
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--navy);
+    font-size: 16px;
+    font-weight: 800;
+    margin: 23px 0 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+.section-title:first-child {
+    margin-top: 0;
+}
+
+
+.section-title::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background:#e8edf3;
+}
+
+
+/* ========================= GRID ========================== */
+
+.grid {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+
+.field {
+     margin-bottom: 14px;
+}
+
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+
+/* ========================= LABEL ========================== */
+
+label {
+
+    display: block;
+    margin-bottom: 7px;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* ========================= INPUT ========================== */
+
+.input-wrap {
+    position: relative;
+}
+
+.field-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform:
+    translateY(-50%);
+    color: #94a3b8;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+
+input,select {
+
+    width: 100%;
+    height: 46px;
+    border:1.5px solid var(--border);
+    border-radius: 11px;
+    outline: none;
+    background:var(--light);
+    color:var(--text);
+    padding: 0 13px 0 39px;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+
+select {
+    cursor: pointer;
+    padding-left: 13px;
+}
+
+
+input::placeholder {
+     color: #a8b2c1;
+}
+
+
+input:focus,select:focus {
+     background: white;
+    border-color: #60a5fa;
+    box-shadow:0 0 0 4px rgba(37,99,235,0.09);
+}
+
+
+/* ========================= PASSWORD ========================== */
+
+.password-wrap input {
+    padding-right: 43px;
+}
+
+
+.toggle {
+
+    position: absolute;
+    right: 9px;
+    top: 50%;
+    transform:
+    translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border: 0;
+    background:transparent;
+    color:#64748b;
+    cursor: pointer;
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+
+.toggle:hover {
+
+    background: #eaf1ff;
+    color:var(--primary);
+}
+
+
+/* ========================= ERROR ========================== */
+
+.error {
+
+    min-height: 16px;
+    margin-top: 5px;
+    color:var(--danger);
+    font-size: 11px;
+}
+
+
+/* ========================= GENDER========================== */
+
+.gender-list {
+
+    display: grid;
+    grid-template-columns:
+    repeat(3, 1fr);
+    gap: 9px;
+}
+
+
+.gender-list input {
+    display: none;
+}
+
+
+.gender-list label {
+
+    margin: 0;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--light);
+    color:#64748b;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.2s;
+}
+
+
+.gender-list input:checked + label {
+
+    color:var(--primary-dark);
+    background: #eff6ff;
+    border-color:#60a5fa;
+    box-shadow: 0 3px 12px rgba(37,99,235,0.1);
+}
+
+
+/* ========================= TERMS ========================== */
+
+.terms {
+
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin:8px 0 15px;
+}
+
+
+.terms input {
+    width: 17px;
+    height: 17px;
+    margin-top: 1px;
+    accent-color:var(--primary);
+    cursor: pointer;
+    padding: 0;
+}
+
+
+.terms label {
+
+    margin: 0;
+    color:#64748b;
+    line-height: 1.45;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+
+/* ========================= SUBMIT BUTTON ========================== */
+
+.submit-btn {
+
+    width: 100%;
+    height: 49px;
+    border: 0;
+    border-radius: 11px;
+    background:var(--primary);
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow:0 9px 22pxrgba(37,99,235,0.22);
+}
+
+
+.submit-btn:hover {
+
+    background: var(--primary-dark);
+    transform:translateY(-1px);
+    box-shadow:0 12px 25pxrgba(37,99,235,0.28);
+}
+
+
+.submit-btn:active {
+    transform:translateY(0);
+}
+
+
+/* ========================= SUCCESS ========================== */
+
+.success {
+
+    display: none;
+    margin-top: 13px;
+    padding: 11px 13px;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    background:#f0fdf4;
+    color:var(--success);
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.login-note {
+
+    text-align: center;
+    margin-top: 16px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+
+/* ========================= TABLET ========================== */
+
+@media (max-width: 850px) {
+
+    .register-card {
+        grid-template-columns: 1fr;
+        max-width: 650px;
+    }
+
+    .intro {
+        min-height: 310px;
+        padding: 30px;
+    }
+
+    .benefits {
+        grid-template-columns:1fr 1fr;
+        margin-top: 25px;
+    }
+
+    .form-area {
+        padding: 32px;
+    }
+}
+
+
+/* ========================= MOBILE ========================== */
+
+@media (max-width: 560px) {
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            min-height: 100vh;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #667eea,
-                    #764ba2,
-                    #6a11cb,
-                    #2575fc
-                );
-
-            background-size: 400% 400%;
-            animation: backgroundAnimation 12s ease infinite;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            padding: 30px 15px;
+            padding: 15px;
         }
 
-        @keyframes backgroundAnimation {
-
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+        .intro {
+            padding: 25px;
         }
 
-
-        /* =========================
-           MAIN CONTAINER
-        ========================== */
-
-        .container {
-            width: 600px;
-            max-width: 100%;
-
-            background: rgba(255, 255, 255, 0.95);
-
-            padding: 40px;
-
-            border-radius: 25px;
-
-            box-shadow:
-                0 20px 50px rgba(0, 0, 0, 0.25);
-
-            animation: formAnimation 0.8s ease;
-
-            position: relative;
-            overflow: hidden;
-        }
-
-        @keyframes formAnimation {
-
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-
-        /* Decorative top line */
-
-        .container::before {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-            left: 0;
-
-            width: 100%;
-            height: 6px;
-
-            background: linear-gradient(
-                90deg,
-                #667eea,
-                #764ba2,
-                #2575fc
-            );
-        }
-
-
-        /* =========================
-           HEADER
-        ========================== */
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header .icon {
-            width: 75px;
-            height: 75px;
-
-            margin: auto;
-            margin-bottom: 15px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            border-radius: 50%;
-
-            background: linear-gradient(
-                135deg,
-                #667eea,
-                #764ba2
-            );
-
-            color: white;
-
+        .intro h1 {
             font-size: 35px;
-
-            box-shadow:
-                0 8px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .header h1 {
-            color: #222;
-            font-size: 30px;
-            margin-bottom: 8px;
+        .benefits {
+            grid-template-columns:1fr;
         }
 
-        .header p {
-            color: #777;
-            font-size: 14px;
+        .form-area {
+            padding:25px 20px;
         }
 
-
-        /* =========================
-           FORM GROUP
-        ========================== */
-
-        .form-group {
-            margin-bottom: 20px;
+        .grid {
+            grid-template-columns:1fr;
+            gap: 0;
         }
 
-        .form-group label {
-            display: block;
-
-            margin-bottom: 8px;
-
-            color: #333;
-
-            font-size: 14px;
-
-            font-weight: bold;
+        .field.full {
+            grid-column:auto;
         }
 
-
-        /* =========================
-           INPUT BOX
-        ========================== */
-
-        .input-box {
-            position: relative;
+        .gender-list {
+            grid-template-columns:1fr;
         }
 
-        .input-icon {
-            position: absolute;
-
-            left: 15px;
-            top: 50%;
-
-            transform: translateY(-50%);
-
-            font-size: 18px;
-
-            color: #667eea;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="password"],
-        select {
-
-            width: 100%;
-
-            padding: 13px 15px 13px 45px;
-
-            border: 2px solid #e0e0e0;
-
-            border-radius: 10px;
-
-            font-size: 15px;
-
-            background: #fafafa;
-
-            transition: 0.3s;
-        }
-
-        select {
-            padding-left: 15px;
-        }
-
-        input:focus,
-        select:focus {
-
-            outline: none;
-
-            border-color: #667eea;
-
-            background: white;
-
-            box-shadow:
-                0 0 0 4px rgba(102, 126, 234, 0.12);
-        }
-
-
-        /* =========================
-           PASSWORD SHOW BUTTON
-        ========================== */
-
-        .password-box {
-            position: relative;
-        }
-
-        .password-box input {
-            padding-right: 50px;
-        }
-
-        .show-password {
-
-            position: absolute;
-
-            right: 15px;
-            top: 50%;
-
-            transform: translateY(-50%);
-
-            border: none;
-
-            background: none;
-
-            cursor: pointer;
-
-            font-size: 18px;
-
-            color: #667eea;
-        }
-
-
-        /* =========================
-           SELECT
-        ========================== */
-
-        select {
-            cursor: pointer;
-        }
-
-
-        /* =========================
-           GENDER
-        ========================== */
-
-        .gender-container {
-
-            display: flex;
-
-            gap: 15px;
-
-            flex-wrap: wrap;
-        }
-
-        .gender-option {
-
-            flex: 1;
-
-            min-width: 100px;
-        }
-
-        .gender-option input {
-            display: none;
-        }
-
-        .gender-option label {
-
-            display: block;
-
-            padding: 12px;
-
-            text-align: center;
-
-            border: 2px solid #e0e0e0;
-
-            border-radius: 10px;
-
-            cursor: pointer;
-
-            color: #555;
-
-            transition: 0.3s;
-        }
-
-        .gender-option input:checked + label {
-
-            background: linear-gradient(
-                135deg,
-                #667eea,
-                #764ba2
-            );
-
-            color: white;
-
-            border-color: #667eea;
-
-            box-shadow:
-                0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-
-
-        /* =========================
-           TERMS
-        ========================== */
-
-        .terms {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            margin-top: 10px;
-        }
-
-        .terms input {
-
-            width: 18px;
-            height: 18px;
-
-            cursor: pointer;
-
-            accent-color: #586ecd;
-        }
-
-        .terms label {
-
-            margin: 0;
-
-            font-size: 13px;
-
-            color: #555;
-
-            cursor: pointer;
-        }
-
-
-        /* =========================
-           ERROR MESSAGE
-        ========================== */
-
-        .error {
-
-            color: #e74c3c;
-
-            font-size: 12px;
-
-            margin-top: 6px;
-
-            min-height: 15px;
-        }
-
-
-        /* =========================
-           BUTTON
-        ========================== */
-
-        button[type="submit"] {
-
-            width: 100%;
-
-            padding: 14px;
-
-            border: none;
-
-            border-radius: 10px;
-
-            background: linear-gradient(
-                135deg,
-                #0b2cc0,
-                #100dc1
-            );
-
-            color: white;
-
-            font-size: 17px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-            transition: 0.3s;
-
-            box-shadow:
-                0 8px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        button[type="submit"]:hover {
-
-            transform: translateY(-2px);
-
-            box-shadow:
-                0 12px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        button[type="submit"]:active {
-
-            transform: translateY(0);
-        }
-
-
-        /* =========================
-           SUCCESS MESSAGE
-        ========================== */
-
-        .success {
-
-            text-align: center;
-
-            margin-top: 18px;
-
-            padding: 12px;
-
-            border-radius: 8px;
-
-            background: #e8f8f0;
-
-            color: #219653;
-
-            font-weight: bold;
-
-            display: none;
-        }
-
-
-        /* =========================
-           FOOTER
-        ========================== */
-
-        .footer {
-
-            text-align: center;
-
-            margin-top: 25px;
-
-            font-size: 12px;
-
-            color: #888;
-        }
-
-
-        /* =========================
-           MOBILE RESPONSIVE
-        ========================== */
-
-        @media (max-width: 600px) {
-
-            body {
-                padding: 15px;
-            }
-
-            .container {
-                padding: 25px 20px;
-            }
-
-            .header h1 {
-                font-size: 25px;
-            }
-
-            .gender-container {
-                flex-direction: column;
-            }
-
-            .gender-option {
-                width: 100%;
-            }
-        }
+}
 
     </style>
 </head>
@@ -521,345 +627,540 @@
 
 <body>
 
-    <div class="container">
 
-        <!-- =========================
-             HEADER
-        ========================== -->
+<!-- ===================================== MAIN REGISTRATION CARD ====================================== -->
 
-        <div class="header">
-
-            <div class="icon">
-                🎓
-            </div>
-
-            <h1>Student Registration</h1>
-
-            <p>
-                Create your student account
-            </p>
-
-        </div>
+<main class="register-card">
 
 
-        <!-- =========================
-             REGISTRATION FORM
-        ========================== -->
+<!-- ===================================== LEFT SIDE ====================================== -->
 
-        <form id="registrationForm">
+<section class="intro">
 
 
-            <!-- FULL NAME -->
+        <!-- BRAND -->
 
-            <div class="form-group">
+<div class="brand">
 
-                <label for="name">
-                    Full Name
-                </label>
+    <div class="brand-mark">
+        S
+    </div>
 
-                <div class="input-box">
+    <span>
+        StudentHub
+    </span>
 
-                    <span class="input-icon">
-                        👤
-                    </span>
-
-                    <input
-                        type="text"
-                        id="name"
-                        placeholder="Enter your full name"
-                    >
-
-                </div>
-
-                <div
-                    id="nameError"
-                    class="error">
-                </div>
-
-            </div>
+</div>
 
 
-            <!-- EMAIL -->
+            <!-- INTRO -->
 
-            <div class="form-group">
+<div class="intro-content">
 
-                <label for="email">
-                    Email Address
-                </label>
+        <span class="tag">
+            STUDENT PORTAL
+        </span>
 
-                <div class="input-box">
-
-                    <span class="input-icon">
-                        ✉️
-                    </span>
-
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="example@gmail.com"
-                    >
-
-                </div>
-
-                <div
-                    id="emailError"
-                    class="error">
-                </div>
-
-            </div>
+        <h1>
+            Start your
+            <br>
+                student journey.
+        </h1>
 
 
-            <!-- MOBILE -->
+        <p>
+            Create your StudentHub account
+            and keep your academic profile
+            connected in one simple place.
+        </p>
 
-            <div class="form-group">
+</div>
 
-                <label for="mobile">
-                    Mobile Number
-                </label>
 
-                <div class="input-box">
+            <!-- BENEFITS -->
 
-                    <span class="input-icon">
-                        📱
-                    </span>
+<ul class="benefits">
 
-                    <input
-                        type="tel"
-                        id="mobile"
-                        placeholder="Enter 10 digit mobile number"
-                    >
+    <li>
+        <span class="check">✓</span>
+            Simple student profile
+    </li>
 
-                </div>
+    <li>
+        <span class="check">✓</span>
+            Secure account details
+    </li>
 
-                <div
-                    id="mobileError"
-                    class="error">
-                </div>
+    <li>
+        <span class="check">✓</span>
+            Responsive on mobile
+    </li>
+
+    <li>
+        <span class="check">✓</span>
+            Easy to use interface
+    </li>
+
+</ul>
+
+
+</section>
+
+
+
+        <!-- =====================================
+             RIGHT SIDE FORM
+        ====================================== -->
+
+        <section class="form-area">
+
+
+            <!-- FORM HEADER -->
+
+            <div class="form-head">
+
+                <h2>
+                    Create account
+                </h2>
+
+                <p>
+                    Fill in your details to register
+                    on StudentHub.
+                </p>
 
             </div>
 
 
-            <!-- PASSWORD -->
+            <!-- PROGRESS -->
 
-            <div class="form-group">
+            <div class="progress">
 
-                <label for="password">
-                    Password
-                </label>
+                <span class="active"></span>
 
-                <div class="password-box">
+                <span class="active"></span>
 
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Create a strong password"
-                    >
-
-                    <button
-                        type="button"
-                        class="show-password"
-                        onclick="togglePassword('password', this)">
-                        👁️
-                    </button>
-
-                </div>
-
-                <div
-                    id="passwordError"
-                    class="error">
-                </div>
+                <span></span>
 
             </div>
 
 
-            <!-- CONFIRM PASSWORD -->
 
-            <div class="form-group">
+            <!-- =====================================
+                 FORM
+            ====================================== -->
 
-                <label for="confirmPassword">
-                    Confirm Password
-                </label>
+<form
+    id="registrationForm"
+    action="process.php"
+    method="POST"
+    novalidate
+>
 
-                <div class="password-box">
 
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        placeholder="Re-enter your password"
-                    >
+                <!-- PERSONAL INFORMATION -->
 
-                    <button
-                        type="button"
-                        class="show-password"
-                        onclick="togglePassword('confirmPassword', this)">
-                        👁️
-                    </button>
-
+                <div class="section-title">
+                    Personal Information
                 </div>
 
-                <div
-                    id="confirmPasswordError"
-                    class="error">
-                </div>
 
-            </div>
+                <div class="grid">
 
 
-            <!-- COURSE -->
+                    <!-- NAME -->
 
-            <div class="form-group">
+                    <div class="field full">
 
-                <label for="course">
-                    Select Course
-                </label>
-
-                <select id="course">
-
-                    <option value="">
-                        -- Select Course --
-                    </option>
-
-                    <option value="BCA">
-                        BCA
-                    </option>
-
-                    <option value="BSc IT">
-                        BSc IT
-                    </option>
-
-                    <option value="B.Tech">
-                        B.Tech
-                    </option>
-
-                    <option value="MCA">
-                        MCA
-                    </option>
-
-                    <option value="MSc IT">
-                        MSc IT
-                    </option>
-
-                </select>
-
-                <div
-                    id="courseError"
-                    class="error">
-                </div>
-
-            </div>
-
-
-            <!-- YEAR -->
-
-            <div class="form-group">
-
-                <label for="year">
-                    Academic Year
-                </label>
-
-                <select id="year">
-
-                    <option value="">
-                        -- Select Year --
-                    </option>
-
-                    <option value="1">
-                        First Year
-                    </option>
-
-                    <option value="2">
-                        Second Year
-                    </option>
-
-                    <option value="3">
-                        Third Year
-                    </option>
-
-                    <option value="4">
-                        Fourth Year
-                    </option>
-
-                </select>
-
-                <div
-                    id="yearError"
-                    class="error">
-                </div>
-
-            </div>
-
-
-            <!-- GENDER -->
-
-            <div class="form-group">
-
-                <label>
-                    Gender
-                </label>
-
-                <div class="gender-container">
-
-
-                    <div class="gender-option">
-
-                        <input
-                            type="radio"
-                            id="male"
-                            name="gender"
-                            value="Male"
-                        >
-
-                        <label for="male">
-                            👨 Male
+                        <label for="name">
+                            Full Name
                         </label>
+
+
+                        <div class="input-wrap">
+
+<input
+    type="text"
+    id="name"
+    name="name"
+    placeholder="Enter your full name"
+    autocomplete="name"
+>
+
+                            <span class="field-icon">
+                                👤
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="error"
+                            id="nameError"
+                        ></div>
 
                     </div>
 
 
-                    <div class="gender-option">
 
-                        <input
-                            type="radio"
-                            id="female"
-                            name="gender"
-                            value="Female"
-                        >
+                    <!-- EMAIL -->
 
-                        <label for="female">
-                            👩 Female
+                    <div class="field">
+
+                        <label for="email">
+                            Email Address
                         </label>
+
+
+                        <div class="input-wrap">
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                            >
+
+                            <span class="field-icon">
+                                ✉
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="error"
+                            id="emailError"
+                        ></div>
 
                     </div>
 
 
-                    <div class="gender-option">
 
-                        <input
-                            type="radio"
-                            id="other"
-                            name="gender"
-                            value="Other"
-                        >
+                    <!-- MOBILE -->
 
-                        <label for="other">
-                            🧑 Other
+                    <div class="field">
+
+                        <label for="mobile">
+                            Mobile Number
                         </label>
+
+
+                        <div class="input-wrap">
+
+                            <input
+                                type="tel"
+                                id="mobile"
+                                name="mobile"
+                                placeholder="10 digit number"
+                                maxlength="10"
+                                inputmode="numeric"
+                                autocomplete="tel"
+                            >
+
+                            <span class="field-icon">
+                                ☎
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="error"
+                            id="mobileError"
+                        ></div>
 
                     </div>
 
+
                 </div>
 
-                <div
-                    id="genderError"
-                    class="error">
+
+
+                <!-- =====================================
+                     ACADEMIC DETAILS
+                ====================================== -->
+
+                <div class="section-title">
+                    Academic Details
                 </div>
 
-            </div>
+
+                <div class="grid">
 
 
-            <!-- TERMS -->
+                    <!-- COURSE -->
 
-            <div class="form-group">
+                    <div class="field">
+
+                        <label for="course">
+                            Course
+                        </label>
+
+
+                        <select id="course" name="course">
+
+                            <option value="">
+                                Select course
+                            </option>
+
+                            <option value="BCA">
+                                BCA
+                            </option>
+
+                            <option value="BSc IT">
+                                BSc IT
+                            </option>
+
+                            <option value="B.Tech">
+                                B.Tech
+                            </option>
+
+                            <option value="MCA">
+                                MCA
+                            </option>
+
+                            <option value="MSc IT">
+                                MSc IT
+                            </option>
+
+                        </select>
+
+
+                        <div
+                            class="error"
+                            id="courseError"
+                        ></div>
+
+                    </div>
+
+
+
+                    <!-- YEAR -->
+
+                    <div class="field">
+
+                        <label for="year">
+                            Academic Year
+                        </label>
+
+
+                        <select id="year" name="year">
+
+                            <option value="">
+                                Select year
+                            </option>
+
+                            <option value="1">
+                                First Year
+                            </option>
+
+                            <option value="2">
+                                Second Year
+                            </option>
+
+                            <option value="3">
+                                Third Year
+                            </option>
+
+                            <option value="4">
+                                Fourth Year
+                            </option>
+
+                        </select>
+
+
+                        <div
+                            class="error"
+                            id="yearError"
+                        ></div>
+
+                    </div>
+
+
+
+                    <!-- GENDER -->
+
+                    <div class="field full">
+
+                        <label>
+                            Gender
+                        </label>
+
+
+                        <div class="gender-list">
+
+
+                            <div>
+
+                                <input
+                                    type="radio"
+                                    id="male"
+                                    name="gender"
+                                    value="Male"
+                                >
+
+                                <label for="male">
+                                    Male
+                                </label>
+
+                            </div>
+
+
+
+                            <div>
+
+                                <input
+                                    type="radio"
+                                    id="female"
+                                    name="gender"
+                                    value="Female"
+                                >
+
+                                <label for="female">
+                                    Female
+                                </label>
+
+                            </div>
+
+
+
+                            <div>
+
+                                <input
+                                    type="radio"
+                                    id="other"
+                                    name="gender"
+                                    value="Other"
+                                >
+
+                                <label for="other">
+                                    Other
+                                </label>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div
+                            class="error"
+                            id="genderError"
+                        ></div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =====================================
+                     ACCOUNT SECURITY
+                ====================================== -->
+
+                <div class="section-title">
+                    Account Security
+                </div>
+
+
+                <div class="grid">
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="field">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+
+                        <div
+                            class="input-wrap password-wrap"
+                        >
+
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="Create password"
+                                autocomplete="new-password"
+                            >
+
+
+                            <button
+                                class="toggle"
+                                type="button"
+                                onclick="togglePassword(
+                                    'password',
+                                    this
+                                )"
+                            >
+                                👁
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="error"
+                            id="passwordError"
+                        ></div>
+
+                    </div>
+
+
+
+                    <!-- CONFIRM PASSWORD -->
+
+                    <div class="field">
+
+                        <label for="confirmPassword">
+                            Confirm Password
+                        </label>
+
+
+                        <div
+                            class="input-wrap password-wrap"
+                        >
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                placeholder="Repeat password"
+                                autocomplete="new-password"
+                            >
+
+
+                            <button
+                                class="toggle"
+                                type="button"
+                                onclick="togglePassword(
+                                    'confirmPassword',
+                                    this
+                                )"
+                            >
+                                👁
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="error"
+                            id="confirmPasswordError"
+                        ></div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- TERMS -->
 
                 <div class="terms">
 
@@ -870,374 +1171,359 @@
 
                     <label for="terms">
 
-                        I accept the
+                        I agree to the StudentHub
                         terms and conditions.
 
                     </label>
 
                 </div>
 
+
                 <div
+                    class="error"
                     id="termsError"
-                    class="error">
+                ></div>
+
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    class="submit-btn"
+                    type="submit"
+                >
+
+                    Create Student Account →
+
+                </button>
+
+
+
+                <!-- SUCCESS -->
+
+                <div
+                    class="success"
+                    id="successMessage"
+                >
+
+                    ✓ Registration successful!
+                    Welcome to StudentHub.
+
                 </div>
 
-            </div>
 
 
-            <!-- SUBMIT -->
+                <div class="login-note">
 
-            <button type="submit">
+                    Your information is used only
+                    for your StudentHub account.
 
-                🚀 Create Account
-
-            </button>
-
-
-            <!-- SUCCESS -->
-
-            <div
-                id="successMessage"
-                class="success">
-
-                ✅ Registration Successful!
-
-            </div>
+                </div>
 
 
-        </form>
+            </form>
 
 
-        <div class="footer">
+        </section>
 
-            © 2026 Student Registration Portal
-
-        </div>
-
-    </div>
+    </main>
 
 
 
-    <!-- =========================
+    <!-- =====================================
          JAVASCRIPT
-    ========================== -->
+    ====================================== -->
 
     <script>
 
 
         /* =========================
-           PASSWORD SHOW / HIDE
+           SHOW / HIDE PASSWORD
         ========================== */
 
-        function togglePassword(inputId, button) {
+        function togglePassword(inputId,button) {
 
-            let passwordInput =
-                document.getElementById(inputId);
+            const input = document.getElementById(inputId);
 
-            if (passwordInput.type === "password") {
+            if (input.type === "password") {
 
-                passwordInput.type = "text";
+                input.type = "text";
 
                 button.textContent = "🙈";
 
+                button.setAttribute("aria-label","Hide password");
+
             }
+
             else {
 
-                passwordInput.type = "password";
+                input.type = "password";
 
-                button.textContent = "👁️";
+                button.textContent = "👁";
+
+                button.setAttribute("aria-label","Show password");
 
             }
 
         }
 
 
+
         /* =========================
-           FORM VALIDATION
+           FORM
         ========================== */
 
-        document
-            .getElementById("registrationForm")
-            .addEventListener("submit", function(event) {
+        const form = document.getElementById("registrationForm");
 
 
-                // Stop form from submitting
-                event.preventDefault();
+        form.addEventListener("submit",
+        function (event) {
+
+            event.preventDefault();
 
 
-                /* =========================
-                   GET VALUES
-                ========================== */
+                /* GET VALUES */
 
-                let name =
+                const name =
                     document.getElementById("name").value.trim();
 
-                let email =
+
+                const email =
                     document.getElementById("email").value.trim();
 
-                let mobile =
+
+                const mobile =
                     document.getElementById("mobile").value.trim();
 
-                let password =
+
+                const password =
                     document.getElementById("password").value;
 
-                let confirmPassword =
+
+                const confirmPassword =
                     document.getElementById("confirmPassword").value;
 
-                let course =
+
+                const course =
                     document.getElementById("course").value;
 
-                let year =
-                    document.getElementById("year").value;
 
-                let gender =
-                    document.querySelector(
-                        'input[name="gender"]:checked'
+                const year =
+                    document.getElementById( "year").value;
+
+
+                const gender =
+                    document.querySelector('input[name="gender"]:checked');
+
+
+                const terms =document.getElementById("terms").checked;
+
+
+
+                /* ERROR ELEMENTS */
+
+                const errors = {
+
+                    name:
+                        document.getElementById("nameError"),
+
+                    email:
+                        document.getElementById("emailError"),
+
+                    mobile:
+                        document.getElementById("mobileError"),
+
+                    password:
+                        document.getElementById("passwordError"),
+
+                    confirmPassword:
+                        document.getElementById("confirmPasswordError"),
+
+                    course:
+                        document.getElementById("courseError"),
+
+                    year:
+                        document.getElementById("yearError"),
+
+                    gender:
+                        document.getElementById("genderError"),
+
+                    terms:
+                        document.getElementById("termsError")
+
+                };
+
+
+
+                /* CLEAR ERRORS */
+
+                Object.values(errors)
+                    .forEach(
+                        error =>
+                            error.textContent = ""
                     );
 
-                let terms =
-                    document.getElementById("terms").checked;
+
+                document.getElementById(
+                    "successMessage"
+                ).style.display = "none";
 
 
-                /* =========================
-                   ERROR ELEMENTS
-                ========================== */
 
-                let nameError =
-                    document.getElementById("nameError");
-
-                let emailError =
-                    document.getElementById("emailError");
-
-                let mobileError =
-                    document.getElementById("mobileError");
-
-                let passwordError =
-                    document.getElementById("passwordError");
-
-                let confirmPasswordError =
-                    document.getElementById(
-                        "confirmPasswordError"
-                    );
-
-                let courseError =
-                    document.getElementById("courseError");
-
-                let yearError =
-                    document.getElementById("yearError");
-
-                let genderError =
-                    document.getElementById("genderError");
-
-                let termsError =
-                    document.getElementById("termsError");
-
-                let successMessage =
-                    document.getElementById(
-                        "successMessage"
-                    );
+                let valid = true;
 
 
-                /* =========================
-                   CLEAR OLD ERRORS
-                ========================== */
 
-                nameError.textContent = "";
+                /* REGEX */
 
-                emailError.textContent = "";
-
-                mobileError.textContent = "";
-
-                passwordError.textContent = "";
-
-                confirmPasswordError.textContent = "";
-
-                courseError.textContent = "";
-
-                yearError.textContent = "";
-
-                genderError.textContent = "";
-
-                termsError.textContent = "";
-
-                successMessage.style.display = "none";
-
-
-                let isValid = true;
-
-
-                /* =========================
-                   REGULAR EXPRESSIONS
-                ========================== */
-
-
-                // Name
-                let nameRegex =
+                const nameRegex =
                     /^[A-Za-z ]{2,50}$/;
 
 
-                // Email
-                let emailRegex =
+                const emailRegex =
                     /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
 
-                // Mobile
-                let mobileRegex =
+                const mobileRegex =
                     /^[6-9][0-9]{9}$/;
 
 
-                // Password
-                let passwordRegex =
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$/;
+                const passwordRegex =
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&]).{8,}$/;
 
 
-                /* =========================
-                   NAME VALIDATION
-                ========================== */
+
+                /* NAME */
 
                 if (!nameRegex.test(name)) {
 
-                    nameError.textContent =
-                        "❌ Name must contain only alphabets and spaces.";
-
-                    isValid = false;
-
+                    errors.name.textContent = "Please enter a valid name.";
+                    valid = false;
                 }
 
 
-                /* =========================
-                   EMAIL VALIDATION
-                ========================== */
+
+                /* EMAIL */
 
                 if (!emailRegex.test(email)) {
 
-                    emailError.textContent =
-                        "❌ Please enter a valid email address.";
-
-                    isValid = false;
-
+                    errors.email.textContent = "Please enter a valid email.";
+                    valid = false;
                 }
 
 
-                /* =========================
-                   MOBILE VALIDATION
-                ========================== */
+
+                /* MOBILE */
 
                 if (!mobileRegex.test(mobile)) {
 
-                    mobileError.textContent =
-                        "❌ Enter a valid 10-digit mobile number.";
-
-                    isValid = false;
-
+                    errors.mobile.textContent = "Enter a valid 10-digit mobile number.";
+                    valid = false;
                 }
 
 
-                /* =========================
-                   PASSWORD VALIDATION
-                ========================== */
+
+                /* PASSWORD */
 
                 if (!passwordRegex.test(password)) {
 
-                    passwordError.textContent =
-                        "❌ Password must contain 8+ characters, uppercase, lowercase, number and special character.";
-
-                    isValid = false;
-
+                    errors.password.textContent ="Use 8+ characters with uppercase, lowercase, number and special character.";
+                    valid = false;
                 }
 
 
-                /* =========================
-                   CONFIRM PASSWORD
-                ========================== */
+
+                /* CONFIRM PASSWORD */
 
                 if (password !== confirmPassword) {
 
-                    confirmPasswordError.textContent =
-                        "❌ Passwords do not match.";
-
-                    isValid = false;
-
+                    errors.confirmPassword.textContent ="Passwords do not match.";
+                    valid = false;
                 }
 
 
-                /* =========================
-                   COURSE
-                ========================== */
 
-                if (course === "") {
+                /* COURSE */
 
-                    courseError.textContent =
-                        "❌ Please select a course.";
+                if (!course) {
 
-                    isValid = false;
-
+                    errors.course.textContent ="Please select your course.";
+                    valid = false;
                 }
 
 
-                /* =========================
-                   YEAR
-                ========================== */
 
-                if (year === "") {
+                /* YEAR */
 
-                    yearError.textContent =
-                        "❌ Please select your academic year.";
+                if (!year) {
 
-                    isValid = false;
-
+                    errors.year.textContent = "Please select your academic year.";
+                    valid = false;
                 }
 
 
-                /* =========================
-                   GENDER
-                ========================== */
+
+                /* GENDER */
 
                 if (!gender) {
 
-                    genderError.textContent =
-                        "❌ Please select your gender.";
-
-                    isValid = false;
-
+                    errors.gender.textContent = "Please select your gender.";
+                    valid = false;
                 }
 
 
-                /* =========================
-                   TERMS
-                ========================== */
+
+                /* TERMS */
 
                 if (!terms) {
 
-                    termsError.textContent =
-                        "❌ You must accept the terms and conditions.";
-
-                    isValid = false;
-
+                    errors.terms.textContent = "Please accept the terms and conditions.";
+                    valid = false;
                 }
 
 
-                /* =========================
-                   SUCCESS
-                ========================== */
 
-                if (isValid) {
+                /* SUCCESS */
 
-                    successMessage.style.display = "block";
+                if (valid) {
 
-                    successMessage.textContent =
-                        "🎉 Registration Successful! Welcome to Student Portal.";
+                    document.getElementById("successMessage").style.display = "block";
 
-                    document
-                        .getElementById("registrationForm")
-                        .reset();
+                    form.reset();
+
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
 
                 }
 
+            }
+        );
 
-            });
+
+
+        /* =========================
+           MOBILE NUMBER
+        ========================== */
+
+        document
+            .getElementById("mobile")
+            .addEventListener(
+                "input",
+                function () {
+
+                    this.value =
+                        this.value
+                            .replace(/\D/g, "")
+                            .slice(0, 10);
+
+                }
+            );
 
     </script>
 
 </body>
+
 </html>

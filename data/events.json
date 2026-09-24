@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "title": "Web Development Workshop",
+    "date": "2026-10-05",
+    "category": "Workshop",
+    "location": "Computer Lab"
+  },
+  {
+    "id": 2,
+    "title": "GitHub Workshop",
+    "date": "2026-10-10",
+    "category": "Technical",
+    "location": "Seminar Hall"
+  },
+  {
+    "id": 3,
+    "title": "Coding Competition",
+    "date": "2026-10-15",
+    "category": "Competition",
+    "location": "CSE Lab"
+  },
+  {
+    "id": 4,
+    "title": "Football Tournament",
+    "date": "2026-10-20",
+    "category": "Sports",
+    "location": "College Ground"
+  },
+  {
+    "id": 5,
+    "title": "AI and Machine Learning Seminar",
+    "date": "2026-10-25",
+    "category": "Seminar",
+    "location": "Auditorium"
+  },
+  {
+    "id": 6,
+    "title": "Java Programming Workshop",
+    "date": "2026-11-01",
+    "category": "Workshop",
+    "location": "Computer Lab"
+  },
+  {
+    "id": 7,
+    "title": "Hackathon 2026",
+    "date": "2026-11-05",
+    "category": "Competition",
+    "location": "Innovation Lab"
+  },
+  {
+    "id": 8,
+    "title": "Cyber Security Awareness",
+    "date": "2026-11-10",
+    "category": "Seminar",
+    "location": "Seminar Hall"
+  },
+  {
+    "id": 9,
+    "title": "C Programming Contest",
+    "date": "2026-11-15",
+    "category": "Competition",
+    "location": "CSE Lab"
+  },
+  {
+    "id": 10,
+    "title": "Cricket Tournament",
+    "date": "2026-11-20",
+    "category": "Sports",
+    "location": "College Ground"
+  },
+  {
+    "id": 11,
+    "title": "UI UX Design Workshop",
+    "date": "2026-11-25",
+    "category": "Workshop",
+    "location": "Design Lab"
+  },
+  {
+    "id": 12,
+    "title": "Cloud Computing Seminar",
+    "date": "2026-12-01",
+    "category": "Seminar",
+    "location": "Auditorium"
+  },
+  {
+    "id": 13,
+    "title": "Python Programming Workshop",
+    "date": "2026-12-05",
+    "category": "Workshop",
+    "location": "Computer Lab"
+  },
+  {
+    "id": 14,
+    "title": "Chess Competition",
+    "date": "2026-12-10",
+    "category": "Sports",
+    "location": "Student Activity Center"
+  },
+  {
+    "id": 15,
+    "title": "Project Exhibition",
+    "date": "2026-12-15",
+    "category": "Technical",
+    "location": "Main Hall"
+  }
+]
