@@ -16,5 +16,14 @@
         "year": "1",
         "gender": "Male",
         "date": "2026-09-27 15:28:24"
+    },
+    {
+        "name": "Om Patel",
+        "email": "ompatel211@gmail.com",
+        "mobile": "9525365212",
+        "course": "B.Tech",
+        "year": "2",
+        "gender": "Male",
+        "date": "2026-09-27 15:39:51"
     }
 ]
