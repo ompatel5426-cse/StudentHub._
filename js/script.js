@@ -2,22 +2,22 @@
 const themeBtn = document.getElementById("themeBtn");
 
 // Saved theme check
-if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
+if (localStorage.getItem("theme") === "dark-mode") {
+    document.body.classList.add("dark-mode");
     themeBtn.textContent = "☀️";
 }
 
 // Button click
 themeBtn.addEventListener("click", function () {
 
-    document.body.classList.toggle("dark");
+    document.body.classList.toggle("dark-mode");
 
-    if (document.body.classList.contains("dark")) {
+    if (document.body.classList.contains("dark-mode")) {
         themeBtn.textContent = "☀️";
-        localStorage.setItem("theme", "dark");
+        localStorage.setItem("theme", "dark-mode");
     } else {
         themeBtn.textContent = "🌙";
-        localStorage.setItem("theme", "light");
+        localStorage.setItem("theme", "light-mode");
     }
 
 });

@@ -321,10 +321,30 @@ section{
 
 footer{
     background:#222;
-    color:white;
+    color:white ;
     text-align:center;
     padding:30px;
     margin-top:5px;
+}
+
+/* ===== Footer Dark Mode Fix ===== */
+
+body.dark-mode footer {
+    background: #222;
+    color: #ffffff;
+}
+
+body.dark-mode footer h3,
+body.dark-mode footer h4,
+body.dark-mode footer p,
+body.dark-mode footer a,
+body.dark-mode footer li,
+body.dark-mode footer span {
+    color: #ffffff !important;
+}
+
+body.dark-mode footer a:hover {
+    color: #6C63FF !important;
 }
 
 /* ===== Login Page ===== */
@@ -719,46 +739,182 @@ footer{
     }
 }
 
-/* ===== Dark Theme ===== */
+/* =========================================
+   DARK THEME
+========================================= */
 
-body.dark{
-    background:#121212;
-    color:white;
+body.dark-mode {
+    background: #121212;
+    color: #f5f5f5;
 }
 
-body.dark header{
-    background:#1f1f1f;
+/* Header */
+body.dark-mode header {
+    background: #1f1f1f;
+    color: #ffffff;
 }
 
-body.dark nav a{
-    color:white;
+body.dark-mode nav a {
+    color: #ffffff;
 }
 
-body.dark .card,
-body.dark .box,
-body.dark table,
-body.dark footer{
-    background:#1f1f1f;
-    color:white;
+body.dark-mode nav a:hover {
+    color: #6C63FF;
 }
 
-body.dark table td,
-body.dark table th{
-    border:1px solid #444;
+/* Main headings */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #ffffff;
 }
 
-#themeBtn{
-    background:#6C63FF;
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:18px;
+/* Paragraphs */
+body.dark-mode p,
+body.dark-mode li,
+body.dark-mode label {
+    color: #dddddd;
 }
 
-#themeBtn:hover{
-    background:#5148d8;
+/* Links */
+body.dark-mode a {
+    color: #ffffff;
+}
+
+/* Cards */
+body.dark-mode .card,
+body.dark-mode .course-card,
+body.dark-mode .material-card,
+body.dark-mode .profile-card,
+body.dark-mode .stat-box,
+body.dark-mode .story-points div,
+body.dark-mode .menu-box {
+    background: #1f1f1f;
+    color: #ffffff;
+}
+
+/* Card text */
+body.dark-mode .card h2,
+body.dark-mode .card h3,
+body.dark-mode .course-card h2,
+body.dark-mode .course-card h3,
+body.dark-mode .material-card h2,
+body.dark-mode .material-card h3,
+body.dark-mode .profile-card h2,
+body.dark-mode .profile-card h3,
+body.dark-mode .stat-box h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .card p,
+body.dark-mode .course-card p,
+body.dark-mode .material-card p,
+body.dark-mode .profile-card p,
+body.dark-mode .stat-box p {
+    color: #dddddd;
+}
+
+/* Story / About page */
+body.dark-mode .story-text h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .story-text > p {
+    color: #cccccc;
+}
+
+body.dark-mode .story-points p {
+    color: #cccccc;
+}
+
+/* Page title */
+body.dark-mode .page-title h1 {
+    color: #ffffff;
+}
+
+body.dark-mode .page-title p {
+    color: #cccccc;
+}
+
+/* Summary / Benefits / Quick Links */
+body.dark-mode .summary h2,
+body.dark-mode .benefits h2,
+body.dark-mode .quick-links h2 {
+    color: #ffffff;
+}
+
+/* Tables */
+body.dark-mode table {
+    background: #1f1f1f;
+    color: #ffffff;
+}
+
+body.dark-mode table th {
+    background: linear-gradient(135deg, #6c63ff, #5148d8);
+    color: #ffffff;
+}
+
+body.dark-mode table td {
+    color: #eeeeee;
+    border-color: #444444;
+}
+
+/* Alternate table rows */
+body.dark-mode table tr:nth-child(even) {
+    background: #292929;
+}
+
+body.dark-mode table tr:nth-child(odd) {
+    background: #1f1f1f;
+}
+
+/* Table hover */
+body.dark-mode table tbody tr:hover {
+    background: #333344;
+}
+
+/* Inputs and Selects */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: #1f1f1f;
+    color: #ffffff;
+    border: 1px solid #555555;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #aaaaaa;
+}
+
+/* Login form */
+body.dark-mode .login-right form {
+    background: #1f1f1f;
+    color: #ffffff;
+}
+
+body.dark-mode .login-right h2 {
+    color: #6C63FF;
+}
+
+/* Menu */
+body.dark-mode .menu-list a {
+    background: #1f1f1f;
+    color: #ffffff;
+}
+
+body.dark-mode .menu-list a:hover {
+    background: #6C63FF;
+    color: #ffffff;
+}
+
+/* Footer */
+body.dark-mode footer {
+    background: #1f1f1f;
+    color: #ffffff;
 }
 
 /* ===== Notification Banner ===== */
@@ -1188,4 +1344,320 @@ table tr:last-child td {
         margin-bottom: 10px;
     }
 
+}
+
+/* =========================================
+   DARK MODE - COMPLETE BACKGROUND FIX
+========================================= */
+
+body.dark-mode {
+    background: #121212;
+    color: #f5f5f5;
+}
+
+/* Main sections */
+body.dark-mode section,
+body.dark-mode main {
+    background: #121212;
+}
+
+/* Hero section */
+body.dark-mode .hero {
+    background: #121212;
+}
+
+/* Hero text */
+body.dark-mode .hero-text h1,
+body.dark-mode .hero-text p,
+body.dark-mode .hero-text .small-title {
+    color: #ffffff;
+}
+
+/* Page title */
+body.dark-mode .page-title {
+    background: #121212;
+}
+
+body.dark-mode .page-title h1 {
+    color: #ffffff;
+}
+
+body.dark-mode .page-title p {
+    color: #cccccc;
+}
+
+/* About page */
+body.dark-mode .story-section {
+    background: #121212;
+}
+
+body.dark-mode .story-text h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .story-text > p {
+    color: #cccccc;
+}
+
+/* Why StudentHub */
+body.dark-mode .benefits,
+body.dark-mode .summary,
+body.dark-mode .quick-links {
+    background: #121212;
+}
+
+body.dark-mode .benefits h2,
+body.dark-mode .summary h2,
+body.dark-mode .quick-links h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .benefits li,
+body.dark-mode .benefits p {
+    color: #dddddd;
+}
+
+/* FAQ */
+body.dark-mode .faq,
+body.dark-mode .faq-section {
+    background: #121212;
+}
+
+body.dark-mode .faq h2,
+body.dark-mode .faq h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .faq p {
+    color: #cccccc;
+}
+
+/* Course page */
+body.dark-mode .courses {
+    background: #121212;
+}
+
+body.dark-mode .course-card {
+    background: #1f1f1f;
+    color: #ffffff;
+}
+
+/* Study material */
+body.dark-mode .materials {
+    background: #121212;
+}
+
+body.dark-mode .material-card {
+    background: #1f1f1f;
+    color: #ffffff;
+}
+
+/* Dashboard */
+body.dark-mode .dashboard {
+    background: #121212;
+}
+
+body.dark-mode .content {
+    color: #ffffff;
+}
+
+/* Footer */
+body.dark-mode footer {
+    background: #1f1f1f;
+    color: #ffffff;
+}
+
+/* General text */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #ffffff;
+}
+
+body.dark-mode p,
+body.dark-mode li,
+body.dark-mode span,
+body.dark-mode label {
+    color: #dddddd;
+}
+
+/* Inputs */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: #1f1f1f;
+    color: #ffffff;
+    border-color: #555;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #aaaaaa;
+}
+
+/* =========================================
+   DARK MODE - FOOTER TEXT
+========================================= */
+
+body.dark-mode .footer,
+body.dark-mode footer {
+    background: #1f1f1f;
+    color: #ffffff;
+}
+
+body.dark-mode .footer h3,
+body.dark-mode .footer h4,
+body.dark-mode .footer p,
+body.dark-mode .footer a,
+body.dark-mode .footer li,
+body.dark-mode .footer span {
+    color: #ffffff !important;
+}
+
+body.dark-mode .footer a:hover {
+    color: #6C63FF !important;
+}
+
+/* =========================================
+   WHY STUDENTHUB + FAQ SECTION
+========================================= */
+
+.benefits {
+    padding: 50px 8%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.benefits h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: #222;
+}
+
+.benefits ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.benefits li {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+    color: #333;
+    line-height: 1.6;
+}
+
+.benefits li strong {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #222;
+}
+
+
+/* =========================================
+   FAQ SECTION
+========================================= */
+
+.faq {
+    padding: 50px 8%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.faq h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: #222;
+}
+
+.faq-item {
+    background: #ffffff;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    padding: 18px 22px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+}
+
+.faq-item button {
+    width: 100%;
+    text-align: left;
+    background: #6C63FF;
+    color: #ffffff;
+    border: none;
+    padding: 14px 18px;
+    border-radius: 9px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.faq-item button:hover {
+    background: #5148d8;
+}
+
+.faq-item p {
+    margin: 12px 0 0;
+    color: #444;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+body.dark-mode .benefits,
+body.dark-mode .faq {
+    background: #121212;
+}
+
+body.dark-mode .benefits h2,
+body.dark-mode .faq h2 {
+    color: #ffffff;
+}
+
+body.dark-mode .benefits li,
+body.dark-mode .faq-item {
+    background: #1f1f1f;
+    color: #ffffff;
+}
+
+body.dark-mode .benefits li strong {
+    color: #ffffff;
+}
+
+body.dark-mode .benefits li,
+body.dark-mode .faq-item p {
+    color: #dddddd;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .benefits ul {
+        grid-template-columns: 1fr;
+    }
+
+    .benefits,
+    .faq {
+        padding: 40px 6%;
+    }
+
+    .benefits h2,
+    .faq h2 {
+        font-size: 24px;
+    }
 }
