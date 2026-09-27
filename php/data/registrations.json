@@ -7,5 +7,14 @@
         "year": "2",
         "gender": "Male",
         "date": "2026-09-27 15:12:28"
+    },
+    {
+        "name": "Kunj Patel",
+        "email": "kunjpatel234@gmail.com",
+        "mobile": "9632584177",
+        "course": "B.Tech",
+        "year": "1",
+        "gender": "Male",
+        "date": "2026-09-27 15:28:24"
     }
 ]

@@ -149,7 +149,7 @@ if (!empty($errors)) {
         echo "<p class='error'>• " . htmlspecialchars($error) . "</p>";
     }
 
-    echo "<a href='registration.html'>Go Back</a>";
+    echo "<a href='../registration.html'>Go Back</a>";
 
     echo "</div>";
 
@@ -380,7 +380,7 @@ file_put_contents(
 
     </div>
 
-    <a href="registration.html">
+    <a href="../registration.html">
         Back to Registration
     </a>
 

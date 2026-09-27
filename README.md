@@ -18,3 +18,5 @@
     12. notices
     13. registration
     
+URL Link => C:\xampp\htdocs\StudentHub
+
