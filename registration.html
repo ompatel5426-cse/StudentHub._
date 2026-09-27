@@ -745,60 +745,61 @@ input:focus,select:focus {
 
 
 
-            <!-- =====================================
+    <!-- =====================================
                  FORM
-            ====================================== -->
+    ====================================== -->
 
 <form
     id="registrationForm"
-    action="process.php"
+    action="php/process.php"
     method="POST"
     novalidate
 >
 
 
-                <!-- PERSONAL INFORMATION -->
 
-                <div class="section-title">
-                    Personal Information
-                </div>
+        <!-- PERSONAL INFORMATION -->
 
-
-                <div class="grid">
+<div class="section-title">
+    Personal Information
+</div>
 
 
-                    <!-- NAME -->
-
-                    <div class="field full">
-
-                        <label for="name">
-                            Full Name
-                        </label>
+<div class="grid">
 
 
-                        <div class="input-wrap">
+        <!-- NAME -->
 
-<input
-    type="text"
-    id="name"
-    name="name"
-    placeholder="Enter your full name"
-    autocomplete="name"
->
+<div class="field full">
 
-                            <span class="field-icon">
-                                👤
-                            </span>
-
-                        </div>
+    <label for="name">
+        Full Name
+    </label>
 
 
-                        <div
-                            class="error"
-                            id="nameError"
-                        ></div>
+    <div class="input-wrap">
 
-                    </div>
+    <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="Enter your full name"
+        autocomplete="name"
+    >
+
+    <span class="field-icon">
+            👤
+    </span>
+
+    </div>
+
+
+    <div
+        class="error"
+        id="nameError"
+    ></div>
+
+</div>
 
 
 
@@ -1080,14 +1081,13 @@ input:focus,select:focus {
                         <div
                             class="input-wrap password-wrap"
                         >
-
-                            <input
-                                type="password"
-                                id="password"
-                                placeholder="Create password"
-                                autocomplete="new-password"
-                            >
-
+<input
+    type="password"
+    id="password"
+    name="password"
+    placeholder="Create a password"
+    autocomplete="new-password"
+>
 
                             <button
                                 class="toggle"
@@ -1276,8 +1276,7 @@ input:focus,select:focus {
         const form = document.getElementById("registrationForm");
 
 
-        form.addEventListener("submit",
-        function (event) {
+        form.addEventListener("submit", function (event) {
 
             event.preventDefault();
 
@@ -1487,15 +1486,7 @@ input:focus,select:focus {
 
                 if (valid) {
 
-                    document.getElementById("successMessage").style.display = "block";
-
-                    form.reset();
-
-
-                    window.scrollTo({
-                        top: 0,
-                        behavior: "smooth"
-                    });
+                    form.submit();
 
                 }
 

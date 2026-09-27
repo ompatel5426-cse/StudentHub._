@@ -22,10 +22,11 @@ async function loadEvents() {
         loading.style.display = "block";
 
         error.textContent = "";
+       // await new Promise(resolve => setTimeout(resolve, 3000));   // Simulate a delay for testing purposes
 
 
         const response = await fetch("data/events.json");
-
+        //const response = await fetch("data/wrong-events.json");  // Simulate a fetch error for testing purposes
 
         if (!response.ok) {
 
