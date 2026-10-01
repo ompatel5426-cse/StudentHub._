@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Practical 8 - StudentHub</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        .practical-container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 50px auto;
+        }
+
+        .practical-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .practical-title h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .practical-title p {
+            color: #777;
+        }
+
+        .practical-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+        }
+
+        .practical-table th {
+            width: 25%;
+            background: #222;
+            color: white;
+            padding: 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .practical-table td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            line-height: 1.6;
+        }
+
+        .practical-table tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+
+        .database-section {
+            margin-top: 40px;
+            padding: 25px;
+            background: #f5f7ff;
+            border-radius: 12px;
+        }
+
+        .database-section h2 {
+            margin-bottom: 15px;
+        }
+
+        .database-section ul {
+            line-height: 2;
+        }
+
+        .btn-area {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .connection-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #4f46e5;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .connection-btn:hover {
+            background: #3730a3;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">StudentHub</div>
+
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="registration.html">Registration</a></li>
+            <li><a href="practical8.html">Practical 8</a></li>
+        </ul>
+    </nav>
+
+
+    <main class="practical-container">
+
+        <div class="practical-title">
+            <h1>Practical 8</h1>
+
+            <p>
+                MySQL Schema Design, ER Model, PDO Connectivity
+                and Prepared Statements
+            </p>
+        </div>
+
+
+        <table class="practical-table">
+
+            <tr>
+                <th>Problem Definition</th>
+
+                <td>
+                    Design the database for StudentHub with students,
+                    events and registrations. Create PHP database
+                    connection using MySQL statements.
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Key Questions / Analysis / Interpretation</th>
+
+                <td>
+                    <ol>
+                        <li>Is the schema normalized properly?</li>
+                        <li>Are primary keys and foreign keys correctly defined?</li>
+                        <li>Is the database connection handled securely?</li>
+                    </ol>
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Key Skills to be Addressed</th>
+
+                <td>
+                    ER modeling, MySQL, phpMyAdmin,
+                    database error handling
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Applications</th>
+
+                <td>
+                    Secure database-backed web applications
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Learning Outcome</th>
+
+                <td>
+                    Students will design and connect a normalized
+                    database securely using PHP.
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>CO Mapping</th>
+
+                <td>
+                    CO1, CO5
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Dataset / Test Data</th>
+
+                <td>
+                    SQL seed data for students, events and registrations
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Tools / Technology to be Used</th>
+
+                <td>
+                    MySQL, phpMyAdmin, PHP, XAMPP
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Total Hours</th>
+
+                <td>
+                    Implementation: 4 hours |
+                    Total engagement: 6 hours
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Post Laboratory Work</th>
+
+                <td>
+                    Submit SQL dump, db.php file and
+                    connection test screenshot.
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Evaluation Strategy Including Viva</th>
+
+                <td>
+                    Database, database connections and DB viva
+                </td>
+            </tr>
+
+
+            <tr>
+                <th>Advanced / Intermediate Extension</th>
+
+                <td>
+                    Intermediate: Use PHP PDO and Prepared Statement.<br>
+                    Advanced: Add stored procedure concept.
+                </td>
+            </tr>
+
+        </table>
+
+
+        <!-- Database Section -->
+
+        <section class="database-section">
+
+            <h2>StudentHub Database</h2>
+
+            <ul>
+                <li><b>Students:</b> Stores student information.</li>
+
+                <li><b>Events:</b> Stores available college events.</li>
+
+                <li><b>Registrations:</b> Stores student event registrations.</li>
+            </ul>
+
+        </section>
+
+
+        <div class="btn-area">
+
+            <a href="php/test_connection.php"
+               class="connection-btn">
+                Test Database Connection
+            </a>
+
+        </div>
+
+    </main>
+
+
+</body>
+</html>

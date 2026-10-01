@@ -1,14 +1,17 @@
 <?php
 
-// Only allow POST requests
+// =====================================
+// ONLY POST REQUEST ALLOWED
+// =====================================
+
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     die("Invalid request method.");
 }
 
 
-// ===============================
+// =====================================
 // GET FORM DATA
-// ===============================
+// =====================================
 
 $name = trim($_POST["name"] ?? "");
 $email = trim($_POST["email"] ?? "");
@@ -20,9 +23,9 @@ $password = $_POST["password"] ?? "";
 $confirmPassword = $_POST["confirmPassword"] ?? "";
 
 
-// ===============================
-// SERVER-SIDE VALIDATION
-// ===============================
+// =====================================
+// VALIDATION
+// =====================================
 
 $errors = [];
 
@@ -71,7 +74,9 @@ if ($gender === "") {
 
 // Password
 if ($password === "") {
+
     $errors[] = "Password is required.";
+
 } elseif (
     strlen($password) < 8 ||
     !preg_match("/[A-Z]/", $password) ||
@@ -79,28 +84,32 @@ if ($password === "") {
     !preg_match("/[0-9]/", $password) ||
     !preg_match("/[@$!%*?&]/", $password)
 ) {
-    $errors[] = "Password must contain 8+ characters, uppercase, lowercase, number and special character.";
+
+    $errors[] =
+        "Password must contain 8+ characters, uppercase, lowercase, number and special character.";
 }
 
 
-// Confirm Password
+// Confirm password
 if ($password !== $confirmPassword) {
     $errors[] = "Passwords do not match.";
 }
 
 
-// ===============================
-// DISPLAY ERRORS
-// ===============================
+// =====================================
+// SHOW VALIDATION ERRORS
+// =====================================
 
 if (!empty($errors)) {
 
     echo "<!DOCTYPE html>";
     echo "<html>";
     echo "<head>";
+
     echo "<title>Registration Error</title>";
 
     echo "<style>
+
         body {
             font-family: Arial, sans-serif;
             background: #f1f5f9;
@@ -137,16 +146,20 @@ if (!empty($errors)) {
             text-decoration: none;
             border-radius: 8px;
         }
+
     </style>";
 
     echo "</head>";
     echo "<body>";
 
     echo "<div class='box'>";
+
     echo "<h2>Registration Failed</h2>";
 
     foreach ($errors as $error) {
-        echo "<p class='error'>• " . htmlspecialchars($error) . "</p>";
+        echo "<p class='error'>• "
+            . htmlspecialchars($error)
+            . "</p>";
     }
 
     echo "<a href='../registration.html'>Go Back</a>";
@@ -160,135 +173,178 @@ if (!empty($errors)) {
 }
 
 
-// ===============================
-// SANITIZE DATA
-// ===============================
+// =====================================
+// DATABASE CONNECTION
+// =====================================
 
-$name = htmlspecialchars($name, ENT_QUOTES, "UTF-8");
-$email = htmlspecialchars($email, ENT_QUOTES, "UTF-8");
-$mobile = htmlspecialchars($mobile, ENT_QUOTES, "UTF-8");
-$course = htmlspecialchars($course, ENT_QUOTES, "UTF-8");
-$year = htmlspecialchars($year, ENT_QUOTES, "UTF-8");
-$gender = htmlspecialchars($gender, ENT_QUOTES, "UTF-8");
+$host = "localhost";
+$username = "root";
+$dbPassword = "";
+$database = "studenthub";
 
-
-// ===============================
-// DATE & TIME
-// ===============================
-
-$date = date("Y-m-d H:i:s");
+$conn = new mysqli(
+    $host,
+    $username,
+    $dbPassword,
+    $database
+);
 
 
-// ===============================
-// DATA FOLDER
-// ===============================
+// Check connection
 
-$dataFolder = __DIR__ . "/data";
-
-if (!is_dir($dataFolder)) {
-    mkdir($dataFolder, 0755, true);
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
 }
 
 
-// ===============================
-// CSV STORAGE
-// ===============================
+// =====================================
+// CHECK EMAIL ALREADY EXISTS
+// =====================================
 
-$csvFile = $dataFolder . "/registrations.csv";
+$check = $conn->prepare(
+    "SELECT student_id
+     FROM students
+     WHERE email = ?"
+);
 
-$isNewFile = !file_exists($csvFile);
+$check->bind_param("s", $email);
 
-$file = fopen($csvFile, "a");
+$check->execute();
 
-if ($file === false) {
-    die("Unable to open CSV file.");
+$result = $check->get_result();
+
+
+if ($result->num_rows > 0) {
+
+    echo "<!DOCTYPE html>";
+
+    echo "<html>";
+    echo "<head>";
+    echo "<title>Registration Error</title>";
+
+    echo "<style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .box {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            color: #dc2626;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 11px 22px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+    </style>";
+
+    echo "</head>";
+
+    echo "<body>";
+
+    echo "<div class='box'>";
+
+    echo "<h2>Email Already Registered</h2>";
+
+    echo "<p>This email is already registered in StudentHub.</p>";
+
+    echo "<a href='../registration.html'>Back to Registration</a>";
+
+    echo "</div>";
+
+    echo "</body>";
+    echo "</html>";
+
+    $check->close();
+    $conn->close();
+
+    exit;
 }
 
-
-// Lock file while writing
-flock($file, LOCK_EX);
+$check->close();
 
 
-// Add header for new CSV
-if ($isNewFile) {
+// =====================================
+// HASH PASSWORD
+// =====================================
 
-    fputcsv($file, [
-        "Name",
-        "Email",
-        "Mobile",
-        "Course",
-        "Year",
-        "Gender",
-        "Date"
-    ]);
-}
+$hashedPassword = password_hash(
+    $password,
+    PASSWORD_DEFAULT
+);
 
 
-// Add registration data
-fputcsv($file, [
+// =====================================
+// INSERT STUDENT
+// =====================================
+
+$stmt = $conn->prepare(
+    "INSERT INTO students
+    (name, email, mobile, course, year, gender, password)
+    VALUES (?, ?, ?, ?, ?, ?, ?)"
+);
+
+
+$stmt->bind_param(
+    "sssssss",
     $name,
     $email,
     $mobile,
     $course,
     $year,
     $gender,
-    $date
-]);
-
-
-// Unlock and close
-flock($file, LOCK_UN);
-fclose($file);
-
-
-// ===============================
-// JSON STORAGE
-// ===============================
-
-$jsonFile = $dataFolder . "/registrations.json";
-
-$records = [];
-
-
-// Read existing JSON
-if (file_exists($jsonFile)) {
-
-    $jsonData = file_get_contents($jsonFile);
-
-    if ($jsonData !== false && $jsonData !== "") {
-
-        $decodedData = json_decode($jsonData, true);
-
-        if (is_array($decodedData)) {
-            $records = $decodedData;
-        }
-    }
-}
-
-
-// Add new record
-$records[] = [
-    "name" => $name,
-    "email" => $email,
-    "mobile" => $mobile,
-    "course" => $course,
-    "year" => $year,
-    "gender" => $gender,
-    "date" => $date
-];
-
-
-// Save JSON
-file_put_contents(
-    $jsonFile,
-    json_encode($records, JSON_PRETTY_PRINT),
-    LOCK_EX
+    $hashedPassword
 );
 
 
-// ===============================
-// SUCCESS MESSAGE
-// ===============================
+// =====================================
+// EXECUTE INSERT
+// =====================================
+
+if (!$stmt->execute()) {
+
+    die(
+        "Registration failed: "
+        . htmlspecialchars($stmt->error)
+    );
+}
+
+
+// Get newly created student ID
+
+$student_id = $conn->insert_id;
+
+
+// Close database
+
+$stmt->close();
+$conn->close();
+
+
+// =====================================
+// SUCCESS PAGE
+// =====================================
 
 ?>
 
@@ -356,9 +412,14 @@ file_put_contents(
 
     <h2>✓ Registration Successful!</h2>
 
-    <p>Your StudentHub account has been registered successfully.</p>
+    <p>
+        Your StudentHub account has been created successfully.
+    </p>
 
     <div class="details">
+
+        <strong>Student ID:</strong>
+        <?= htmlspecialchars($student_id) ?><br>
 
         <strong>Name:</strong>
         <?= htmlspecialchars($name) ?><br>
@@ -380,8 +441,8 @@ file_put_contents(
 
     </div>
 
-    <a href="../registration.html">
-        Back to Registration
+    <a href="../login.html">
+        Go to Login
     </a>
 
 </div>
