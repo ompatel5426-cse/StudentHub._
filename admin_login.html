@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentHub | Administrator Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-login-banner {
+            background: linear-gradient(145deg, #0f172a, #1e1b4b, #312e81);
+            color: white;
+            padding: 50px 8%;
+            border-radius: 20px;
+        }
+
+        .admin-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #f87171;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+        }
+
+        .admin-box {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(15, 23, 42, 0.12);
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-admin-submit {
+            background: #1e1b4b;
+            color: white;
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-admin-submit:hover {
+            background: #312e81;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= HEADER ================= -->
+    <header>
+        <div class="logo">
+            <h2>StudentHub</h2>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="courses.html">Courses</a>
+            <a href="events.html">Events</a>
+            <a href="login.html">Student Login</a>
+            <a href="admin_login.html" style="color:#6C63FF; font-weight:700;">Admin Login 🛡️</a>
+        </nav>
+    </header>
+
+    <!-- ================= LOGIN SECTION ================= -->
+    <section class="login-section">
+
+        <!-- Left Side -->
+        <div class="login-left" style="background: linear-gradient(145deg, #0f172a, #1e1b4b);">
+            <div class="admin-badge-pill">🛡️ Restricted Access</div>
+            <h1 style="color:white;">Administrator Portal</h1>
+            <p style="color:#cbd5e1;">
+                Authorized access for university administrators, department heads, and faculty staff.
+                Manage student records, perform CRUD operations, export reporting data, and configure academic catalogs.
+            </p>
+            <div style="margin-top:25px; padding:15px; background:rgba(255,255,255,0.06); border-radius:12px; border:1px solid rgba(255,255,255,0.1); font-size:13px; color:#94a3b8;">
+                🔒 Enforces Role-Based Access Control (RBAC), prepared statements, and bcrypt hash verification.
+            </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="login-right">
+            <form action="php/admin_login.php" method="POST">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <h2>Admin Sign In</h2>
+                    <span style="font-size:22px;">🛡️</span>
+                </div>
+
+                <div id="loginAlert" style="display:none; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:15px;"></div>
+
+                <input type="hidden" name="csrf_token" id="admin_csrf_token" value="">
+
+                <p>Administrator Email</p>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="admin@studenthub.com"
+                    required
+                    autocomplete="username"
+                >
+
+                <p>Password</p>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your administrator password"
+                    required
+                    autocomplete="current-password"
+                >
+
+                <div class="options" style="display:flex; justify-content:space-between; align-items:center; margin:10px 0;">
+                    <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#555; cursor:pointer;">
+                        <input type="checkbox" name="remember" value="1"> Remember Me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-admin-submit">
+                    Sign In to Admin Console →
+                </button>
+
+                <div style="margin-top:20px; padding-top:15px; border-top:1px dashed #e2e8f0; font-size:13px; text-align:center; display:flex; flex-direction:column; gap:8px;">
+                    <div>
+                        New Administrator?
+                        <a href="admin_register.html" style="color:#6C63FF; font-weight:600;">Register Admin Account</a>
+                    </div>
+                    <div>
+                        Are you a student?
+                        <a href="login.html" style="color:#475569; text-decoration:underline;">Switch to Student Login →</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <div>
+            <h3>StudentHub</h3>
+            <p>Smart Student Management Portal</p>
+        </div>
+        <div>
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Student Login</a></li>
+                <li><a href="admin_login.html">Admin Login</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Contact</h4>
+            <p>Email: admin@studenthub.com</p>
+            <p>Phone: +91 9876543210</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        (function() {
+            var params = new URLSearchParams(window.location.search);
+            var alertBox = document.getElementById("loginAlert");
+            if (params.has("msg")) {
+                var msg = params.get("msg");
+                alertBox.style.display = "block";
+                if (msg === "registered") {
+                    alertBox.style.background = "#dcfce7";
+                    alertBox.style.color = "#15803d";
+                    alertBox.style.border = "1px solid #bbf7d0";
+                    alertBox.innerHTML = "✓ Administrator account created successfully! Please sign in.";
+                } else if (msg === "logged_out") {
+                    alertBox.style.background = "#dcfce7";
+                    alertBox.style.color = "#15803d";
+                    alertBox.style.border = "1px solid #bbf7d0";
+                    alertBox.innerHTML = "✓ Logged out from Administrator Console.";
+                } else if (msg === "admin_required") {
+                    alertBox.style.background = "#fee2e2";
+                    alertBox.style.color = "#b91c1c";
+                    alertBox.style.border = "1px solid #fecaca";
+                    alertBox.innerHTML = "⚠ Administrator login required to access that resource.";
+                } else if (msg === "student_denied") {
+                    alertBox.style.background = "#fee2e2";
+                    alertBox.style.color = "#b91c1c";
+                    alertBox.style.border = "1px solid #fecaca";
+                    alertBox.innerHTML = "⚠ Access Denied: That account is a Student. Please use the Student Login.";
+                }
+            }
+
+            fetch('php/csrf.php')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data && data.csrf_token) {
+                        var el = document.getElementById('admin_csrf_token');
+                        if (el) el.value = data.csrf_token;
+                    }
+                })
+                .catch(function(err) {});
+        })();
+    </script>
+</body>
+</html>

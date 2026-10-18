@@ -755,6 +755,8 @@ input:focus,select:focus {
     method="POST"
     novalidate
 >
+    <!-- CSRF Protection Token -->
+    <input type="hidden" name="csrf_token" id="csrf_token" value="">
 
 
 
@@ -1220,6 +1222,10 @@ input:focus,select:focus {
 
                 </div>
 
+                <div style="margin-top:14px; text-align:center; font-size:13px; color:#64748b;">
+                    Faculty or Staff? 
+                    <a href="admin_register.html" style="color:#2563eb; font-weight:600;">Admin Registration →</a>
+                </div>
 
             </form>
 
@@ -1512,6 +1518,21 @@ input:focus,select:focus {
 
                 }
             );
+
+        /* =========================
+           CSRF TOKEN AUTO-FETCH
+        ========================== */
+        fetch('php/csrf.php')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data && data.csrf_token) {
+                    var csrfInput = document.getElementById('csrf_token');
+                    if (csrfInput) csrfInput.value = data.csrf_token;
+                }
+            })
+            .catch(function(err) {
+                console.warn('CSRF token initialization skipped:', err);
+            });
 
     </script>
 

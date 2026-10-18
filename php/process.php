@@ -1,312 +1,163 @@
 <?php
+/**
+ * StudentHub — Practical 9: Secure User Registration Processor
+ * Uses PHP MySQLi with Prepared Statements, Server-side Validation,
+ * Secure Hashing (password_hash), CSRF Protection, and PRG Pattern.
+ */
+
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/auth.php';
+
+start_secure_session();
 
 // =====================================
-// ONLY POST REQUEST ALLOWED
+// 1. ENFORCE HTTP POST METHOD
 // =====================================
-
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    die("Invalid request method.");
+    http_response_code(405);
+    header("Location: ../registration.html");
+    exit;
 }
 
+// =====================================
+// 2. CSRF TOKEN VALIDATION
+// =====================================
+$submitted_csrf = $_POST["csrf_token"] ?? "";
+if (!empty($submitted_csrf) && !verify_csrf_token($submitted_csrf)) {
+    render_error_page(["Security validation failed (invalid CSRF token). Please try submitting the form again."]);
+    exit;
+}
 
 // =====================================
-// GET FORM DATA
+// 3. SANITIZE & RETRIEVE INPUTS
 // =====================================
-
-$name = trim($_POST["name"] ?? "");
-$email = trim($_POST["email"] ?? "");
-$mobile = trim($_POST["mobile"] ?? "");
-$course = trim($_POST["course"] ?? "");
-$year = trim($_POST["year"] ?? "");
-$gender = trim($_POST["gender"] ?? "");
-$password = $_POST["password"] ?? "";
+$name            = trim($_POST["name"] ?? "");
+$email           = trim($_POST["email"] ?? "");
+$mobile          = trim($_POST["mobile"] ?? "");
+$course          = trim($_POST["course"] ?? "");
+$year            = trim($_POST["year"] ?? "");
+$gender          = trim($_POST["gender"] ?? "");
+$password        = $_POST["password"] ?? "";
 $confirmPassword = $_POST["confirmPassword"] ?? "";
-
+$terms           = isset($_POST["terms"]) || isset($_POST["agree"]);
 
 // =====================================
-// VALIDATION
+// 4. RIGOROUS SERVER-SIDE VALIDATION
 // =====================================
-
 $errors = [];
 
-
-// Name
+// Name validation (2 to 50 characters, letters and spaces only)
 if ($name === "") {
     $errors[] = "Full name is required.";
 } elseif (!preg_match("/^[A-Za-z ]{2,50}$/", $name)) {
-    $errors[] = "Please enter a valid name.";
+    $errors[] = "Full name must be 2 to 50 characters and contain only letters and spaces.";
 }
 
-
-// Email
+// Email validation
 if ($email === "") {
-    $errors[] = "Email is required.";
+    $errors[] = "Email address is required.";
+} elseif (strlen($email) > 100) {
+    $errors[] = "Email address cannot exceed 100 characters.";
 } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errors[] = "Please enter a valid email address.";
+    $errors[] = "Please provide a valid email address (e.g. name@example.com).";
 }
 
-
-// Mobile
+// Mobile validation (10 digits starting with 6, 7, 8, or 9)
 if ($mobile === "") {
     $errors[] = "Mobile number is required.";
 } elseif (!preg_match("/^[6-9][0-9]{9}$/", $mobile)) {
-    $errors[] = "Enter a valid 10-digit mobile number.";
+    $errors[] = "Mobile number must be a valid 10-digit Indian phone number starting with 6, 7, 8, or 9.";
 }
 
-
-// Course
+// Course validation
+$allowed_courses = ["BCA", "BSc IT", "B.Tech", "MCA", "MSc IT", "Computer Science Engineering", "Information Technology"];
 if ($course === "") {
     $errors[] = "Please select your course.";
+} elseif (!in_array($course, $allowed_courses, true) && strlen($course) > 100) {
+    $errors[] = "Invalid course selection.";
 }
 
-
-// Year
+// Year validation
+$allowed_years = ["1", "2", "3", "4", "First Year", "Second Year", "Third Year", "Fourth Year", "1st Year", "2nd Year", "3rd Year", "4th Year"];
 if ($year === "") {
     $errors[] = "Please select your academic year.";
+} elseif (!in_array($year, $allowed_years, true)) {
+    $errors[] = "Invalid academic year selection.";
 }
 
-
-// Gender
+// Gender validation
+$allowed_genders = ["Male", "Female", "Other"];
 if ($gender === "") {
     $errors[] = "Please select your gender.";
+} elseif (!in_array($gender, $allowed_genders, true)) {
+    $errors[] = "Invalid gender selection.";
 }
 
-
-// Password
+// Password complexity validation (8+ chars, min 1 uppercase, 1 lowercase, 1 digit, 1 special char)
 if ($password === "") {
-
     $errors[] = "Password is required.";
-
 } elseif (
     strlen($password) < 8 ||
     !preg_match("/[A-Z]/", $password) ||
     !preg_match("/[a-z]/", $password) ||
     !preg_match("/[0-9]/", $password) ||
-    !preg_match("/[@$!%*?&]/", $password)
+    !preg_match("/[@$!%*?&#]/", $password)
 ) {
-
-    $errors[] =
-        "Password must contain 8+ characters, uppercase, lowercase, number and special character.";
+    $errors[] = "Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character (@$!%*?&#).";
 }
 
-
-// Confirm password
+// Password confirmation match
 if ($password !== $confirmPassword) {
-    $errors[] = "Passwords do not match.";
+    $errors[] = "Password and confirm password do not match.";
 }
 
-
-// =====================================
-// SHOW VALIDATION ERRORS
-// =====================================
-
+// If any validation errors exist, render the error view
 if (!empty($errors)) {
-
-    echo "<!DOCTYPE html>";
-    echo "<html>";
-    echo "<head>";
-
-    echo "<title>Registration Error</title>";
-
-    echo "<style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f1f5f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .box {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-
-        h2 {
-            color: #dc2626;
-        }
-
-        .error {
-            color: #dc2626;
-            margin: 10px 0;
-        }
-
-        a {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-        }
-
-    </style>";
-
-    echo "</head>";
-    echo "<body>";
-
-    echo "<div class='box'>";
-
-    echo "<h2>Registration Failed</h2>";
-
-    foreach ($errors as $error) {
-        echo "<p class='error'>• "
-            . htmlspecialchars($error)
-            . "</p>";
-    }
-
-    echo "<a href='../registration.html'>Go Back</a>";
-
-    echo "</div>";
-
-    echo "</body>";
-    echo "</html>";
-
+    render_error_page($errors);
     exit;
 }
 
-
 // =====================================
-// DATABASE CONNECTION
+// 5. CHECK IF EMAIL ALREADY EXISTS (Prepared Statement)
 // =====================================
-
-$host = "localhost";
-$username = "root";
-$dbPassword = "";
-$database = "studenthub";
-
-$conn = new mysqli(
-    $host,
-    $username,
-    $dbPassword,
-    $database
-);
-
-
-// Check connection
-
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
-}
-
-
-// =====================================
-// CHECK EMAIL ALREADY EXISTS
-// =====================================
-
-$check = $conn->prepare(
-    "SELECT student_id
-     FROM students
-     WHERE email = ?"
-);
-
-$check->bind_param("s", $email);
-
-$check->execute();
-
-$result = $check->get_result();
-
-
-if ($result->num_rows > 0) {
-
-    echo "<!DOCTYPE html>";
-
-    echo "<html>";
-    echo "<head>";
-    echo "<title>Registration Error</title>";
-
-    echo "<style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f1f5f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .box {
-            background: white;
-            padding: 35px;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-
-        h2 {
-            color: #dc2626;
-        }
-
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 11px 22px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-        }
-
-    </style>";
-
-    echo "</head>";
-
-    echo "<body>";
-
-    echo "<div class='box'>";
-
-    echo "<h2>Email Already Registered</h2>";
-
-    echo "<p>This email is already registered in StudentHub.</p>";
-
-    echo "<a href='../registration.html'>Back to Registration</a>";
-
-    echo "</div>";
-
-    echo "</body>";
-    echo "</html>";
-
-    $check->close();
-    $conn->close();
-
+$check_stmt = $conn->prepare("SELECT student_id FROM students WHERE email = ? LIMIT 1");
+if (!$check_stmt) {
+    error_log("StudentHub Prepare Error: " . $conn->error);
+    render_error_page(["An unexpected server error occurred. Please try again later."]);
     exit;
 }
 
-$check->close();
+$check_stmt->bind_param("s", $email);
+$check_stmt->execute();
+$check_result = $check_stmt->get_result();
 
+if ($check_result && $check_result->num_rows > 0) {
+    $check_stmt->close();
+    render_duplicate_email_page($email);
+    exit;
+}
+$check_stmt->close();
 
 // =====================================
-// HASH PASSWORD
+// 6. SECURE PASSWORD HASHING (PASSWORD_DEFAULT)
 // =====================================
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-$hashedPassword = password_hash(
-    $password,
-    PASSWORD_DEFAULT
+// =====================================
+// 7. INSERT STUDENT RECORD (Prepared Statement)
+// =====================================
+$insert_stmt = $conn->prepare(
+    "INSERT INTO students (name, email, mobile, course, year, gender, role, status, password) 
+     VALUES (?, ?, ?, ?, ?, ?, 'student', 'active', ?)"
 );
 
+if (!$insert_stmt) {
+    error_log("StudentHub Insert Prepare Error: " . $conn->error);
+    render_error_page(["Registration could not be completed at this time. Please contact support."]);
+    exit;
+}
 
-// =====================================
-// INSERT STUDENT
-// =====================================
-
-$stmt = $conn->prepare(
-    "INSERT INTO students
-    (name, email, mobile, course, year, gender, password)
-    VALUES (?, ?, ?, ?, ?, ?, ?)"
-);
-
-
-$stmt->bind_param(
+$insert_stmt->bind_param(
     "sssssss",
     $name,
     $email,
@@ -314,139 +165,114 @@ $stmt->bind_param(
     $course,
     $year,
     $gender,
-    $hashedPassword
+    $hashed_password
 );
 
-
-// =====================================
-// EXECUTE INSERT
-// =====================================
-
-if (!$stmt->execute()) {
-
-    die(
-        "Registration failed: "
-        . htmlspecialchars($stmt->error)
-    );
+if (!$insert_stmt->execute()) {
+    error_log("StudentHub Execute Error: " . $insert_stmt->error);
+    $insert_stmt->close();
+    render_error_page(["An error occurred while saving your record. Please try again."]);
+    exit;
 }
 
-
-// Get newly created student ID
-
-$student_id = $conn->insert_id;
-
-
-// Close database
-
-$stmt->close();
-$conn->close();
-
+$new_student_id = $conn->insert_id;
+$insert_stmt->close();
 
 // =====================================
-// SUCCESS PAGE
+// 8. POST / REDIRECT / GET (PRG) PATTERN
 // =====================================
+$_SESSION['registered_student'] = [
+    'student_id' => $new_student_id,
+    'name'       => $name,
+    'email'      => $email,
+    'mobile'     => $mobile,
+    'course'     => $course,
+    'year'       => $year,
+    'gender'     => $gender
+];
 
-?>
+header("Location: register_success.php");
+exit;
 
-<!DOCTYPE html>
 
-<html lang="en">
+// =========================================================================
+// HELPER UI FUNCTIONS (Matching StudentHub Theme)
+// =========================================================================
 
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Registration Successful</title>
-
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f1f5f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .success-box {
-            background: white;
-            padding: 35px;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-
-        h2 {
-            color: #15803d;
-        }
-
-        .details {
-            text-align: left;
-            margin-top: 20px;
-            line-height: 1.8;
-        }
-
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 11px 22px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-        }
-
-    </style>
-
-</head>
-
-<body>
-
-<div class="success-box">
-
-    <h2>✓ Registration Successful!</h2>
-
-    <p>
-        Your StudentHub account has been created successfully.
-    </p>
-
-    <div class="details">
-
-        <strong>Student ID:</strong>
-        <?= htmlspecialchars($student_id) ?><br>
-
-        <strong>Name:</strong>
-        <?= htmlspecialchars($name) ?><br>
-
-        <strong>Email:</strong>
-        <?= htmlspecialchars($email) ?><br>
-
-        <strong>Mobile:</strong>
-        <?= htmlspecialchars($mobile) ?><br>
-
-        <strong>Course:</strong>
-        <?= htmlspecialchars($course) ?><br>
-
-        <strong>Academic Year:</strong>
-        <?= htmlspecialchars($year) ?><br>
-
-        <strong>Gender:</strong>
-        <?= htmlspecialchars($gender) ?><br>
-
+function render_error_page(array $errors) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registration Error - StudentHub</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', -apple-system, sans-serif; }
+            body { background: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+            .box { background: white; padding: 35px; border-radius: 18px; width: 100%; max-width: 520px; box-shadow: 0 15px 40px rgba(15,23,42,0.12); border: 1px solid rgba(220,38,38,0.2); }
+            .icon { width: 60px; height: 60px; background: #fee2e2; color: #dc2626; font-size: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 16px; }
+            h2 { color: #dc2626; font-size: 22px; text-align: center; margin-bottom: 8px; }
+            p.sub { color: #64748b; font-size: 13px; text-align: center; margin-bottom: 20px; }
+            .error-list { background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 15px 20px; margin-bottom: 24px; list-style-type: none; }
+            .error-list li { color: #b91c1c; font-size: 13px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px; }
+            .error-list li:last-child { margin-bottom: 0; }
+            .btn-wrap { text-align: center; }
+            a.btn { display: inline-block; padding: 11px 24px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; }
+            a.btn:hover { background: #1d4ed8; }
+        </style>
+    </head>
+    <body>
+    <div class="box">
+        <div class="icon">✕</div>
+        <h2>Registration Failed</h2>
+        <p class="sub">Please correct the following errors and try again:</p>
+        <ul class="error-list">
+            <?php foreach ($errors as $err): ?>
+                <li><span>•</span> <span><?= htmlspecialchars($err, ENT_QUOTES, 'UTF-8') ?></span></li>
+            <?php endforeach; ?>
+        </ul>
+        <div class="btn-wrap">
+            <a href="javascript:history.back()" class="btn">← Go Back & Edit</a>
+        </div>
     </div>
+    </body>
+    </html>
+    <?php
+}
 
-    <a href="../login.html">
-        Go to Login
-    </a>
-
-</div>
-
-</body>
-
-</html>
+function render_duplicate_email_page($email) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Email Already Registered - StudentHub</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', -apple-system, sans-serif; }
+            body { background: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+            .box { background: white; padding: 38px; border-radius: 18px; width: 100%; max-width: 520px; text-align: center; box-shadow: 0 15px 40px rgba(15,23,42,0.12); border: 1px solid rgba(234,88,12,0.25); }
+            .icon { width: 64px; height: 64px; background: #ffedd5; color: #ea580c; font-size: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 18px; }
+            h2 { color: #c2410c; font-size: 22px; margin-bottom: 8px; }
+            p { color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+            .highlight { color: #1e293b; font-weight: 600; background: #f1f5f9; padding: 3px 8px; border-radius: 6px; }
+            .btn-group { display: flex; gap: 12px; justify-content: center; }
+            a.btn-primary { padding: 11px 22px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; }
+            a.btn-outline { padding: 11px 22px; background: #f8fafc; color: #475569; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; border: 1px solid #cbd5e1; }
+        </style>
+    </head>
+    <body>
+    <div class="box">
+        <div class="icon">⚠</div>
+        <h2>Email Already Registered</h2>
+        <p>The email address <span class="highlight"><?= htmlspecialchars($email, ENT_QUOTES, 'UTF-8') ?></span> is already linked to an existing StudentHub account.</p>
+        <div class="btn-group">
+            <a href="../login.html" class="btn-primary">Sign In Instead →</a>
+            <a href="../registration.html" class="btn-outline">Use Different Email</a>
+        </div>
+    </div>
+    </body>
+    </html>
+    <?php
+}
