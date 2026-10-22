@@ -25,20 +25,37 @@ async function loadEvents() {
        // await new Promise(resolve => setTimeout(resolve, 3000));   // Simulate a delay for testing purposes
 
 
-        const response = await fetch("php/data/events.json");
-        //const response = await fetch("data/wrong-events.json");  // Simulate a fetch error for testing purposes
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Unable to load events.json"
-            );
-
+        // Practical 13: Fetch from PHP JSON API with fallback to events.json
+        let apiData = null;
+        try {
+            const apiRes = await fetch("php/api/events.php");
+            if (apiRes.ok) {
+                const json = await apiRes.json();
+                if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+                    apiData = json.data.map(item => ({
+                        id: item.event_id,
+                        title: item.event_name,
+                        date: item.event_date,
+                        category: item.category || 'General',
+                        location: item.venue || 'Campus',
+                        poster_url: item.poster_url || null,
+                        description: item.description || ''
+                    }));
+                }
+            }
+        } catch (e) {
+            console.warn("API fetch error, falling back to static json:", e);
         }
 
-
-        events = await response.json();
-
+        if (apiData) {
+            events = apiData;
+        } else {
+            const response = await fetch("php/data/events.json");
+            if (!response.ok) {
+                throw new Error("Unable to load events");
+            }
+            events = await response.json();
+        }
 
         filteredEvents = [...events];
 
@@ -113,7 +130,7 @@ function renderEvents() {
 
 
         card.innerHTML = `
-
+            ${event.poster_url ? `<img src="${event.poster_url}" alt="${event.title}" style="width:100%; height:150px; object-fit:cover; border-radius:10px; margin-bottom:12px; display:block;">` : ''}
             <span class="event-category">
                 ${event.category}
             </span>

@@ -77,6 +77,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             set_remember_me_token($conn, $row["student_id"]);
                         }
 
+                        // Practical 14: Audit Logging
+                        log_audit_action($conn, 'ADMIN_LOGIN', "Administrator {$row['email']} signed into admin console.");
+
                         $stmt->close();
                         header("Location: admin_dashboard.php");
                         exit;

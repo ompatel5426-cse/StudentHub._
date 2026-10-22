@@ -139,7 +139,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ins->bind_param("ssssssss", $name, $email, $mobile, $course, $year, $gender, $status, $hashed);
 
         if ($ins->execute()) {
-            $_SESSION['flash_success'] = "Student '$name' (#{$conn->insert_id}) created successfully!";
+            $new_id = $conn->insert_id;
+            $_SESSION['flash_success'] = "Student '$name' (#$new_id) created successfully!";
+            log_audit_action($conn, 'STUDENT_CREATE', "Created student #$new_id ($name, $email).");
         } else {
             $_SESSION['flash_error'] = "Database insert failed: " . $conn->error;
         }
@@ -207,6 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($upd->execute()) {
             $_SESSION['flash_success'] = "Student #$student_id updated successfully!";
+            log_audit_action($conn, 'STUDENT_UPDATE', "Updated student #$student_id ($name).");
         } else {
             $_SESSION['flash_error'] = "Update failed: " . $conn->error;
         }
@@ -225,6 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("i", $student_id);
             if ($stmt->execute()) {
                 $_SESSION['flash_success'] = "Student #$student_id has been deactivated (Soft Deleted).";
+                log_audit_action($conn, 'STUDENT_SOFT_DELETE', "Deactivated student #$student_id.");
             }
             $stmt->close();
         }
@@ -242,6 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("i", $student_id);
             if ($stmt->execute()) {
                 $_SESSION['flash_success'] = "Student #$student_id has been restored to Active status.";
+                log_audit_action($conn, 'STUDENT_RESTORE', "Restored student #$student_id to active.");
             }
             $stmt->close();
         }
@@ -259,6 +264,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("i", $student_id);
             if ($stmt->execute()) {
                 $_SESSION['flash_success'] = "Student #$student_id permanently deleted from database.";
+                log_audit_action($conn, 'STUDENT_HARD_DELETE', "Permanently deleted student #$student_id.");
             } else {
                 $_SESSION['flash_error'] = "Failed to delete student: " . $conn->error;
             }

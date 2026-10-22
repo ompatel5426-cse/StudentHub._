@@ -261,6 +261,16 @@ function logout_user($is_timeout = false) {
         unset($_COOKIE['studenthub_remember']);
     }
 
+    // Log logout audit action before destroying session
+    if (!empty($_SESSION['student_id'])) {
+        require_once __DIR__ . '/db.php';
+        global $conn;
+        if ($conn) {
+            $reason = $is_timeout ? 'Session timed out due to inactivity.' : 'User initiated logout.';
+            log_audit_action($conn, 'LOGOUT', $reason);
+        }
+    }
+
     // Unset all session variables
     $_SESSION = [];
 
@@ -280,4 +290,23 @@ function logout_user($is_timeout = false) {
 
     // Destroy session storage
     session_destroy();
+}
+
+/**
+ * Record action in audit_logs table (Practical 14)
+ */
+function log_audit_action($conn, $action, $details = '') {
+    if (!$conn) return;
+
+    $user_id = $_SESSION['student_id'] ?? null;
+    $user_email = $_SESSION['email'] ?? 'guest';
+    $role = $_SESSION['role'] ?? 'guest';
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1';
+
+    $stmt = $conn->prepare("INSERT INTO audit_logs (user_id, user_email, role, action, details, ip_address) VALUES (?, ?, ?, ?, ?, ?)");
+    if ($stmt) {
+        $stmt->bind_param("isssss", $user_id, $user_email, $role, $action, $details, $ip);
+        $stmt->execute();
+        $stmt->close();
+    }
 }
