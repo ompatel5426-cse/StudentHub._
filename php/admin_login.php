@@ -102,15 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudentHub | Administrator Sign In</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        .alert-box { padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
-        .alert-danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-        .alert-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-        .remember-wrap { display: flex; justify-content: space-between; align-items: center; margin: 12px 0 16px; font-size: 13px; }
-        .remember-wrap label { display: flex; align-items: center; gap: 6px; color: #555; cursor: pointer; }
-        .btn-admin-submit { background: #0f172a; color: white; width: 100%; padding: 13px; border: none; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer; }
-        .btn-admin-submit:hover { background: #1e293b; }
-    </style>
+    <link rel="stylesheet" href="../css/admin_login.css">
 </head>
 <body>
 
@@ -121,20 +113,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <nav>
             <a href="../index.html">Home</a>
             <a href="../about.html">About</a>
+            <a href="../courses.html">Courses</a>
+            <a href="../events.html">Events</a>
             <a href="../login.html">Student Login</a>
             <a href="admin_login.php" style="color:#6C63FF; font-weight:700;">Admin Login 🛡️</a>
         </nav>
     </header>
 
     <section class="login-section">
-        <div class="login-left" style="background: linear-gradient(145deg, #0f172a, #1e1b4b);">
-            <div style="background:rgba(239,68,68,0.2); color:#fca5a5; display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:700; margin-bottom:15px;">
-                🛡️ RESTRICTED ADMIN PORTAL
-            </div>
-            <h1 style="color:white;">Administrator Sign In</h1>
-            <p style="color:#cbd5e1;">
-                Restricted access for college management and faculty members. Manage student databases, attendance, circulars, and system configurations.
+        <div class="login-left">
+            <div class="login-badge">🛡️ RESTRICTED ACCESS</div>
+            <h1 style="color:white; font-size:42px; margin-bottom:15px; font-weight:700; line-height:1.2;">Administrator Portal</h1>
+            <p style="color:#f1f5f9; font-size:16px; line-height:1.6; margin-bottom:10px;">
+                Authorized access for university administrators, department heads, and faculty staff. Manage student records, publish campus events, configure settings, and audit system activities.
             </p>
+
+            <div class="login-features-list">
+                <div class="login-feature-pill">
+                    <span>🔒</span> <span>Role-Based Access Control (Admin verified)</span>
+                </div>
+                <div class="login-feature-pill">
+                    <span>🛡️</span> <span>Bcrypt password hashing & session regeneration</span>
+                </div>
+                <div class="login-feature-pill">
+                    <span>⚡</span> <span>MySQLi prepared statements & audit logging</span>
+                </div>
+            </div>
         </div>
 
         <div class="login-right">
@@ -184,7 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
 
                 <button type="submit" class="btn-admin-submit">
-                    Sign In to Console →
+                    Sign In to Admin Portal
                 </button>
 
                 <div style="margin-top:20px; padding-top:15px; border-top:1px dashed #e2e8f0; font-size:13px; text-align:center; display:flex; flex-direction:column; gap:8px;">
@@ -200,6 +204,54 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </form>
         </div>
     </section>
+
+    <!-- ================= FEATURES ================= -->
+    <section class="login-features">
+        <h2>Administrator Capabilities</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>👥 Student Management</h3>
+                <p>Add, update, search, filter, and export student academic records to CSV.</p>
+            </div>
+
+            <div class="card">
+                <h3>📅 Event Management</h3>
+                <p>Publish campus events, upload poster images with validation, and track registrations.</p>
+            </div>
+
+            <div class="card">
+                <h3>⚡ Real-Time API</h3>
+                <p>RESTful JSON endpoints and asynchronous Fetch API live event feeds.</p>
+            </div>
+
+            <div class="card">
+                <h3>🛡️ Security Audits</h3>
+                <p>Monitor critical administrative actions with immutable timestamped audit logs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+        <div>
+            <h3>StudentHub</h3>
+            <p>Smart Student Management Portal</p>
+        </div>
+        <div>
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../login.html">Student Login</a></li>
+                <li><a href="admin_login.php">Admin Login</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Contact</h4>
+            <p>Email: admin@studenthub.com</p>
+            <p>Phone: +91 9876543210</p>
+        </div>
+    </footer>
 
 </body>
 </html>

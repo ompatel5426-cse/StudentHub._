@@ -207,20 +207,7 @@ function render_error_page(array $errors) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Registration Error - StudentHub</title>
-        <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', -apple-system, sans-serif; }
-            body { background: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-            .box { background: white; padding: 35px; border-radius: 18px; width: 100%; max-width: 520px; box-shadow: 0 15px 40px rgba(15,23,42,0.12); border: 1px solid rgba(220,38,38,0.2); }
-            .icon { width: 60px; height: 60px; background: #fee2e2; color: #dc2626; font-size: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 16px; }
-            h2 { color: #dc2626; font-size: 22px; text-align: center; margin-bottom: 8px; }
-            p.sub { color: #64748b; font-size: 13px; text-align: center; margin-bottom: 20px; }
-            .error-list { background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 15px 20px; margin-bottom: 24px; list-style-type: none; }
-            .error-list li { color: #b91c1c; font-size: 13px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px; }
-            .error-list li:last-child { margin-bottom: 0; }
-            .btn-wrap { text-align: center; }
-            a.btn { display: inline-block; padding: 11px 24px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; }
-            a.btn:hover { background: #1d4ed8; }
-        </style>
+        <link rel="stylesheet" href="../css/process_feedback.css">
     </head>
     <body>
     <div class="box">
@@ -249,18 +236,7 @@ function render_duplicate_email_page($email) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Email Already Registered - StudentHub</title>
-        <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', -apple-system, sans-serif; }
-            body { background: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-            .box { background: white; padding: 38px; border-radius: 18px; width: 100%; max-width: 520px; text-align: center; box-shadow: 0 15px 40px rgba(15,23,42,0.12); border: 1px solid rgba(234,88,12,0.25); }
-            .icon { width: 64px; height: 64px; background: #ffedd5; color: #ea580c; font-size: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 18px; }
-            h2 { color: #c2410c; font-size: 22px; margin-bottom: 8px; }
-            p { color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
-            .highlight { color: #1e293b; font-weight: 600; background: #f1f5f9; padding: 3px 8px; border-radius: 6px; }
-            .btn-group { display: flex; gap: 12px; justify-content: center; }
-            a.btn-primary { padding: 11px 22px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; }
-            a.btn-outline { padding: 11px 22px; background: #f8fafc; color: #475569; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; border: 1px solid #cbd5e1; }
-        </style>
+        <link rel="stylesheet" href="../css/process_feedback.css">
     </head>
     <body>
     <div class="box">

@@ -290,93 +290,7 @@ $stmt->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Events - Practical 12 CRUD</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',-apple-system,sans-serif; }
-        body { background: #f4f6fa; color: #1e293b; }
-
-        /* Navbar */
-        nav.admin-nav {
-            background: #0f172a;
-            color: white;
-            padding: 16px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .brand-text { font-size: 24px; font-weight: 700; color: #818cf8; }
-        .admin-tag { background: #ef4444; color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; margin-left: 8px; }
-        .admin-nav-links { display: flex; align-items: center; gap: 20px; }
-        .admin-nav-links a { color: #cbd5e1; text-decoration: none; font-size: 14px; font-weight: 500; }
-        .admin-nav-links a:hover { color: white; }
-        .btn-logout { background: #ef4444 !important; color: white !important; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
-
-        /* Page Layout */
-        .page-wrap { max-width: 1350px; margin: 35px auto; padding: 0 4%; }
-        .alert { padding: 14px 18px; border-radius: 10px; margin-bottom: 22px; font-size: 14px; display: flex; align-items: center; justify-content: space-between; }
-        .alert-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-        .alert-danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-
-        .header-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
-        .header-bar h1 { font-size: 26px; color: #0f172a; }
-        .header-bar p { font-size: 14px; color: #64748b; }
-        .btn-primary-action { background: #6C63FF; color: white; padding: 11px 22px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; text-decoration: none; }
-        .btn-primary-action:hover { background: #5148d8; }
-        .btn-ajax-link { background: #0284c7; color: white; padding: 11px 20px; border-radius: 10px; border: none; font-weight: 600; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-ajax-link:hover { background: #0369a1; }
-
-        /* Filter Panel */
-        .filter-panel { background: white; padding: 20px 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; margin-bottom: 25px; }
-        .filter-form { display: grid; grid-template-columns: 2fr 1fr 1fr auto auto; gap: 12px; align-items: center; }
-        @media (max-width: 900px) { .filter-form { grid-template-columns: 1fr 1fr; } }
-        @media (max-width: 600px) { .filter-form { grid-template-columns: 1fr; } }
-        .filter-input, .filter-select { padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; color: #1e293b; background: white; width: 100%; }
-        .btn-filter { background: #2563eb; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; }
-        .btn-reset { background: #f1f5f9; color: #475569; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; text-align: center; border: 1px solid #cbd5e1; }
-
-        /* Table Card */
-        .table-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #e2e8f0; overflow: hidden; }
-        .table-responsive { overflow-x: auto; }
-        table.events-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
-        table.events-table th { background: #f8fafc; color: #475569; font-weight: 600; padding: 14px 16px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
-        table.events-table td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; color: #334155; vertical-align: middle; }
-        table.events-table tr:hover { background: #fbfcfe; }
-
-        /* Poster Thumbnail */
-        .poster-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid #e2e8f0; }
-        .poster-placeholder { width: 50px; height: 50px; border-radius: 8px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #94a3b8; border: 1px dashed #cbd5e1; }
-
-        /* Badges */
-        .badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-        .badge-open { background: #dcfce7; color: #15803d; }
-        .badge-closed { background: #fee2e2; color: #b91c1c; }
-        .badge-cat { background: #f3e8ff; color: #7e22ce; font-size: 11px; padding: 3px 8px; border-radius: 6px; font-weight: 500; }
-
-        /* Actions */
-        .btn-action { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
-        .btn-edit { background: #dbeafe; color: #1e40af; }
-        .btn-edit:hover { background: #bfdbfe; }
-        .btn-toggle { background: #fef3c7; color: #92400e; }
-        .btn-delete { background: #fee2e2; color: #b91c1c; }
-
-        /* Modals */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
-        .modal.open { display: flex; }
-        .modal-box { background: white; border-radius: 18px; width: 95%; max-width: 650px; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
-        .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e2e8f0; }
-        .modal-head h3 { font-size: 20px; color: #0f172a; }
-        .modal-close { background: none; border: none; font-size: 24px; color: #64748b; cursor: pointer; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-        .form-full { grid-column: span 2; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; font-family: inherit; }
-        .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0; }
-        .btn-cancel { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; }
-        .btn-submit { background: #6C63FF; color: white; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; }
-    </style>
+    <link rel="stylesheet" href="../css/manage_events.css">
 </head>
 <body>
 
@@ -691,22 +605,6 @@ $stmt->close();
         </div>
     </div>
 
-    <script>
-        function openCreateModal() { document.getElementById('createModal').classList.add('open'); }
-        function openEditModal(evt) {
-            document.getElementById('edit_event_id').value = evt.event_id;
-            document.getElementById('edit_event_name').value = evt.event_name;
-            document.getElementById('edit_category').value = evt.category || 'Workshop';
-            document.getElementById('edit_event_date').value = evt.event_date;
-            document.getElementById('edit_venue').value = evt.venue || '';
-            document.getElementById('edit_status').value = evt.status || 'open';
-            document.getElementById('edit_description').value = evt.description || '';
-            document.getElementById('editModal').classList.add('open');
-        }
-        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') { closeModal('createModal'); closeModal('editModal'); }
-        });
-    </script>
+    <script src="../js/manage_events.js"></script>
 </body>
 </html>

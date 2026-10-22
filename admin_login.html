@@ -5,54 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudentHub | Administrator Login</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .admin-login-banner {
-            background: linear-gradient(145deg, #0f172a, #1e1b4b, #312e81);
-            color: white;
-            padding: 50px 8%;
-            border-radius: 20px;
-        }
-
-        .admin-badge-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.35);
-            color: #f87171;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 15px;
-        }
-
-        .admin-box {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 15px 45px rgba(15, 23, 42, 0.12);
-            border: 1px solid #e2e8f0;
-        }
-
-        .btn-admin-submit {
-            background: #1e1b4b;
-            color: white;
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-admin-submit:hover {
-            background: #312e81;
-        }
-    </style>
+    <link rel="stylesheet" href="css/admin_login.css">
 </head>
 <body>
 
@@ -61,12 +14,13 @@
         <div class="logo">
             <h2>StudentHub</h2>
         </div>
-        <nav>
+        <nav id="mainNav">
             <a href="index.html">Home</a>
             <a href="about.html">About</a>
             <a href="courses.html">Courses</a>
             <a href="events.html">Events</a>
             <a href="login.html">Student Login</a>
+            <a href="registration.html">Student Register</a>
             <a href="admin_login.html" style="color:#6C63FF; font-weight:700;">Admin Login 🛡️</a>
         </nav>
     </header>
@@ -75,25 +29,31 @@
     <section class="login-section">
 
         <!-- Left Side -->
-        <div class="login-left" style="background: linear-gradient(145deg, #0f172a, #1e1b4b);">
-            <div class="admin-badge-pill">🛡️ Restricted Access</div>
-            <h1 style="color:white;">Administrator Portal</h1>
-            <p style="color:#cbd5e1;">
+        <div class="login-left">
+            <div class="login-badge">🛡️ RESTRICTED ACCESS</div>
+            <h1 style="color:white; font-size:42px; margin-bottom:15px; font-weight:700; line-height:1.2;">Administrator Portal</h1>
+            <p style="color:#f1f5f9; font-size:16px; line-height:1.6; margin-bottom:10px;">
                 Authorized access for university administrators, department heads, and faculty staff.
-                Manage student records, perform CRUD operations, export reporting data, and configure academic catalogs.
+                Manage student records, publish campus events, configure settings, and audit system activities.
             </p>
-            <div style="margin-top:25px; padding:15px; background:rgba(255,255,255,0.06); border-radius:12px; border:1px solid rgba(255,255,255,0.1); font-size:13px; color:#94a3b8;">
-                🔒 Enforces Role-Based Access Control (RBAC), prepared statements, and bcrypt hash verification.
+
+            <div class="login-features-list">
+                <div class="login-feature-pill">
+                    <span>🔒</span> <span>Role-Based Access Control (Admin verified)</span>
+                </div>
+                <div class="login-feature-pill">
+                    <span>🛡️</span> <span>Bcrypt password hashing & session regeneration</span>
+                </div>
+                <div class="login-feature-pill">
+                    <span>⚡</span> <span>MySQLi prepared statements & audit logging</span>
+                </div>
             </div>
         </div>
 
         <!-- Right Side -->
         <div class="login-right">
             <form action="php/admin_login.php" method="POST">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <h2>Admin Sign In</h2>
-                    <span style="font-size:22px;">🛡️</span>
-                </div>
+                <h2>Admin Login</h2>
 
                 <div id="loginAlert" style="display:none; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:15px;"></div>
 
@@ -112,12 +72,12 @@
                 <input
                     type="password"
                     name="password"
-                    placeholder="Enter your administrator password"
+                    placeholder="Enter your password"
                     required
                     autocomplete="current-password"
                 >
 
-                <div class="options" style="display:flex; justify-content:space-between; align-items:center; margin:10px 0;">
+                <div class="options" style="display:flex; justify-content:space-between; align-items:center; margin:15px 0;">
                     <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#555; cursor:pointer;">
                         <input type="checkbox" name="remember" value="1"> Remember Me
                     </label>
@@ -125,7 +85,7 @@
                 </div>
 
                 <button type="submit" class="btn-admin-submit">
-                    Sign In to Admin Console →
+                    Sign In to Admin Portal
                 </button>
 
                 <div style="margin-top:20px; padding-top:15px; border-top:1px dashed #e2e8f0; font-size:13px; text-align:center; display:flex; flex-direction:column; gap:8px;">
@@ -141,6 +101,33 @@
             </form>
         </div>
 
+    </section>
+
+    <!-- ================= FEATURES ================= -->
+    <section class="login-features">
+        <h2>Administrator Capabilities</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>👥 Student Management</h3>
+                <p>Add, update, search, filter, and export student academic records to CSV.</p>
+            </div>
+
+            <div class="card">
+                <h3>📅 Event Management</h3>
+                <p>Publish campus events, upload poster images with validation, and track registrations.</p>
+            </div>
+
+            <div class="card">
+                <h3>⚡ Real-Time API</h3>
+                <p>RESTful JSON endpoints and asynchronous Fetch API live event feeds.</p>
+            </div>
+
+            <div class="card">
+                <h3>🛡️ Security Audits</h3>
+                <p>Monitor critical administrative actions with immutable timestamped audit logs.</p>
+            </div>
+        </div>
     </section>
 
     <!-- ================= FOOTER ================= -->
@@ -165,46 +152,7 @@
     </footer>
 
     <script src="js/script.js"></script>
-    <script>
-        (function() {
-            var params = new URLSearchParams(window.location.search);
-            var alertBox = document.getElementById("loginAlert");
-            if (params.has("msg")) {
-                var msg = params.get("msg");
-                alertBox.style.display = "block";
-                if (msg === "registered") {
-                    alertBox.style.background = "#dcfce7";
-                    alertBox.style.color = "#15803d";
-                    alertBox.style.border = "1px solid #bbf7d0";
-                    alertBox.innerHTML = "✓ Administrator account created successfully! Please sign in.";
-                } else if (msg === "logged_out") {
-                    alertBox.style.background = "#dcfce7";
-                    alertBox.style.color = "#15803d";
-                    alertBox.style.border = "1px solid #bbf7d0";
-                    alertBox.innerHTML = "✓ Logged out from Administrator Console.";
-                } else if (msg === "admin_required") {
-                    alertBox.style.background = "#fee2e2";
-                    alertBox.style.color = "#b91c1c";
-                    alertBox.style.border = "1px solid #fecaca";
-                    alertBox.innerHTML = "⚠ Administrator login required to access that resource.";
-                } else if (msg === "student_denied") {
-                    alertBox.style.background = "#fee2e2";
-                    alertBox.style.color = "#b91c1c";
-                    alertBox.style.border = "1px solid #fecaca";
-                    alertBox.innerHTML = "⚠ Access Denied: That account is a Student. Please use the Student Login.";
-                }
-            }
-
-            fetch('php/csrf.php')
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    if (data && data.csrf_token) {
-                        var el = document.getElementById('admin_csrf_token');
-                        if (el) el.value = data.csrf_token;
-                    }
-                })
-                .catch(function(err) {});
-        })();
-    </script>
+    <script src="js/admin_login.js"></script>
+    <script src="js/nav.js"></script>
 </body>
 </html>

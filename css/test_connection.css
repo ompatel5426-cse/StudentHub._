@@ -1,0 +1,44 @@
+/* ========================================================
+   StudentHub — Test Connection Styles (Practical 8)
+   ======================================================== */
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5ff;
+    padding: 40px;
+}
+
+.box {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #6C63FF;
+}
+
+.success {
+    color: green;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background: #6C63FF;
+    color: white;
+}

@@ -58,48 +58,7 @@ if ($actions_res) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audit Logs — Practical 14</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',-apple-system,sans-serif; }
-        body { background: #f4f6fa; color: #1e293b; }
-
-        nav.admin-nav {
-            background: #0f172a; color: white; padding: 16px 8%;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 100;
-        }
-        .brand-text { font-size: 24px; font-weight: 700; color: #818cf8; }
-        .admin-tag { background: #ef4444; color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; margin-left: 8px; }
-        .admin-nav-links { display: flex; align-items: center; gap: 20px; }
-        .admin-nav-links a { color: #cbd5e1; text-decoration: none; font-size: 14px; font-weight: 500; }
-        .admin-nav-links a:hover { color: white; }
-        .btn-logout { background: #ef4444 !important; color: white !important; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
-
-        .page-wrap { max-width: 1350px; margin: 35px auto; padding: 0 4%; }
-        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
-        .header-bar h1 { font-size: 26px; color: #0f172a; }
-        .header-bar p { font-size: 14px; color: #64748b; }
-
-        .filter-panel { background: white; padding: 18px 24px; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 25px; }
-        .filter-form { display: grid; grid-template-columns: 2fr 1fr auto auto; gap: 12px; align-items: center; }
-        .filter-input, .filter-select { padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; width: 100%; }
-        .btn-filter { background: #2563eb; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; }
-        .btn-reset { background: #f1f5f9; color: #475569; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; border: 1px solid #cbd5e1; text-align: center; }
-
-        .table-card { background: white; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.04); overflow: hidden; }
-        .table-responsive { overflow-x: auto; }
-        table.log-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
-        table.log-table th { background: #f8fafc; color: #475569; font-weight: 600; padding: 12px 16px; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
-        table.log-table td { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; color: #334155; vertical-align: middle; }
-        table.log-table tr:hover { background: #f8fafc; }
-
-        .badge-act { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; font-family: monospace; }
-        .act-login { background: #dcfce7; color: #15803d; }
-        .act-logout { background: #f1f5f9; color: #475569; }
-        .act-create { background: #dbeafe; color: #1e40af; }
-        .act-update { background: #fef3c7; color: #92400e; }
-        .act-delete { background: #fee2e2; color: #b91c1c; }
-        .act-other { background: #f3e8ff; color: #7e22ce; }
-    </style>
+    <link rel="stylesheet" href="../css/audit_logs.css">
 </head>
 <body>
 

@@ -1,0 +1,146 @@
+/* ========================================================
+   StudentHub — Process Feedback & Error Page Styles
+   ======================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', -apple-system, sans-serif;
+}
+
+body {
+    background: #f1f5f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.box {
+    background: white;
+    padding: 38px;
+    border-radius: 18px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.12);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.box.box-warning {
+    border-color: rgba(234, 88, 12, 0.25);
+    text-align: center;
+}
+
+.icon {
+    width: 64px;
+    height: 64px;
+    background: #fee2e2;
+    color: #dc2626;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+}
+
+.icon.icon-warning {
+    background: #ffedd5;
+    color: #ea580c;
+    font-size: 30px;
+}
+
+h2 {
+    color: #dc2626;
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+h2.warning {
+    color: #c2410c;
+}
+
+p.sub, p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.error-list {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 24px;
+    list-style-type: none;
+    text-align: left;
+}
+
+.error-list li {
+    color: #b91c1c;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.error-list li:last-child {
+    margin-bottom: 0;
+}
+
+.btn-wrap {
+    text-align: center;
+}
+
+a.btn, a.btn-primary {
+    display: inline-block;
+    padding: 11px 24px;
+    background: #6C63FF;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+a.btn:hover, a.btn-primary:hover {
+    background: #5148d8;
+}
+
+a.btn-outline {
+    display: inline-block;
+    padding: 11px 22px;
+    background: #f8fafc;
+    color: #475569;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid #cbd5e1;
+    transition: 0.2s ease;
+}
+
+a.btn-outline:hover {
+    background: #e2e8f0;
+}
+
+.highlight {
+    color: #1e293b;
+    font-weight: 600;
+    background: #f1f5f9;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}

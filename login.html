@@ -18,15 +18,14 @@
             <h2>StudentHub</h2>
         </div>
 
-        <nav>
-
+        <nav id="mainNav">
             <a href="index.html">Home</a>
             <a href="about.html">About</a>
             <a href="courses.html">Courses</a>
-            <a href="study-materials.html">Study Materials</a>
-            <a href="assignments.html">Assignments</a>
-            <a href="login.html">Login</a>
-
+            <a href="events.html">Events</a>
+            <a href="login.html" style="color:#6C63FF; font-weight:700;">Student Login</a>
+            <a href="registration.html">Student Register</a>
+            <a href="admin_login.html">Admin Login 🛡️</a>
         </nav>
 
     </header>
@@ -202,45 +201,7 @@
     </footer>
 
     <script src="js/script.js"></script>
-    <script>
-        // Check URL parameters for status messages
-        (function() {
-            var params = new URLSearchParams(window.location.search);
-            var alertBox = document.getElementById("loginAlert");
-            if (params.has("msg")) {
-                var msg = params.get("msg");
-                alertBox.style.display = "block";
-                if (msg === "logged_out") {
-                    alertBox.style.background = "#dcfce7";
-                    alertBox.style.color = "#15803d";
-                    alertBox.style.border = "1px solid #bbf7d0";
-                    alertBox.innerHTML = "✓ You have been logged out successfully.";
-                } else if (msg === "timeout") {
-                    alertBox.style.background = "#fee2e2";
-                    alertBox.style.color = "#b91c1c";
-                    alertBox.style.border = "1px solid #fecaca";
-                    alertBox.innerHTML = "⚠ Session expired due to inactivity. Please sign in again.";
-                } else if (msg === "login_required") {
-                    alertBox.style.background = "#fee2e2";
-                    alertBox.style.color = "#b91c1c";
-                    alertBox.style.border = "1px solid #fecaca";
-                    alertBox.innerHTML = "⚠ Please sign in to access your dashboard.";
-                }
-            }
-
-            // Auto-fetch CSRF token
-            fetch('php/csrf.php')
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    if (data && data.csrf_token) {
-                        var el = document.getElementById('login_csrf_token');
-                        if (el) el.value = data.csrf_token;
-                    }
-                })
-                .catch(function(err) {
-                    console.warn('CSRF token fetch skipped:', err);
-                });
-        })();
-    </script>
+    <script src="js/login.js"></script>
+    <script src="js/nav.js"></script>
 </body>
 </html>

@@ -122,18 +122,7 @@ function render_admin_reg_error(array $errors) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Admin Registration Failed - StudentHub</title>
-        <style>
-            * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',-apple-system,sans-serif; }
-            body { background: #0f172a; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-            .box { background: white; padding: 35px; border-radius: 18px; width: 100%; max-width: 520px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); border: 1px solid rgba(239,68,68,0.3); }
-            h2 { color: #dc2626; font-size: 22px; text-align: center; margin-bottom: 8px; }
-            p.sub { color: #64748b; font-size: 13px; text-align: center; margin-bottom: 20px; }
-            .error-list { background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 15px 20px; margin-bottom: 24px; list-style-type: none; }
-            .error-list li { color: #b91c1c; font-size: 13px; margin-bottom: 8px; }
-            .btn-wrap { text-align: center; }
-            a.btn { display: inline-block; padding: 11px 24px; background: #0f172a; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; }
-            a.btn:hover { background: #1e293b; }
-        </style>
+        <link rel="stylesheet" href="../css/process_feedback.css">
     </head>
     <body>
     <div class="box">

@@ -122,44 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudentHub | Login</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        .alert-box {
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .alert-danger {
-            background: #fee2e2;
-            color: #b91c1c;
-            border: 1px solid #fecaca;
-        }
-        .alert-success {
-            background: #dcfce7;
-            color: #15803d;
-            border: 1px solid #bbf7d0;
-        }
-        .remember-wrap {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 12px 0 16px;
-            font-size: 13px;
-        }
-        .remember-wrap label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #555;
-            cursor: pointer;
-        }
-        .remember-wrap a {
-            color: #6C63FF;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
 
