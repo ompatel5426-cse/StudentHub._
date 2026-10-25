@@ -4,6 +4,8 @@
  * Strictly guarded by require_admin().
  * Features:
  *  - Create, Read, Update, Delete (Soft & Hard Delete with confirmation)
+ *  - External Student Approval Workflow (Approve / Reject self-registrations)
+ *  - Student Marks Management (Add, View, Delete semester subject scores)
  *  - Prepared statements for ALL SQL operations
  *  - Live search by Name, Email, Course
  *  - Multi-criteria filtering by Course, Academic Year, Gender, and Status
@@ -25,10 +27,40 @@ $flash_error   = $_SESSION['flash_error'] ?? "";
 unset($_SESSION['flash_success'], $_SESSION['flash_error']);
 
 // =========================================================================
-// 1. CSV EXPORT HANDLER (With Formula Injection Protection)
+// 1. AJAX: GET STUDENT MARKS
+// =========================================================================
+if (isset($_GET['action']) && $_GET['action'] === 'get_marks') {
+    header('Content-Type: application/json; charset=utf-8');
+    $sid = (int)($_GET['student_id'] ?? 0);
+    $st_stmt = $conn->prepare("SELECT student_id, name, course, year, enrollment_no FROM students WHERE student_id = ?");
+    $st_stmt->bind_param("i", $sid);
+    $st_stmt->execute();
+    $st_data = $st_stmt->get_result()->fetch_assoc();
+    $st_stmt->close();
+
+    if (!$st_data) {
+        echo json_encode(['success' => false, 'message' => 'Student not found']);
+        exit;
+    }
+
+    $marks = [];
+    $m_stmt = $conn->prepare("SELECT mark_id, semester, subject_name, subject_code, internal_marks, external_marks, total_marks, grade FROM student_marks WHERE student_id = ? ORDER BY semester ASC, mark_id ASC");
+    $m_stmt->bind_param("i", $sid);
+    $m_stmt->execute();
+    $m_res = $m_stmt->get_result();
+    while ($mr = $m_res->fetch_assoc()) {
+        $marks[] = $mr;
+    }
+    $m_stmt->close();
+
+    echo json_encode(['success' => true, 'student' => $st_data, 'marks' => $marks]);
+    exit;
+}
+
+// =========================================================================
+// 2. CSV EXPORT HANDLER (With Formula Injection Protection)
 // =========================================================================
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
-    // Sanitizer function to guard against CSV Formula / DDE Injection
     function sanitize_csv_field($val) {
         $str = (string)$val;
         if (isset($str[0]) && in_array($str[0], ['=', '+', '-', '@', "\t", "\r"], true)) {
@@ -45,26 +77,26 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     header('Expires: 0');
 
     $output = fopen('php://output', 'w');
-    // UTF-8 BOM for clean Excel display
-    fputs($output, "\xEF\xBB\xBF");
+    fputs($output, "\xEF\xBB\xBF"); // UTF-8 BOM
 
     // CSV Column Headers
-    fputcsv($output, ['Student ID', 'Full Name', 'Email Address', 'Mobile', 'Course', 'Year', 'Gender', 'Role', 'Status']);
+    fputcsv($output, ['Student ID', 'Enrollment No', 'Full Name', 'Email Address', 'Mobile', 'Course', 'Year', 'Gender', 'Source', 'Status']);
 
-    $export_stmt = $conn->prepare("SELECT student_id, name, email, mobile, course, year, gender, role, status FROM students WHERE role = 'student' ORDER BY student_id ASC");
+    $export_stmt = $conn->prepare("SELECT student_id, enrollment_no, name, email, mobile, course, year, gender, registration_source, status FROM students WHERE role = 'student' ORDER BY student_id ASC");
     if ($export_stmt) {
         $export_stmt->execute();
         $export_res = $export_stmt->get_result();
         while ($row = $export_res->fetch_assoc()) {
             fputcsv($output, [
                 sanitize_csv_field($row['student_id']),
+                sanitize_csv_field($row['enrollment_no'] ?: 'SH2026-' . str_pad($row['student_id'], 4, '0', STR_PAD_LEFT)),
                 sanitize_csv_field($row['name']),
                 sanitize_csv_field($row['email']),
                 sanitize_csv_field($row['mobile']),
                 sanitize_csv_field($row['course']),
                 sanitize_csv_field($row['year']),
                 sanitize_csv_field($row['gender']),
-                sanitize_csv_field($row['role']),
+                sanitize_csv_field($row['registration_source'] ?? 'self'),
                 sanitize_csv_field($row['status'])
             ]);
         }
@@ -76,7 +108,7 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 }
 
 // =========================================================================
-// 2. PROCESS MUTATING ACTIONS (POST: ADD, EDIT, SOFT_DELETE, RESTORE, DELETE)
+// 3. PROCESS MUTATING ACTIONS (POST)
 // =========================================================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $submitted_token = $_POST['csrf_token'] ?? '';
@@ -88,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $action = $_POST['action'] ?? '';
 
-    // --- A. CREATE STUDENT ---
+    // --- A. CREATE STUDENT (By Admin) ---
     if ($action === 'create') {
         $name     = trim($_POST['name'] ?? '');
         $email    = trim($_POST['email'] ?? '');
@@ -112,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($course === '') $errors[] = "Course selection is required.";
         if ($year === '') $errors[] = "Academic year selection is required.";
         if (!in_array($gender, ['Male', 'Female', 'Other'], true)) $errors[] = "Valid gender is required.";
-        if (!in_array($status, ['active', 'inactive'], true)) $status = 'active';
+        if (!in_array($status, ['active', 'inactive', 'pending'], true)) $status = 'active';
         if (strlen($password) < 6) $errors[] = "Temporary password must be at least 6 characters.";
 
         if (!empty($errors)) {
@@ -133,15 +165,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $chk->close();
 
-        // Hash and insert
+        // Hash and insert as admin-created
         $hashed = password_hash($password, PASSWORD_DEFAULT);
-        $ins = $conn->prepare("INSERT INTO students (name, email, mobile, course, year, gender, role, status, password) VALUES (?, ?, ?, ?, ?, ?, 'student', ?, ?)");
+        $ins = $conn->prepare("INSERT INTO students (name, email, mobile, course, year, gender, role, registration_source, status, password) VALUES (?, ?, ?, ?, ?, ?, 'student', 'admin', ?, ?)");
         $ins->bind_param("ssssssss", $name, $email, $mobile, $course, $year, $gender, $status, $hashed);
 
         if ($ins->execute()) {
             $new_id = $conn->insert_id;
-            $_SESSION['flash_success'] = "Student '$name' (#$new_id) created successfully!";
-            log_audit_action($conn, 'STUDENT_CREATE', "Created student #$new_id ($name, $email).");
+            $enrol_no = sprintf("SH2026-%04d", $new_id);
+            $conn->query("UPDATE students SET enrollment_no = '$enrol_no' WHERE student_id = $new_id");
+
+            $_SESSION['flash_success'] = "Student '$name' (#$new_id / $enrol_no) created successfully by Admin!";
+            log_audit_action($conn, 'STUDENT_CREATE', "Admin created student #$new_id ($name, $email).");
         } else {
             $_SESSION['flash_error'] = "Database insert failed: " . $conn->error;
         }
@@ -172,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($name === '' || !preg_match("/^[A-Za-z ]{2,50}$/", $name)) $errors[] = "Valid student name is required.";
         if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Valid email is required.";
         if ($mobile === '' || !preg_match("/^[6-9][0-9]{9}$/", $mobile)) $errors[] = "Valid 10-digit mobile is required.";
-        if (!in_array($status, ['active', 'inactive'], true)) $status = 'active';
+        if (!in_array($status, ['active', 'inactive', 'pending'], true)) $status = 'active';
 
         if (!empty($errors)) {
             $_SESSION['flash_error'] = implode(" ", $errors);
@@ -273,12 +308,123 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: manage_students.php");
         exit;
     }
+
+    // --- F. APPROVE SELF-REGISTERED STUDENT (Add to College) ---
+    if ($action === 'approve') {
+        $student_id = (int)($_POST['student_id'] ?? 0);
+        if ($student_id <= 0) {
+            $_SESSION['flash_error'] = "Invalid student ID.";
+        } else {
+            $s_info = $conn->query("SELECT name, email FROM students WHERE student_id = $student_id LIMIT 1");
+            $s_name = "Student #$student_id";
+            if ($s_info && $sr = $s_info->fetch_assoc()) {
+                $s_name = $sr['name'];
+            }
+            $stmt = $conn->prepare("UPDATE students SET status = 'active' WHERE student_id = ? AND role = 'student'");
+            $stmt->bind_param("i", $student_id);
+            if ($stmt->execute()) {
+                $_SESSION['flash_success'] = "✓ Student '$s_name' (#$student_id) has been approved and added to active students! They can now log in.";
+                log_audit_action($conn, 'STUDENT_APPROVE', "Approved self-registered student #$student_id ($s_name).");
+            } else {
+                $_SESSION['flash_error'] = "Failed to approve student: " . $conn->error;
+            }
+            $stmt->close();
+        }
+        header("Location: manage_students.php");
+        exit;
+    }
+
+    // --- G. REJECT / REMOVE PENDING STUDENT ---
+    if ($action === 'reject') {
+        $student_id = (int)($_POST['student_id'] ?? 0);
+        if ($student_id <= 0) {
+            $_SESSION['flash_error'] = "Invalid student ID.";
+        } else {
+            $s_info = $conn->query("SELECT name, email FROM students WHERE student_id = $student_id AND status = 'pending' LIMIT 1");
+            $s_name = "Student #$student_id";
+            if ($s_info && $sr = $s_info->fetch_assoc()) {
+                $s_name = $sr['name'];
+            }
+            $stmt = $conn->prepare("DELETE FROM students WHERE student_id = ? AND status = 'pending' AND role = 'student'");
+            $stmt->bind_param("i", $student_id);
+            if ($stmt->execute() && $stmt->affected_rows > 0) {
+                $_SESSION['flash_success'] = "Pending registration for '$s_name' (#$student_id) was rejected and removed.";
+                log_audit_action($conn, 'STUDENT_REJECT', "Rejected and removed pending student #$student_id ($s_name).");
+            } else {
+                $_SESSION['flash_error'] = "Could not reject student or record was already processed.";
+            }
+            $stmt->close();
+        }
+        header("Location: manage_students.php");
+        exit;
+    }
+
+    // --- H. ADD STUDENT MARKS ---
+    if ($action === 'add_mark') {
+        $student_id     = (int)($_POST['student_id'] ?? 0);
+        $semester       = trim($_POST['semester'] ?? '1st Semester');
+        $subject_name   = trim($_POST['subject_name'] ?? '');
+        $subject_code   = trim($_POST['subject_code'] ?? '');
+        $internal_marks = (int)($_POST['internal_marks'] ?? 0);
+        $external_marks = (int)($_POST['external_marks'] ?? 0);
+
+        if ($student_id <= 0 || $subject_name === '') {
+            $_SESSION['flash_error'] = "Student ID and Subject Name are required to add marks.";
+            header("Location: manage_students.php");
+            exit;
+        }
+
+        $internal_marks = max(0, min(40, $internal_marks));
+        $external_marks = max(0, min(60, $external_marks));
+        $total_marks    = $internal_marks + $external_marks;
+
+        // Compute Grade
+        if ($total_marks >= 90) $grade = 'A+';
+        elseif ($total_marks >= 80) $grade = 'A';
+        elseif ($total_marks >= 70) $grade = 'B+';
+        elseif ($total_marks >= 60) $grade = 'B';
+        elseif ($total_marks >= 50) $grade = 'C';
+        elseif ($total_marks >= 40) $grade = 'P';
+        else $grade = 'F';
+
+        $m_ins = $conn->prepare("INSERT INTO student_marks (student_id, semester, subject_name, subject_code, internal_marks, external_marks, total_marks, grade) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $m_ins->bind_param("isssiiis", $student_id, $semester, $subject_name, $subject_code, $internal_marks, $external_marks, $total_marks, $grade);
+        if ($m_ins->execute()) {
+            $_SESSION['flash_success'] = "✓ Marks for '$subject_name' ($semester) added successfully! Total: $total_marks/100, Grade: $grade.";
+            log_audit_action($conn, 'STUDENT_MARK_ADD', "Added mark for student #$student_id in $subject_name ($total_marks/100).");
+        } else {
+            $_SESSION['flash_error'] = "Failed to add marks: " . $conn->error;
+        }
+        $m_ins->close();
+        header("Location: manage_students.php");
+        exit;
+    }
+
+    // --- I. DELETE STUDENT MARKS ---
+    if ($action === 'delete_mark') {
+        $mark_id    = (int)($_POST['mark_id'] ?? 0);
+        $student_id = (int)($_POST['student_id'] ?? 0);
+
+        if ($mark_id > 0) {
+            $m_del = $conn->prepare("DELETE FROM student_marks WHERE mark_id = ?");
+            $m_del->bind_param("i", $mark_id);
+            if ($m_del->execute()) {
+                $_SESSION['flash_success'] = "Mark entry removed successfully.";
+                log_audit_action($conn, 'STUDENT_MARK_DELETE', "Deleted mark #$mark_id for student #$student_id.");
+            } else {
+                $_SESSION['flash_error'] = "Failed to delete mark: " . $conn->error;
+            }
+            $m_del->close();
+        }
+        header("Location: manage_students.php");
+        exit;
+    }
 }
 
 // =========================================================================
-// 3. SEARCH, FILTER & PAGINATION PARAMETERS
+// 4. SEARCH, FILTER & PAGINATION PARAMETERS
 // =========================================================================
-$search_query = trim($_GET['search'] ?? '');
+$search_query  = trim($_GET['search'] ?? '');
 $filter_course = trim($_GET['course'] ?? '');
 $filter_year   = trim($_GET['year'] ?? '');
 $filter_gender = trim($_GET['gender'] ?? '');
@@ -287,6 +433,13 @@ $filter_status = trim($_GET['status'] ?? '');
 $page = max(1, (int)($_GET['page'] ?? 1));
 $per_page = 8;
 $offset = ($page - 1) * $per_page;
+
+// Count Pending Registrations for top notification banner
+$pending_count = 0;
+$p_chk = $conn->query("SELECT COUNT(*) FROM students WHERE status = 'pending' AND role = 'student'");
+if ($p_chk) {
+    $pending_count = (int)$p_chk->fetch_row()[0];
+}
 
 // Build Dynamic Prepared Query
 $where_clauses = ["role = 'student'"];
@@ -324,8 +477,8 @@ if ($filter_gender !== "") {
     $param_values[] = $filter_gender;
 }
 
-// Status filter
-if ($filter_status !== "" && in_array($filter_status, ['active', 'inactive'], true)) {
+// Status filter (active, inactive, pending)
+if ($filter_status !== "" && in_array($filter_status, ['active', 'inactive', 'pending'], true)) {
     $where_clauses[] = "status = ?";
     $param_types .= "s";
     $param_values[] = $filter_status;
@@ -346,7 +499,7 @@ $count_stmt->close();
 $total_pages = max(1, (int)ceil($total_records / $per_page));
 
 // Fetch Paginated Records
-$data_sql = "SELECT student_id, name, email, mobile, course, year, gender, status 
+$data_sql = "SELECT student_id, name, email, mobile, course, year, gender, status, registration_source, enrollment_no 
              FROM students 
              WHERE $where_sql 
              ORDER BY student_id ASC 
@@ -395,8 +548,9 @@ if ($c_res) {
         <div class="admin-nav-links">
             <a href="admin_dashboard.php">Dashboard</a>
             <a href="manage_students.php" style="color:white; font-weight:700;">Students CRUD</a>
-            <a href="../events.html">Events</a>
-            <a href="dashboard.php">Student View</a>
+            <a href="manage_events.php">Events CRUD</a>
+            <a href="audit_logs.php">Audit Logs</a>
+            <a href="dashboard.php" target="_blank" style="color:#a78bfa;">Student View ↗</a>
             <a href="logout.php" class="btn-logout">Logout ⏻</a>
         </div>
     </nav>
@@ -407,7 +561,7 @@ if ($c_res) {
         <!-- Flash Messages -->
         <?php if (!empty($flash_success)): ?>
             <div class="alert alert-success">
-                <span>✓ <?= e($flash_success) ?></span>
+                <span><?= e($flash_success) ?></span>
                 <span style="cursor:pointer;" onclick="this.parentElement.style.display='none'">✕</span>
             </div>
         <?php endif; ?>
@@ -419,13 +573,29 @@ if ($c_res) {
             </div>
         <?php endif; ?>
 
+        <!-- Pending Registrations Alert Banner -->
+        <?php if ($pending_count > 0): ?>
+            <div class="pending-alert-banner">
+                <div class="pending-alert-content">
+                    <span class="pending-bell">🔔</span>
+                    <div>
+                        <strong><?= $pending_count ?> External Student Registration(s) Awaiting Approval!</strong>
+                        <p>These students registered online and require administrator approval (Add / Approve) before their account is activated.</p>
+                    </div>
+                </div>
+                <div class="pending-alert-action">
+                    <a href="manage_students.php?status=pending" class="btn-review-pending">Review Pending Registrations »</a>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <!-- Title & Action Buttons -->
         <div class="crud-header">
             <div>
                 <h1>Student Records Management</h1>
-                <p>Practical 11: Real-time search, multi-attribute filtering, CRUD operations & secure CSV export.</p>
+                <p>Practical 11: Real-time search, multi-attribute filtering, approval workflow, marks system & CSV export.</p>
             </div>
-            <div style="display:flex; gap:12px;">
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
                 <button type="button" class="btn-add" onclick="openCreateModal()">
                     ＋ Add New Student
                 </button>
@@ -473,6 +643,7 @@ if ($c_res) {
                 <div>
                     <select name="status" class="filter-select">
                         <option value="">All Statuses</option>
+                        <option value="pending" <?= $filter_status === 'pending' ? 'selected' : '' ?>>⏳ Pending Approval (<?= $pending_count ?>)</option>
                         <option value="active" <?= $filter_status === 'active' ? 'selected' : '' ?>>Active</option>
                         <option value="inactive" <?= $filter_status === 'inactive' ? 'selected' : '' ?>>Inactive (Soft-Deleted)</option>
                     </select>
@@ -494,14 +665,13 @@ if ($c_res) {
                 <table class="crud-table">
                     <thead>
                         <tr>
-                            <th style="width:50px;">Sr.</th>
-                            <th>ID</th>
+                            <th style="width:45px;">Sr.</th>
+                            <th>ID & Enrol</th>
                             <th>Full Name</th>
                             <th>Email Address</th>
                             <th>Mobile</th>
-                            <th>Course</th>
-                            <th>Year</th>
-                            <th>Gender</th>
+                            <th>Course / Year</th>
+                            <th>Source</th>
                             <th>Status</th>
                             <th style="text-align:center;">Actions</th>
                         </tr>
@@ -509,57 +679,106 @@ if ($c_res) {
                     <tbody>
                         <?php if (empty($students)): ?>
                             <tr>
-                                <td colspan="10" style="text-align:center; padding:35px; color:#64748b;">
+                                <td colspan="9" style="text-align:center; padding:35px; color:#64748b;">
                                     No student records match your search or filter criteria.
                                 </td>
                             </tr>
                         <?php else: ?>
                             <?php $counter = $offset; foreach ($students as $st): $counter++; ?>
-                                <tr>
+                                <?php 
+                                    $enrol = !empty($st['enrollment_no']) ? $st['enrollment_no'] : sprintf('SH2026-%04d', $st['student_id']);
+                                    $source = $st['registration_source'] ?? 'self';
+                                ?>
+                                <tr class="<?= $st['status'] === 'pending' ? 'row-pending' : '' ?>">
                                     <td style="color:#64748b; font-weight:600;"><?= $counter ?></td>
-                                    <td><strong>#<?= e($st['student_id']) ?></strong></td>
-                                    <td><strong style="color:#0f172a;"><?= e($st['name']) ?></strong></td>
-                                    <td><?= e($st['email']) ?></td>
-                                    <td><?= e($st['mobile']) ?></td>
-                                    <td><?= e($st['course']) ?></td>
-                                    <td>Year <?= e($st['year']) ?></td>
-                                    <td><?= e($st['gender']) ?></td>
                                     <td>
-                                        <span class="badge <?= $st['status'] === 'active' ? 'badge-active' : 'badge-inactive' ?>">
-                                            <?= ucfirst(e($st['status'])) ?>
-                                        </span>
+                                        <strong>#<?= e($st['student_id']) ?></strong><br>
+                                        <small style="color:#6366f1; font-weight:600;"><?= e($enrol) ?></small>
+                                    </td>
+                                    <td>
+                                        <strong style="color:#0f172a;"><?= e($st['name']) ?></strong><br>
+                                        <small style="color:#64748b;"><?= e($st['gender']) ?></small>
+                                    </td>
+                                    <td><?= e($st['email']) ?></td>
+                                    <td><?= e($st['mobile'] ?: '—') ?></td>
+                                    <td>
+                                        <strong><?= e($st['course']) ?></strong><br>
+                                        <small style="color:#64748b;">Year <?= e($st['year']) ?></small>
+                                    </td>
+                                    <td>
+                                        <?php if ($source === 'self'): ?>
+                                            <span class="badge-source badge-source-self" title="Registered Online">🌐 Online Self-Reg</span>
+                                        <?php else: ?>
+                                            <span class="badge-source badge-source-admin" title="Added by Admin">👤 Admin Added</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($st['status'] === 'active'): ?>
+                                            <span class="badge badge-active">Active</span>
+                                        <?php elseif ($st['status'] === 'pending'): ?>
+                                            <span class="badge badge-pending">⏳ Pending Approval</span>
+                                        <?php else: ?>
+                                            <span class="badge badge-inactive">Inactive</span>
+                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <div class="actions-wrap" style="justify-content:center;">
-                                            <!-- Edit Button -->
-                                            <button type="button" class="btn-action btn-edit" onclick='openEditModal(<?= json_encode($st, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>)'>
-                                                ✏ Edit
-                                            </button>
-
-                                            <!-- Soft Delete / Restore -->
-                                            <?php if ($st['status'] === 'active'): ?>
-                                                <form method="POST" action="manage_students.php" style="display:inline;" onsubmit="return confirm('Soft-delete student #<?= e($st['student_id']) ?> (<?= e($st['name']) ?>)? This will set status to inactive.');">
+                                            <?php if ($st['status'] === 'pending'): ?>
+                                                <!-- APPROVE / ADD STUDENT BUTTON -->
+                                                <form method="POST" action="manage_students.php" style="display:inline;" onsubmit="return confirm('Approve and activate <?= e($st['name']) ?> (#<?= e($st['student_id']) ?>)? They will now be able to log in to their student portal.');">
                                                     <input type="hidden" name="csrf_token" value="<?= e($csrf_token) ?>">
-                                                    <input type="hidden" name="action" value="soft_delete">
+                                                    <input type="hidden" name="action" value="approve">
                                                     <input type="hidden" name="student_id" value="<?= e($st['student_id']) ?>">
-                                                    <button type="submit" class="btn-action btn-soft">⏸ Soft Delete</button>
+                                                    <button type="submit" class="btn-action btn-approve" title="Approve and activate registration">
+                                                        ✓ Add / Approve Student
+                                                    </button>
+                                                </form>
+
+                                                <!-- REJECT / REMOVE STUDENT BUTTON -->
+                                                <form method="POST" action="manage_students.php" style="display:inline;" onsubmit="return confirm('Reject and remove registration for <?= e($st['name']) ?> (#<?= e($st['student_id']) ?>)? This record will be permanently deleted.');">
+                                                    <input type="hidden" name="csrf_token" value="<?= e($csrf_token) ?>">
+                                                    <input type="hidden" name="action" value="reject">
+                                                    <input type="hidden" name="student_id" value="<?= e($st['student_id']) ?>">
+                                                    <button type="submit" class="btn-action btn-reject" title="Reject and remove registration">
+                                                        ✕ Remove / Reject
+                                                    </button>
                                                 </form>
                                             <?php else: ?>
-                                                <form method="POST" action="manage_students.php" style="display:inline;">
+                                                <!-- MARKS MANAGEMENT BUTTON -->
+                                                <button type="button" class="btn-action btn-marks" onclick='openMarksModal(<?= (int)$st['student_id'] ?>, <?= json_encode($st['name']) ?>)' title="View or enter subject marks">
+                                                    📊 Marks
+                                                </button>
+
+                                                <!-- EDIT BUTTON -->
+                                                <button type="button" class="btn-action btn-edit" onclick='openEditModal(<?= json_encode($st, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>)'>
+                                                    ✏ Edit
+                                                </button>
+
+                                                <!-- SOFT DELETE / RESTORE -->
+                                                <?php if ($st['status'] === 'active'): ?>
+                                                    <form method="POST" action="manage_students.php" style="display:inline;" onsubmit="return confirm('Soft-delete student #<?= e($st['student_id']) ?> (<?= e($st['name']) ?>)? This will set status to inactive.');">
+                                                        <input type="hidden" name="csrf_token" value="<?= e($csrf_token) ?>">
+                                                        <input type="hidden" name="action" value="soft_delete">
+                                                        <input type="hidden" name="student_id" value="<?= e($st['student_id']) ?>">
+                                                        <button type="submit" class="btn-action btn-soft" title="Deactivate">⏸ Soft Delete</button>
+                                                    </form>
+                                                <?php else: ?>
+                                                    <form method="POST" action="manage_students.php" style="display:inline;">
+                                                        <input type="hidden" name="csrf_token" value="<?= e($csrf_token) ?>">
+                                                        <input type="hidden" name="action" value="restore">
+                                                        <input type="hidden" name="student_id" value="<?= e($st['student_id']) ?>">
+                                                        <button type="submit" class="btn-action btn-restore" title="Restore active status">▶ Restore</button>
+                                                    </form>
+                                                <?php endif; ?>
+
+                                                <!-- HARD DELETE -->
+                                                <form method="POST" action="manage_students.php" style="display:inline;" onsubmit="return confirm('PERMANENT DELETE: Are you completely sure you want to permanently delete student #<?= e($st['student_id']) ?>? This cannot be undone.');">
                                                     <input type="hidden" name="csrf_token" value="<?= e($csrf_token) ?>">
-                                                    <input type="hidden" name="action" value="restore">
+                                                    <input type="hidden" name="action" value="hard_delete">
                                                     <input type="hidden" name="student_id" value="<?= e($st['student_id']) ?>">
-                                                    <button type="submit" class="btn-action btn-restore">▶ Restore</button>
+                                                    <button type="submit" class="btn-action btn-hard" title="Permanent removal">🗑 Delete</button>
                                                 </form>
                                             <?php endif; ?>
-
-                                            <!-- Hard Delete with Explicit Confirmation -->
-                                            <form method="POST" action="manage_students.php" style="display:inline;" onsubmit="return confirm('PERMANENT DELETE: Are you completely sure you want to permanently delete student #<?= e($st['student_id']) ?>? This cannot be undone.');">
-                                                <input type="hidden" name="csrf_token" value="<?= e($csrf_token) ?>">
-                                                <input type="hidden" name="action" value="hard_delete">
-                                                <input type="hidden" name="student_id" value="<?= e($st['student_id']) ?>">
-                                                <button type="submit" class="btn-action btn-hard">🗑 Delete</button>
-                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -592,6 +811,98 @@ if ($c_res) {
             </div>
         </div>
 
+    </div>
+
+    <!-- ================= MANAGE MARKS MODAL ================= -->
+    <div id="marksModal" class="modal">
+        <div class="modal-box modal-marks-box">
+            <div class="modal-head">
+                <div>
+                    <h3 id="marksModalTitle">Student Marks Management</h3>
+                    <p id="marksModalSubtitle" style="font-size:13px; color:#64748b; margin-top:2px;">View existing marks and add subject scores.</p>
+                </div>
+                <button type="button" class="modal-close" onclick="closeModal('marksModal')">×</button>
+            </div>
+
+            <!-- Existing Marks Section -->
+            <div style="margin-bottom:24px;">
+                <h4 style="font-size:14px; color:#334155; margin-bottom:10px; font-weight:600;">Published Subject Marks</h4>
+                <div id="marksLoading" style="text-align:center; padding:20px; color:#64748b; font-size:13px;">Loading student marks...</div>
+                <div id="marksTableContainer" style="display:none; overflow-x:auto;">
+                    <table class="crud-table" style="font-size:12px;">
+                        <thead>
+                            <tr>
+                                <th>Semester</th>
+                                <th>Subject</th>
+                                <th>Code</th>
+                                <th>Internal (40)</th>
+                                <th>External (60)</th>
+                                <th>Total (100)</th>
+                                <th>Grade</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="marksTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="noMarksNotice" style="display:none; text-align:center; padding:22px; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:10px; color:#64748b; font-size:13px;">
+                    ⚠️ No marks have been added for this student yet. Use the form below to enter subject marks.
+                </div>
+            </div>
+
+            <!-- Add New Mark Form -->
+            <div class="add-mark-box">
+                <h4 style="font-size:14px; color:#1e293b; margin-bottom:12px; font-weight:600;">➕ Add New Subject Mark</h4>
+                <form method="POST" action="manage_students.php">
+                    <input type="hidden" name="csrf_token" value="<?= e($csrf_token) ?>">
+                    <input type="hidden" name="action" value="add_mark">
+                    <input type="hidden" name="student_id" id="mark_student_id">
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Semester</label>
+                            <select name="semester" required>
+                                <option value="1st Semester">1st Semester</option>
+                                <option value="2nd Semester">2nd Semester</option>
+                                <option value="3rd Semester">3rd Semester</option>
+                                <option value="4th Semester">4th Semester</option>
+                                <option value="5th Semester">5th Semester</option>
+                                <option value="6th Semester">6th Semester</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subject Code</label>
+                            <input type="text" name="subject_code" placeholder="e.g. CS101, IT204">
+                        </div>
+
+                        <div class="form-group form-full">
+                            <label>Subject Name</label>
+                            <input type="text" name="subject_name" required placeholder="e.g. Web Development Technologies, Database Systems">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Internal Marks (Max 40)</label>
+                            <input type="number" name="internal_marks" min="0" max="40" required placeholder="0 to 40">
+                        </div>
+
+                        <div class="form-group">
+                            <label>External Marks (Max 60)</label>
+                            <input type="number" name="external_marks" min="0" max="60" required placeholder="0 to 60">
+                        </div>
+                    </div>
+
+                    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:14px;">
+                        <button type="submit" class="btn-submit" style="background:#6C63FF;">+ Save Subject Mark</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer" style="margin-top:16px;">
+                <button type="button" class="btn-cancel" onclick="closeModal('marksModal')">Close</button>
+            </div>
+        </div>
     </div>
 
     <!-- ================= CREATE STUDENT MODAL ================= -->
@@ -648,7 +959,8 @@ if ($c_res) {
                     <div class="form-group">
                         <label>Account Status</label>
                         <select name="status">
-                            <option value="active">Active</option>
+                            <option value="active">Active (Immediate Login)</option>
+                            <option value="pending">Pending Approval</option>
                             <option value="inactive">Inactive</option>
                         </select>
                     </div>
@@ -709,7 +1021,6 @@ if ($c_res) {
                             <option value="2">Second Year (2)</option>
                             <option value="3">Third Year (3)</option>
                             <option value="4">Fourth Year (4)</option>
-                            <option value="3rd Year">3rd Year</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -724,6 +1035,7 @@ if ($c_res) {
                         <label>Account Status</label>
                         <select name="status" id="edit_status">
                             <option value="active">Active</option>
+                            <option value="pending">Pending Approval</option>
                             <option value="inactive">Inactive (Soft Deleted)</option>
                         </select>
                     </div>
@@ -741,7 +1053,7 @@ if ($c_res) {
         </div>
     </div>
 
-    <!-- JAVASCRIPT FOR MODALS -->
+    <!-- JAVASCRIPT FOR MODALS & MARKS -->
     <script src="../js/manage_students.js"></script>
 </body>
 </html>

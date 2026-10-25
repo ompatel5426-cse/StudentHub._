@@ -145,10 +145,14 @@ $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 // =====================================
 // 7. INSERT STUDENT RECORD (Prepared Statement)
+// External student self-registration requires Admin approval (status = 'pending')
 // =====================================
+$status = 'pending';
+$source = 'self';
+
 $insert_stmt = $conn->prepare(
-    "INSERT INTO students (name, email, mobile, course, year, gender, role, status, password) 
-     VALUES (?, ?, ?, ?, ?, ?, 'student', 'active', ?)"
+    "INSERT INTO students (name, email, mobile, course, year, gender, role, status, registration_source, password) 
+     VALUES (?, ?, ?, ?, ?, ?, 'student', ?, ?, ?)"
 );
 
 if (!$insert_stmt) {
@@ -158,13 +162,15 @@ if (!$insert_stmt) {
 }
 
 $insert_stmt->bind_param(
-    "sssssss",
+    "sssssssss",
     $name,
     $email,
     $mobile,
     $course,
     $year,
     $gender,
+    $status,
+    $source,
     $hashed_password
 );
 
@@ -178,17 +184,33 @@ if (!$insert_stmt->execute()) {
 $new_student_id = $conn->insert_id;
 $insert_stmt->close();
 
+// Generate unique Enrollment ID for student
+$enrollment_no = sprintf("SH2026-%04d", $new_student_id);
+$upd_stmt = $conn->prepare("UPDATE students SET enrollment_no = ? WHERE student_id = ?");
+if ($upd_stmt) {
+    $upd_stmt->bind_param("si", $enrollment_no, $new_student_id);
+    $upd_stmt->execute();
+    $upd_stmt->close();
+}
+
+// Log audit action
+if (function_exists('log_audit_action')) {
+    log_audit_action($conn, 'STUDENT_SELF_REGISTER', "External student {$name} ({$email}) registered online. Status: Pending Admin Approval.");
+}
+
 // =====================================
 // 8. POST / REDIRECT / GET (PRG) PATTERN
 // =====================================
 $_SESSION['registered_student'] = [
-    'student_id' => $new_student_id,
-    'name'       => $name,
-    'email'      => $email,
-    'mobile'     => $mobile,
-    'course'     => $course,
-    'year'       => $year,
-    'gender'     => $gender
+    'student_id'    => $new_student_id,
+    'enrollment_no' => $enrollment_no,
+    'name'          => $name,
+    'email'         => $email,
+    'mobile'        => $mobile,
+    'course'        => $course,
+    'year'          => $year,
+    'gender'        => $gender,
+    'status'        => 'pending'
 ];
 
 header("Location: register_success.php");

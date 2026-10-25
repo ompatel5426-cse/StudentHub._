@@ -43,16 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 // =========================================================================
 // 1. DYNAMIC METRICS AGGREGATION
 // =========================================================================
-$total_students = 0; $active_students = 0; $inactive_students = 0;
+$total_students = 0; $active_students = 0; $inactive_students = 0; $pending_students = 0;
 $res = $conn->query("SELECT 
     COUNT(*) AS total,
     SUM(CASE WHEN status = 'active' THEN 1 ELSE 0 END) AS active_cnt,
-    SUM(CASE WHEN status = 'inactive' THEN 1 ELSE 0 END) AS inactive_cnt
+    SUM(CASE WHEN status = 'inactive' THEN 1 ELSE 0 END) AS inactive_cnt,
+    SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) AS pending_cnt
     FROM students WHERE role = 'student'");
 if ($res && $row = $res->fetch_assoc()) {
     $total_students    = (int)$row['total'];
     $active_students   = (int)$row['active_cnt'];
     $inactive_students = (int)$row['inactive_cnt'];
+    $pending_students  = (int)$row['pending_cnt'];
 }
 
 $total_events = 0; $open_events = 0; $closed_events = 0;
@@ -118,7 +120,7 @@ if ($res) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard — Practical 14</title>
+    <title>Admin Dashboard </title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin_dashboard.css">
 </head>
@@ -157,6 +159,28 @@ if ($res) {
             </div>
         </section>
 
+        <!-- Pending Registrations Banner -->
+        <?php if ($pending_students > 0): ?>
+            <div style="background:#fffbeb; border:1px solid #fde68a; border-left:5px solid #f59e0b; padding:16px 22px; border-radius:14px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; box-shadow:0 4px 15px rgba(245,158,11,0.08);">
+                <div style="display:flex; align-items:center; gap:14px;">
+                    <span style="font-size:26px;">🔔</span>
+                    <div>
+                        <strong style="color:#92400e; font-size:15px; display:block; margin-bottom:3px;">
+                            <?= $pending_students ?> Online Student Registration(s) Awaiting Approval!
+                        </strong>
+                        <p style="color:#b45309; font-size:13px; margin:0;">
+                            External students registered online. Please approve them (Add to College) or reject/remove invalid applications.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <a href="manage_students.php?status=pending" style="background:#f59e0b; color:white; padding:9px 18px; border-radius:8px; font-weight:600; text-decoration:none; font-size:13px; display:inline-block;">
+                        Review & Approve Students »
+                    </a>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <!-- Metric Aggregation Grid (Practical 14) -->
         <section class="stats-grid">
             <div class="stat-card">
@@ -166,6 +190,14 @@ if ($res) {
                     <div class="stat-label">Students (<?= $active_students ?> Active / <?= $inactive_students ?> Inactive)</div>
                 </div>
             </div>
+
+            <a href="manage_students.php?status=pending" class="stat-card" style="text-decoration:none; color:inherit;">
+                <div class="stat-icon" style="background:#fef3c7; color:#d97706;">⏳</div>
+                <div>
+                    <div class="stat-num" style="color:<?= $pending_students > 0 ? '#d97706' : '#1e293b' ?>;"><?= $pending_students ?></div>
+                    <div class="stat-label">Pending Approvals <?= $pending_students > 0 ? '⚠️' : '' ?></div>
+                </div>
+            </a>
 
             <div class="stat-card">
                 <div class="stat-icon icon-purple">🏆</div>

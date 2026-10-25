@@ -68,7 +68,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // Verify password hash
                 if (password_verify($password, $row["password"])) {
                     // Check account status
-                    if ($row["status"] !== "active") {
+                    if ($row["status"] === "pending") {
+                        $error_message = "⏳ Your account is pending Administrator approval. Please wait for the admin to approve and activate your registration.";
+                    } elseif ($row["status"] !== "active") {
                         $error_message = "Your account has been deactivated. Please contact an administrator.";
                     } else {
                         // Password is correct & account is active:
@@ -84,6 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         $_SESSION["course"]        = $row["course"];
                         $_SESSION["year"]          = $row["year"];
                         $_SESSION["gender"]        = $row["gender"];
+                        $_SESSION["enrollment_no"] = $row["enrollment_no"] ?? sprintf('SH2026-%04d', $row['student_id']);
                         $_SESSION["last_activity"] = time();
 
                         // 3. Process optional Remember-Me

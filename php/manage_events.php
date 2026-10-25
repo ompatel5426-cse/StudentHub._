@@ -288,7 +288,7 @@ $stmt->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Events - Practical 12 CRUD</title>
+    <title>Manage Events CRUD</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/manage_events.css">
 </head>
@@ -304,7 +304,7 @@ $stmt->close();
             <a href="admin_dashboard.php">Dashboard</a>
             <a href="manage_students.php">Students CRUD</a>
             <a href="manage_events.php" style="color:white; font-weight:700;">Events CRUD</a>
-            <a href="ajax_events.php" style="color:#38bdf8;">Practical 13 AJAX API ⚡</a>
+            <a href="ajax_events.php" style="color:#38bdf8;"> AJAX API ⚡</a>
             <a href="audit_logs.php">Audit Logs</a>
             <a href="logout.php" class="btn-logout">Logout ⏻</a>
         </div>
@@ -332,14 +332,14 @@ $stmt->close();
         <div class="header-bar">
             <div>
                 <h1>College Event Management</h1>
-                <p>Practical 12: Event CRUD with Poster Upload, MIME & Size Validation, and Category Filtering.</p>
+                <p> Event CRUD with Poster Upload, MIME & Size Validation, and Category Filtering.</p>
             </div>
             <div style="display:flex; gap:12px;">
                 <button type="button" class="btn-primary-action" onclick="openCreateModal()">
                     ＋ Add New Event
                 </button>
                 <a href="ajax_events.php" class="btn-ajax-link">
-                    ⚡ AJAX CRUD Mode (Practical 13)
+                    ⚡ AJAX CRUD Mode
                 </a>
             </div>
         </div>

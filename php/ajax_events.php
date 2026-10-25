@@ -16,7 +16,7 @@ $csrf_token = get_csrf_token();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practical 13 — AJAX/Fetch API Event CRUD</title>
+    <title> AJAX/Fetch API Event CRUD</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/ajax_events.css">
 </head>
@@ -25,7 +25,7 @@ $csrf_token = get_csrf_token();
     <nav class="admin-nav">
         <div>
             <span class="brand-text">StudentHub</span>
-            <span class="admin-tag">Practical 13 API</span>
+            <span class="admin-tag"> API</span>
         </div>
         <div class="admin-nav-links">
             <a href="admin_dashboard.php">Dashboard</a>
@@ -41,12 +41,12 @@ $csrf_token = get_csrf_token();
 
         <div class="banner-ajax">
             <div>
-                <h1>Practical 13: Fetch API & JSON Endpoint Integration</h1>
+                <h1> Fetch API & JSON Endpoint Integration</h1>
                 <p>Asynchronous event management without full-page reloads. Real-time REST endpoints consumed via JavaScript Fetch.</p>
             </div>
             <div>
                 <a href="manage_events.php" style="color:white; font-size:13px; text-decoration:underline;">
-                    ← Standard Form Mode (Practical 12)
+                    ← Standard Form Mode
                 </a>
             </div>
         </div>

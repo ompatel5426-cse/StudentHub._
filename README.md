@@ -17,10 +17,12 @@ StudentHub is a comprehensive college student management portal built with **PHP
 3. **Database Configuration:**
    - Open phpMyAdmin: [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
    - Database name: `studenthub`
-   - If setting up fresh, run `schema.sql`, `migration.sql`, and `migration_practicals_12_14.sql`.
+   - Migrations executed: `schema.sql`, `migration.sql`, `migration_practicals_12_14.sql`, and `migration_student_approvals_marks.sql`.
 
 4. **Access Website:**
    - Home Page: [http://localhost/StudentHub/index.html](http://localhost/StudentHub/index.html)
+   - Student Portal: [http://localhost/StudentHub/login.html](http://localhost/StudentHub/login.html)
+   - Admin Console: [http://localhost/StudentHub/admin_login.html](http://localhost/StudentHub/admin_login.html)
 
 ---
 
@@ -30,123 +32,93 @@ StudentHub is a comprehensive college student management portal built with **PHP
 | :--- | :--- | :--- | :--- | :--- |
 | **Administrator** | [`admin_login.html`](http://localhost/StudentHub/admin_login.html) | `admin@studenthub.com` | `Admin@123` | — |
 | **Admin Register** | [`admin_register.html`](http://localhost/StudentHub/admin_register.html) | — | — | `ADMIN2026` |
-| **Student** | [`login.html`](http://localhost/StudentHub/login.html) | `aarav.test@example.com` | `Password@123` | — |
+| **Student (Active)** | [`login.html`](http://localhost/StudentHub/login.html) | `rahul@gmail.com` | `Rahul@123` | — |
 | **Student Register**| [`registration.html`](http://localhost/StudentHub/registration.html) | — | — | — |
 
 ---
 
-## 📚 College Practicals Implemented
+## 🌟 Key Features & Approval Workflows
 
-### Practical 8: Database Connection & Schema Design
-- Centralized database configuration in [`php/db.php`](php/db.php) providing both **MySQLi** (`$conn`) and **PDO** (`$pdo`).
-- Normalized relational schema: `students`, `events`, `registrations`, and `audit_logs`.
-- Test connection page: [`php/test_connection.php`](http://localhost/StudentHub/php/test_connection.php).
+### 1. Dynamic Student Profile Linking
+- **URL**: [`profile.php`](http://localhost/StudentHub/profile.php) (or via Dashboard navbar `My Profile 👤`)
+- When a student registers online, all submitted details (Full Name, Email, Mobile, Course, Year, Gender) along with an auto-generated **Enrollment Number** (`SH2026-XXXX`) are securely stored in MySQL.
+- When logged into their student account, their profile automatically displays their exact registered details, enrollment number, account status, registered events count, and published marks count.
+- Students can click **✏️ Edit Profile Details** to update their Name, Mobile, Date of Birth (DOB), Address, Course, Year, and Gender.
 
-### Practical 9: Secure User Registration
-- Form: [`registration.html`](http://localhost/StudentHub/registration.html) $\rightarrow$ Processor: [`php/process.php`](php/process.php).
-- Server-side validation (Name, 10-digit Mobile, Email, Course, Year, Gender).
-- Duplicate email prevention with prepared statements.
-- Password hashing with `password_hash($pass, PASSWORD_DEFAULT)` (BCrypt).
-- CSRF token validation and Post/Redirect/Get (PRG) pattern with success view: [`php/register_success.php`](http://localhost/StudentHub/php/register_success.php).
+### 2. External Student Self-Registration & Admin Approval Workflow
+- When an external student registers via [`registration.html`](http://localhost/StudentHub/registration.html), their account is created with `status = 'pending'` and `registration_source = 'self'`.
+- **Login Guard**: If a pending student attempts to log in, access is blocked with a clear notice:
+  > *"⏳ Your account is pending Administrator approval. Please wait for the admin to approve and activate your registration."*
+- **Admin Review**:
+  - The Administrator is alerted on the **Admin Dashboard** ([`php/admin_dashboard.php`](http://localhost/StudentHub/php/admin_dashboard.php)) and in **Student CRUD** ([`php/manage_students.php`](http://localhost/StudentHub/php/manage_students.php)) via a top notification banner:
+    `🔔 X External Student Registration(s) Awaiting Approval!`
+  - For every pending student, the Admin has two one-click options:
+    - **`[✓ Add / Approve Student]`**: Activates the student (`status = 'active'`). The student can now log in immediately.
+    - **`[✕ Remove / Reject]`**: Permanently removes and rejects the unapproved registration.
 
-### Practical 10: Secure Authentication & Role-Based Access Control (RBAC)
-- Student Login: [`login.html`](http://localhost/StudentHub/login.html) $\rightarrow$ [`php/login.php`](php/login.php).
-- Dedicated Admin Login: [`admin_login.html`](http://localhost/StudentHub/admin_login.html) $\rightarrow$ [`php/admin_login.php`](php/admin_login.php).
-- Dedicated Admin Registration: [`admin_register.html`](http://localhost/StudentHub/admin_register.html) (requires security passcode `ADMIN2026`).
-- Password verification using `password_verify()`.
-- Session fixation protection using `session_regenerate_id(true)`.
-- 15-minute inactivity session timeout and cache-control security headers.
-- Secure Remember-Me using SHA-256 hashed tokens in MySQL.
-- Secure Logout: [`php/logout.php`](php/logout.php).
+### 3. Student Marks Management & Conditional Display
+- **Admin Side**:
+  - In [`php/manage_students.php`](http://localhost/StudentHub/php/manage_students.php), the Admin can click **`[📊 Marks]`** on any active student record.
+  - A modal opens showing all published marks for that student with options to:
+    - Add subject scores: Semester, Subject Name, Subject Code, Internal Marks (max 40), External Marks (max 60), Total (100), and auto-calculated Grade (`A+`, `A`, `B+`, `B`, `C`, `P`, `F`).
+    - Remove/delete any entered subject mark.
+- **Student Side**:
+  - **URL**: [`results.php`](http://localhost/StudentHub/results.php) (or via Student Dashboard `My Results 📊`).
+  - **If marks have NOT been added by Admin**:
+    - The page displays the clean empty state:
+      `📊 Marks Not Added Yet` (`⚠️ Not add marks / Pending Evaluation`).
+      No fake/dummy scores are shown.
+  - **If marks HAVE been added by Admin**:
+    - Displays real calculated metrics: **SGPA**, **Percentage**, **Total Score**, **Result Status (PASS/REAPPEAR)**, and the complete subject-wise marks table.
 
-### Practical 11: Student Management CRUD with Search, Filter & CSV Export
-- Admin Student Management: [`php/manage_students.php`](http://localhost/StudentHub/php/manage_students.php).
-- **Create**: Add new students with server-side validation.
-- **Read**: Live search (name, email, course), multi-criteria filters (course, year, gender, status), pagination, and sequential **Sr. No.**.
-- **Update**: Edit student details and optional password update.
-- **Delete**: Soft Delete (sets `status = 'inactive'`) with instant Restore, and permanent Delete with confirmation dialog.
-- **CSV Export**: One-click download with CSV formula/DDE injection protection (`manage_students.php?export=csv`).
-
-### Practical 12: Event Management CRUD with Poster Upload & File Validation
-- Admin Event Management: [`php/manage_events.php`](http://localhost/StudentHub/php/manage_events.php).
-- **CRUD Operations**: Add, Edit, Delete, and Open/Closed status toggle for events.
-- **Poster Image Upload**:
-  - Validates file format: JPG, JPEG, PNG, WEBP.
-  - Validates file size: Maximum 2MB.
-  - Safe unique renaming (`event_<uniqid>_<timestamp>.<ext>`).
-  - Saved in protected upload directory: [`uploads/posters/`](uploads/posters/).
-  - Old poster files are automatically removed upon update or event deletion.
-- Event Category and Open/Closed status filters.
-
-### Practical 13: PHP JSON REST API & AJAX/Fetch-Based CRUD
-- **REST API Endpoint**: [`php/api/events.php`](http://localhost/StudentHub/php/api/events.php).
-  - Returns `application/json` with standard envelopes and HTTP status codes (200, 201, 400, 401, 404, 500).
-  - Handles `GET` (list/search), `POST` (create), `PUT` (update), and `DELETE` (delete).
-- **Interactive AJAX Interface**: [`php/ajax_events.php`](http://localhost/StudentHub/php/ajax_events.php).
-  - Performs all CRUD operations asynchronously **without full page reload**.
-  - Live search with 300ms **debounce**.
-  - Loading indicators, modal forms, and real-time DOM updates.
-  - Real-time **Fetch Network Log Console** displaying HTTP status codes and responses.
-
-### Practical 14: Admin Dashboard with RBAC, Dynamic Menu & Audit Log
-- Admin Dashboard: [`php/admin_dashboard.php`](http://localhost/StudentHub/php/admin_dashboard.php).
-- **Dynamic SQL Aggregation**: Real-time counts for students, events, registrations, and audit logs.
-- **Role-Based Dynamic Menu**: Navigation adapts automatically based on user role (Admin vs Student).
-- **Active / Inactive Status Toggle**: Quick one-click status toggle from the dashboard table.
-- **Analytics Chart**: Event distribution bar chart grouped by category (Workshop, Technical, Competition, Sports, Seminar).
-- **System Audit Trail**: Dedicated log viewer at [`php/audit_logs.php`](http://localhost/StudentHub/php/audit_logs.php) recording admin actions (`STUDENT_CREATE`, `EVENT_UPDATE`, `LOGIN`, `LOGOUT`, etc.) with user email, timestamp, and IP address.
+### 4. Events System & Conditional Display
+- **URL**: [`events.html`](http://localhost/StudentHub/events.html)
+- Connected to MySQL database via [`php/api/events.php`](http://localhost/StudentHub/php/api/events.php).
+- **If no events exist in the database**:
+  - Displays: `📅 No New Events Added` (`Not new event add / Waiting for Admin`).
+- **When events are added by Admin**:
+  - Real event cards with poster images, venue, date, and category filters are rendered dynamically.
+- In **Student Dashboard** ([`php/dashboard.php`](http://localhost/StudentHub/php/dashboard.php)), the "Recent Academic Activity" feed reflects whether events and marks are added or pending.
 
 ---
 
-## 📁 Key File Structure
+## 📚 College Practicals Summary (8 through 14)
 
-```text
-StudentHub/
-├── index.html                   # Website Home Page
-├── about.html                   # About Page
-├── courses.html                 # Academic Courses
-├── events.html                  # Student Events Directory (API-Connected)
-├── login.html                   # Student Portal Login
-├── registration.html            # Student Portal Registration
-├── admin_login.html             # Dedicated Administrator Login
-├── admin_register.html          # Dedicated Administrator Registration
-├── schema.sql                   # Initial Database Schema
-├── migration.sql                # Practical 9-11 Migration
-├── migration_practicals_12_14.sql # Practical 12-14 Migration
-├── css/
-│   ├── style.css                # Primary Theme Stylesheet
-│   └── events.css               # Events Directory Stylesheet
-├── js/
-│   ├── script.js                # Core UI Scripts
-│   └── events.js                # Events Fetch & Filter Logic
-├── uploads/
-│   ├── .htaccess                # Script execution protection
-│   └── posters/                 # Uploaded Event Poster Images
-└── php/
-    ├── db.php                   # Database Connection (MySQLi + PDO)
-    ├── auth.php                 # Security, RBAC, Sessions & Audit Logger
-    ├── csrf.php                 # CSRF Token API Endpoint
-    ├── login.php                # Student Login Processor
-    ├── logout.php               # Secure Session Logout
-    ├── process.php              # Student Registration Processor
-    ├── register_success.php     # PRG Registration Success View
-    ├── dashboard.php            # Student Dashboard
-    ├── admin_login.php          # Admin Login Processor
-    ├── admin_register_process.php # Admin Registration Processor
-    ├── admin_dashboard.php      # Admin Analytics Dashboard (Practical 14)
-    ├── manage_students.php      # Student CRUD & CSV Export (Practical 11)
-    ├── manage_events.php        # Event CRUD with Poster Upload (Practical 12)
-    ├── ajax_events.php          # Asynchronous Fetch CRUD UI (Practical 13)
-    ├── audit_logs.php           # Audit Trail Viewer (Practical 14)
-    └── api/
-        └── events.php           # RESTful JSON API Endpoint (Practical 13)
-```
+- **Practical 8**: MySQLi (`$conn`) & PDO (`$pdo`) database connection in [`php/db.php`](php/db.php).
+- **Practical 9**: Secure registration with prepared statements, validation, and `password_hash()`.
+- **Practical 10**: Secure authentication with `password_verify()`, session regeneration, 15m timeout, and RBAC.
+- **Practical 11**: Student CRUD management with live search, filters, pagination, CSV export, and Approval workflow.
+- **Practical 12**: Event CRUD with poster file upload (JPG/PNG/WEBP, 2MB max) in [`php/manage_events.php`](php/manage_events.php).
+- **Practical 13**: RESTful JSON API ([`php/api/events.php`](php/api/events.php)) & Fetch-based Async CRUD ([`php/ajax_events.php`](php/ajax_events.php)).
+- **Practical 14**: Admin dashboard with dynamic SQL metrics, event analytics chart, and audit logging in [`php/audit_logs.php`](php/audit_logs.php).
 
 ---
 
-## 🧪 Testing Summary
+## 🧪 Step-by-Step Testing Guide
 
-All features have been tested and verified automatically via local HTTP requests on XAMPP:
-- **Practicals 9, 10, 11 Suite**: 21 Passed, 0 Failed.
-- **Practicals 12, 13, 14 Suite**: 11 Passed, 0 Failed.
-- Total: **32 Automated Tests Passed**.
+### Test Case 1: Student Self-Registration & Approval
+1. Go to [http://localhost/StudentHub/registration.html](http://localhost/StudentHub/registration.html).
+2. Register a new student (e.g. `Kavya Patel`, `kavya@example.com`, `9876543210`, `BCA`, Year `1`, Female, `Password@123`).
+3. Note the success page: *"Registration Received — Pending Admin Approval"*.
+4. Go to [http://localhost/StudentHub/login.html](http://localhost/StudentHub/login.html) and attempt to log in with `kavya@example.com` / `Password@123`.
+5. Observe rejection: *"⏳ Your account is pending Administrator approval"*.
+6. Open [http://localhost/StudentHub/admin_login.html](http://localhost/StudentHub/admin_login.html) and log in as Admin (`admin@studenthub.com` / `Admin@123`).
+7. Observe pending registration alert banner on Admin Dashboard.
+8. Click **Review & Approve Students »** or go to `manage_students.php`.
+9. Click **`[✓ Add / Approve Student]`**.
+10. Log in again as `kavya@example.com` $ightarrow$ Login succeeds and opens Student Dashboard!
+
+### Test Case 2: Profile Viewing & Editing
+1. From Student Dashboard, click **My Profile 👤** or visit [http://localhost/StudentHub/profile.php](http://localhost/StudentHub/profile.php).
+2. Observe all registered information (Name, Email, Mobile, Course, Year, Gender, Enrollment No).
+3. Click **✏️ Edit Profile Details**, update Address or DOB, and save.
+4. Verify changes are updated in the database and visible on page.
+
+### Test Case 3: Marks Management ("Not Add Marks" $ightarrow$ Published Scorecard)
+1. In Student Portal, click **My Results 📊** or visit [http://localhost/StudentHub/results.php](http://localhost/StudentHub/results.php).
+2. Observe empty state: *"Marks Not Added Yet / Not add marks / Pending Evaluation"*.
+3. In another tab or Admin login, go to [`php/manage_students.php`](http://localhost/StudentHub/php/manage_students.php).
+4. Click **`[📊 Marks]`** next to that student's row.
+5. In the modal, add a subject (e.g., `Web Development Technologies`, Internal: `36`, External: `54`).
+6. Click **+ Save Subject Mark**.
+7. Refresh student's results page $ightarrow$ real SGPA, percentage, and subject scorecard appear immediately!

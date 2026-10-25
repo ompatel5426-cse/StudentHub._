@@ -5,6 +5,7 @@
  * and provides secure logout functionality.
  */
 
+require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/auth.php';
 start_secure_session();
 require_login();
@@ -15,7 +16,21 @@ $student_name = $_SESSION['name'] ?? 'Student';
 $student_email = $_SESSION['email'] ?? '';
 $student_course = $_SESSION['course'] ?? 'Not Assigned';
 $student_year = $_SESSION['year'] ?? '1';
-$student_id = $_SESSION['student_id'] ?? '';
+$student_id = (int)($_SESSION['student_id'] ?? 0);
+
+// Check if marks are added for this student
+$marks_count = 0;
+$m_chk = $conn->query("SELECT COUNT(*) FROM student_marks WHERE student_id = $student_id");
+if ($m_chk) {
+    $marks_count = (int)$m_chk->fetch_row()[0];
+}
+
+// Check for upcoming open events
+$latest_event = null;
+$e_chk = $conn->query("SELECT event_name, venue, event_date FROM events WHERE status = 'open' ORDER BY event_date ASC LIMIT 1");
+if ($e_chk && $e_row = $e_chk->fetch_assoc()) {
+    $latest_event = $e_row;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,11 +52,12 @@ $student_id = $_SESSION['student_id'] ?? '';
 
         <div class="nav-links">
             <a href="dashboard.php" style="color:#6C63FF; font-weight:700;">Dashboard</a>
+            <a href="profile.php">My Profile 👤</a>
             <a href="../courses.html">Courses</a>
             <a href="../assignments.html">Assignments</a>
             <a href="../attendance.html">Attendance</a>
             <a href="../events.html">Events</a>
-            <a href="../results.html">Results</a>
+            <a href="results.php">My Results 📊</a>
 
             <?php if ($is_admin): ?>
                 <a href="admin_dashboard.php" class="btn-admin-switch">Admin Console ⚙</a>
@@ -61,7 +77,7 @@ $student_id = $_SESSION['student_id'] ?? '';
                 <p>Academic session 2026–27 | You are securely authenticated with role: <strong>Student</strong></p>
             </div>
             <div class="student-pill">
-                <div class="sid">Student ID #<?= e($student_id) ?></div>
+                <div class="sid">Student ID #<?= e((string)$student_id) ?></div>
                 <div class="sname"><?= e($student_email) ?></div>
             </div>
         </section>
@@ -74,7 +90,7 @@ $student_id = $_SESSION['student_id'] ?? '';
             </div>
             <div class="strip-item">
                 <div class="strip-label">Academic Year</div>
-                <div class="strip-value">Year <?= e($student_year) ?></div>
+                <div class="strip-value">Year <?= e((string)$student_year) ?></div>
             </div>
             <div class="strip-item">
                 <div class="strip-label">Account Status</div>
@@ -88,6 +104,18 @@ $student_id = $_SESSION['student_id'] ?? '';
 
         <!-- Quick Access Feature Cards -->
         <section class="cards-grid">
+            <a href="profile.php" class="card-box" style="border: 2px solid #e0e7ff;">
+                <span class="card-icon">👤</span>
+                <h3>My Profile</h3>
+                <p>View your registered information, enrollment number, and edit profile details.</p>
+            </a>
+
+            <a href="results.php" class="card-box" style="border: 2px solid #e0e7ff;">
+                <span class="card-icon">📊</span>
+                <h3>Exam Results</h3>
+                <p>Check semester subject marks, overall SGPA, grade sheets, and performance.</p>
+            </a>
+
             <a href="../study-materials.html" class="card-box">
                 <span class="card-icon">📚</span>
                 <h3>Study Materials</h3>
@@ -111,18 +139,6 @@ $student_id = $_SESSION['student_id'] ?? '';
                 <h3>College Events</h3>
                 <p>Browse upcoming workshops, technical symposiums, and sports meets.</p>
             </a>
-
-            <a href="../results.html" class="card-box">
-                <span class="card-icon">📊</span>
-                <h3>Exam Results</h3>
-                <p>View mid-term and semester grade sheets and performance reports.</p>
-            </a>
-
-            <a href="../notices.html" class="card-box">
-                <span class="card-icon">📢</span>
-                <h3>Circulars & Notices</h3>
-                <p>Official notices from department heads and university administration.</p>
-            </a>
         </section>
 
         <!-- Lower Split Panel -->
@@ -130,17 +146,31 @@ $student_id = $_SESSION['student_id'] ?? '';
             <div class="panel-box">
                 <h2>Recent Academic Activity</h2>
                 <ul class="activity-list">
+                    <!-- Marks Status -->
                     <li class="activity-item">
-                        <span class="activity-badge">✓</span>
-                        <span>Mid-semester evaluation results published for <strong><?= e($student_course) ?></strong>.</span>
+                        <?php if ($marks_count > 0): ?>
+                            <span class="activity-badge" style="background:#dcfce7; color:#15803d;">✓</span>
+                            <span>Semester evaluation marks published (<?= $marks_count ?> subjects). <a href="results.php" style="color:#6C63FF; font-weight:600;">View Scorecard »</a></span>
+                        <?php else: ?>
+                            <span class="activity-badge" style="background:#fef3c7; color:#92400e;">⚠️</span>
+                            <span><strong>Marks Not Added Yet</strong> — Examination scores have not been published by administrator yet.</span>
+                        <?php endif; ?>
                     </li>
+
+                    <!-- Events Status -->
                     <li class="activity-item">
-                        <span class="activity-badge">✓</span>
-                        <span>New event registration open: Web Development Workshop (CSPIT Seminar Hall).</span>
+                        <?php if ($latest_event): ?>
+                            <span class="activity-badge" style="background:#dbeafe; color:#1e40af;">🏆</span>
+                            <span>Upcoming Event: <strong><?= e($latest_event['event_name']) ?></strong> (<?= e($latest_event['venue']) ?>). <a href="../events.html" style="color:#6C63FF; font-weight:600;">Explore »</a></span>
+                        <?php else: ?>
+                            <span class="activity-badge" style="background:#fef3c7; color:#92400e;">📅</span>
+                            <span><strong>Not new event add</strong> — No upcoming events scheduled by administration yet.</span>
+                        <?php endif; ?>
                     </li>
+
                     <li class="activity-item">
                         <span class="activity-badge">✓</span>
-                        <span>Attendance updated for current academic semester (92% aggregate).</span>
+                        <span>Academic profile linked to enrollment database. <a href="profile.php" style="color:#6C63FF; font-weight:600;">View Profile »</a></span>
                     </li>
                 </ul>
             </div>

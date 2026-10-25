@@ -25,14 +25,13 @@ async function loadEvents() {
        // await new Promise(resolve => setTimeout(resolve, 3000));   // Simulate a delay for testing purposes
 
 
-        // Practical 13: Fetch from PHP JSON API with fallback to events.json
-        let apiData = null;
+        // Practical 13: Fetch directly from PHP JSON API (MySQL database)
         try {
             const apiRes = await fetch("php/api/events.php");
             if (apiRes.ok) {
                 const json = await apiRes.json();
-                if (json.success && Array.isArray(json.data) && json.data.length > 0) {
-                    apiData = json.data.map(item => ({
+                if (json.success && Array.isArray(json.data)) {
+                    events = json.data.map(item => ({
                         id: item.event_id,
                         title: item.event_name,
                         date: item.event_date,
@@ -41,20 +40,15 @@ async function loadEvents() {
                         poster_url: item.poster_url || null,
                         description: item.description || ''
                     }));
+                } else {
+                    events = [];
                 }
+            } else {
+                events = [];
             }
         } catch (e) {
-            console.warn("API fetch error, falling back to static json:", e);
-        }
-
-        if (apiData) {
-            events = apiData;
-        } else {
-            const response = await fetch("php/data/events.json");
-            if (!response.ok) {
-                throw new Error("Unable to load events");
-            }
-            events = await response.json();
+            console.warn("API fetch error:", e);
+            events = [];
         }
 
         filteredEvents = [...events];
@@ -107,12 +101,28 @@ function renderEvents() {
 
     if (pageEvents.length === 0) {
 
-        container.innerHTML = `
-            <div class="no-results">
-                <h3>No events found</h3>
-                <p>Try another search or category.</p>
-            </div>
-        `;
+        if (events.length === 0) {
+            container.innerHTML = `
+                <div class="no-results" style="text-align:center; padding:55px 20px;">
+                    <div style="font-size:52px; margin-bottom:12px;">📅</div>
+                    <h3 style="font-size:24px; color:#0f172a; margin-bottom:10px;">No New Events Added</h3>
+                    <div style="background:#fef3c7; color:#92400e; border:1px solid #fde68a; padding:6px 18px; border-radius:20px; font-size:13px; font-weight:700; display:inline-block; margin-bottom:14px;">
+                        Not new event add / Waiting for Admin
+                    </div>
+                    <p style="color:#64748b; font-size:15px; max-width:520px; margin:0 auto; line-height:1.6;">
+                        There are currently no new events, competitions, or workshops added by the administrator. Once the college schedules new activities, they will appear here.
+                    </p>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="no-results" style="text-align:center; padding:45px 20px;">
+                    <div style="font-size:42px; margin-bottom:10px;">🔍</div>
+                    <h3 style="font-size:20px; color:#0f172a; margin-bottom:8px;">No Matching Events Found</h3>
+                    <p style="color:#64748b; font-size:14px;">Try searching with different keywords or reset your category filter.</p>
+                </div>
+            `;
+        }
 
         renderPagination();
 
