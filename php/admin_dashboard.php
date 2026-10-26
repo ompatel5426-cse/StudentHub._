@@ -125,6 +125,8 @@ if ($res) {
     <link rel="stylesheet" href="../css/admin_dashboard.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <!-- DYNAMIC ROLE-BASED NAVBAR (Practical 14) -->
     <nav class="admin-nav">
@@ -144,7 +146,7 @@ if ($res) {
         </div>
     </nav>
 
-    <main class="admin-container">
+    <main id="main-content" class="admin-container">
 
         <!-- Top Welcome Banner -->
         <section class="top-banner">
@@ -256,11 +258,11 @@ if ($res) {
                     <a href="manage_students.php" style="font-size:12px; color:#6C63FF; text-decoration:none;">View All →</a>
                 </h2>
                 <table class="dash-table">
-                    <thead>
+                    <th scope="col"ead>
                         <tr>
-                            <th>Student</th>
-                            <th>Status</th>
-                            <th>Quick Action</th>
+                            <th scope="col">Student</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Quick Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -302,11 +304,11 @@ if ($res) {
                     <span style="font-size:12px; color:#64748b; font-weight:normal;">Junction Query</span>
                 </h2>
                 <table class="dash-table">
-                    <thead>
+                    <th scope="col"ead>
                         <tr>
-                            <th>Student</th>
-                            <th>Event Name</th>
-                            <th>Date</th>
+                            <th scope="col">Student</th>
+                            <th scope="col">Event Name</th>
+                            <th scope="col">Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -335,11 +337,11 @@ if ($res) {
                     <a href="audit_logs.php" style="font-size:12px; color:#6C63FF; text-decoration:none;">All Logs →</a>
                 </h2>
                 <table class="dash-table">
-                    <thead>
+                    <th scope="col"ead>
                         <tr>
-                            <th>Action</th>
-                            <th>Details</th>
-                            <th>Time</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Details</th>
+                            <th scope="col">Time</th>
                         </tr>
                     </thead>
                     <tbody>

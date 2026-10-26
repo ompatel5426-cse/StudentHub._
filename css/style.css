@@ -45,7 +45,7 @@ header{
 }
 
 .logo h2{
-    color:#6C63FF;
+    color:#4F46E5;
     font-size:36px;
     font-weight:700;
 }
@@ -61,13 +61,13 @@ nav a{
 }
 
 nav a:hover{
-    color:#6C63FF;
+    color:#4F46E5;
 }
 
 /* Buttons */
 
 button{
-    background:#6C63FF;
+    background:#4F46E5;
     color:white;
     border:none;
     padding:12px 28px;
@@ -180,7 +180,7 @@ table{
 }
 
 table th{
-    background:#6C63FF;
+    background:#4F46E5;
     color:white;
 }
 
@@ -344,7 +344,7 @@ body.dark-mode footer span {
 }
 
 body.dark-mode footer a:hover {
-    color: #6C63FF !important;
+    color: #4F46E5 !important;
 }
 
 /* ===== Login Page ===== */
@@ -380,7 +380,7 @@ body.dark-mode footer a:hover {
 .login-right h2{
     text-align: center;
     margin-bottom: 25px;
-    color: #6C63FF;
+    color: #4F46E5;
     font-size: 28px;
 }
 
@@ -496,7 +496,7 @@ body.dark-mode footer a:hover {
 }
 
 .menu-list a:hover{
-    background:#6C63FF;
+    background:#4F46E5;
     color:#fff;
     padding-left:20px;
 }
@@ -525,7 +525,7 @@ body.dark-mode footer a:hover {
 }
 
 .menu-list a:hover{
-    background:#6C63FF;
+    background:#4F46E5;
     color:#fff;
     transform:translateX(10px) scale(1.03);
     box-shadow:0 10px 20px rgba(108,99,255,.35);
@@ -600,7 +600,7 @@ body.dark-mode footer a:hover {
     height:170px;
     border-radius:50%;
     object-fit:cover;
-    border:5px solid #6C63FF;
+    border:5px solid #4F46E5;
     margin:auto;
 }
 
@@ -625,7 +625,7 @@ body.dark-mode footer a:hover {
 }
 
 .stat-box h3{
-    color:#6C63FF;
+    color:#4F46E5;
     margin-bottom:10px;
 }
 
@@ -651,7 +651,7 @@ body.dark-mode footer a:hover {
 
 .story-tag {
     display: inline-block;
-    color: #6C63FF;
+    color: #4F46E5;
     background: #eeecff;
     padding: 8px 16px;
     border-radius: 20px;
@@ -759,7 +759,7 @@ body.dark-mode nav a {
 }
 
 body.dark-mode nav a:hover {
-    color: #6C63FF;
+    color: #4F46E5;
 }
 
 /* Main headings */
@@ -853,7 +853,7 @@ body.dark-mode table {
 }
 
 body.dark-mode table th {
-    background: linear-gradient(135deg, #6c63ff, #5148d8);
+    background: linear-gradient(135deg, #4f46e5, #5148d8);
     color: #ffffff;
 }
 
@@ -897,7 +897,7 @@ body.dark-mode .login-right form {
 }
 
 body.dark-mode .login-right h2 {
-    color: #6C63FF;
+    color: #4F46E5;
 }
 
 /* Menu */
@@ -907,7 +907,7 @@ body.dark-mode .menu-list a {
 }
 
 body.dark-mode .menu-list a:hover {
-    background: #6C63FF;
+    background: #4F46E5;
     color: #ffffff;
 }
 
@@ -920,7 +920,7 @@ body.dark-mode footer {
 /* ===== Notification Banner ===== */
 
 .banner{
-    background:#6C63FF;
+    background:#4F46E5;
     color:white;
     padding:12px 20px;
     text-align:center;
@@ -955,7 +955,7 @@ table {
 
 /* Table Header */
 table th {
-    background: linear-gradient(135deg, #6c63ff, #5148d8);
+    background: linear-gradient(135deg, #4f46e5, #5148d8);
     color: white;
     padding: 16px;
     text-align: center;
@@ -994,7 +994,7 @@ table tr:last-child td {
 }
 
 .profile-logout button {
-    background: #6C63FF;
+    background: #4F46E5;
     color: white;
     border: none;
     padding: 12px 35px;
@@ -1518,7 +1518,7 @@ body.dark-mode .footer span {
 }
 
 body.dark-mode .footer a:hover {
-    color: #6C63FF !important;
+    color: #4F46E5 !important;
 }
 
 /* =========================================
@@ -1590,7 +1590,7 @@ body.dark-mode .footer a:hover {
 .faq-item button {
     width: 100%;
     text-align: left;
-    background: #6C63FF;
+    background: #4F46E5;
     color: #ffffff;
     border: none;
     padding: 14px 18px;
@@ -1661,3 +1661,4 @@ body.dark-mode .faq-item p {
         font-size: 24px;
     }
 }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }

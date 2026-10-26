@@ -101,7 +101,7 @@ p.sub, p {
 a.btn, a.btn-primary {
     display: inline-block;
     padding: 11px 24px;
-    background: #6C63FF;
+    background: #4F46E5;
     color: white;
     text-decoration: none;
     border-radius: 8px;
@@ -144,3 +144,5 @@ a.btn-outline:hover {
     gap: 12px;
     justify-content: center;
 }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }

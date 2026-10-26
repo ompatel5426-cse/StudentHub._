@@ -39,7 +39,7 @@
 }
 
 .btn-admin-submit {
-    background: #6C63FF;
+    background: #4F46E5;
     color: #ffffff;
     width: 100%;
     padding: 12px;
@@ -92,3 +92,5 @@
     color: #555;
     cursor: pointer;
 }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }

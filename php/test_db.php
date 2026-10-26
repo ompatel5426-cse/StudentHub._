@@ -93,6 +93,10 @@ if (php_sapi_name() === 'cli') {
     </style>
 </head>
 <body>
+    <main id="main-content">
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <div class="test-box">
         <div class="head">
@@ -135,15 +139,15 @@ if (php_sapi_name() === 'cli') {
         <h3 style="font-size:16px; color:#0f172a; margin-bottom:8px;">Registered Users in Database</h3>
         <div style="overflow-x:auto;">
             <table>
-                <thead>
+                <th scope="col"ead>
                     <tr>
-                        <th>ID</th>
-                        <th>Enrollment No</th>
-                        <th>Name</th>
-                        <th>Email Address</th>
-                        <th>Role</th>
-                        <th>Source</th>
-                        <th>Status</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Enrollment No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email Address</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Source</th>
+                        <th scope="col">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -176,5 +180,6 @@ if (php_sapi_name() === 'cli') {
         </div>
     </div>
 
+    </main>
 </body>
 </html>

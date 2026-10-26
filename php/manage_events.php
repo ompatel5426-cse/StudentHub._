@@ -293,6 +293,8 @@ $stmt->close();
     <link rel="stylesheet" href="../css/manage_events.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <!-- NAVBAR -->
     <nav class="admin-nav">
@@ -309,6 +311,8 @@ $stmt->close();
             <a href="logout.php" class="btn-logout">Logout ⏻</a>
         </div>
     </nav>
+    <main id="main-content">
+
 
     <!-- CONTENT -->
     <div class="page-wrap">
@@ -385,16 +389,16 @@ $stmt->close();
         <div class="table-card">
             <div class="table-responsive">
                 <table class="events-table">
-                    <thead>
+                    <th scope="col"ead>
                         <tr>
-                            <th style="width:40px;">Sr.</th>
-                            <th>Poster</th>
-                            <th>Event Title</th>
-                            <th>Category</th>
-                            <th>Event Date</th>
-                            <th>Venue</th>
-                            <th>Status</th>
-                            <th style="text-align:center;">Actions</th>
+                            <th scope="col" style="width:40px;">Sr.</th>
+                            <th scope="col">Poster</th>
+                            <th scope="col">Event Title</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Event Date</th>
+                            <th scope="col">Venue</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" style="text-align:center;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -606,5 +610,6 @@ $stmt->close();
     </div>
 
     <script src="../js/manage_events.js"></script>
+    </main>
 </body>
 </html>

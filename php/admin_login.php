@@ -105,6 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="../css/admin_login.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <header>
         <div class="logo">
@@ -119,6 +121,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <a href="admin_login.php" style="color:#6C63FF; font-weight:700;">Admin Login 🛡️</a>
         </nav>
     </header>
+    <main id="main-content">
+
 
     <section class="login-section">
         <div class="login-left">
@@ -161,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <input type="hidden" name="csrf_token" value="<?= e(get_csrf_token()) ?>">
 
-                <p>Administrator Email</p>
+                <label for="admin_email" style="display:block; font-size:13px; font-weight:600; color:#334155; margin-bottom:6px;">Administrator Email</label>
                 <input
                     type="email"
                     name="email"
@@ -184,7 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <label>
                         <input type="checkbox" name="remember" value="1"> Remember Me
                     </label>
-                    <a href="#">Forgot Password?</a>
+                    <a href="forgot_password.php">Forgot Password?</a>
                 </div>
 
                 <button type="submit" class="btn-admin-submit">
@@ -253,5 +257,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
     </footer>
 
+    </main>
 </body>
 </html>

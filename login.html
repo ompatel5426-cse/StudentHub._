@@ -9,6 +9,8 @@
     
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <!-- ================= HEADER ================= -->
 
@@ -29,6 +31,8 @@
         </nav>
 
     </header>
+    <main id="main-content">
+
 
     <!-- ================= LOGIN SECTION ================= -->
 
@@ -55,33 +59,35 @@
 
                 <h2>Student Login</h2>
 
-                <div id="loginAlert" style="display:none; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:15px;"></div>
+                <div id="loginAlert" role="alert" aria-live="assertive" style="display:none; padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:15px;"></div>
 
                 <input type="hidden" name="csrf_token" id="login_csrf_token" value="">
 
-                <p>Email Address</p>
-
+                <label for="login_email" style="display:block; font-size:13px; font-weight:600; color:#334155; margin-bottom:6px;">Email Address</label>
                 <input
                     type="email"
+                    id="login_email"
                     name="email"
                     placeholder="Enter your email"
                     required
+                    aria-required="true"
                 >
 
-                <p>Password</p>
-
+                <label for="login_password" style="display:block; font-size:13px; font-weight:600; color:#334155; margin-bottom:6px; margin-top:14px;">Password</label>
                 <input
-                    type = "password"
+                    type="password"
+                    id="login_password"
                     name="password"
-                    placeholder = "Enter your password"
+                    placeholder="Enter your password"
                     required
+                    aria-required="true"
                 >
 
                 <div class ="options" style="display:flex; justify-content:space-between; align-items:center; margin:10px 0;">
                     <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#555; cursor:pointer;">
                         <input type="checkbox" name="remember" value="1"> Remember Me
                     </label>
-                    <a href="#">Forgot Password?</a>
+                    <a href="forgot_password.html">Forgot Password?</a>
                 </div>
 
                 <button type="submit">
@@ -203,5 +209,6 @@
     <script src="js/script.js"></script>
     <script src="js/login.js"></script>
     <script src="js/nav.js"></script>
+    </main>
 </body>
 </html>

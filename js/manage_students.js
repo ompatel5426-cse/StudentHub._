@@ -1,14 +1,43 @@
+var lastActiveElement = null;
+
+function trapFocus(modal) {
+    if (!modal) return;
+    var focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable.length === 0) return;
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+
+    modal.onkeydown = function(e) {
+        if (e.key === 'Tab') {
+            if (e.shiftKey) {
+                if (document.activeElement === first) {
+                    last.focus();
+                    e.preventDefault();
+                }
+            } else {
+                if (document.activeElement === last) {
+                    first.focus();
+                    e.preventDefault();
+                }
+            }
+        }
+    };
+    setTimeout(function() { first.focus(); }, 50);
+}
+
 /**
  * StudentHub — Manage Students Scripts (Practical 11)
  * Modal handlers for Create, Edit, and Student Marks
  */
 
 function openCreateModal() {
+    lastActiveElement = document.activeElement;
     var modal = document.getElementById('createModal');
-    if (modal) modal.classList.add('open');
+    if (modal) { modal.classList.add('open'); modal.setAttribute('role', 'dialog'); modal.setAttribute('aria-modal', 'true'); trapFocus(modal); }
 }
 
 function openEditModal(student) {
+    lastActiveElement = document.activeElement;
     document.getElementById('edit_student_id').value = student.student_id;
     document.getElementById('edit_name').value = student.name;
     document.getElementById('edit_email').value = student.email;
@@ -18,10 +47,11 @@ function openEditModal(student) {
     document.getElementById('edit_gender').value = student.gender || 'Male';
     document.getElementById('edit_status').value = student.status || 'active';
     var modal = document.getElementById('editModal');
-    if (modal) modal.classList.add('open');
+    if (modal) { modal.classList.add('open'); modal.setAttribute('role', 'dialog'); modal.setAttribute('aria-modal', 'true'); trapFocus(modal); }
 }
 
 function openMarksModal(studentId, studentName) {
+    lastActiveElement = document.activeElement;
     var modal = document.getElementById('marksModal');
     var title = document.getElementById('marksModalTitle');
     var subtitle = document.getElementById('marksModalSubtitle');
@@ -98,7 +128,12 @@ function escapeHtml(str) {
 
 function closeModal(modalId) {
     var modal = document.getElementById(modalId);
-    if (modal) modal.classList.remove('open');
+    if (modal) {
+        modal.classList.remove('open');
+        if (lastActiveElement && typeof lastActiveElement.focus === 'function') {
+            lastActiveElement.focus();
+        }
+    }
 }
 
 // Close modal on escape key

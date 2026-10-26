@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
 <!--================ HEADER ================-->
 
@@ -28,6 +30,8 @@
     </nav>
 
 </header>
+    <main id="main-content">
+
 
 <!--================ PAGE TITLE ================-->
 
@@ -91,11 +95,11 @@
 
         <tr>
 
-            <th>Subject</th>
-            <th>Assignment</th>
-            <th>Due Date</th>
-            <th>Status</th>
-            <th>Marks</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Assignment</th>
+            <th scope="col">Due Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Marks</th>
 
         </tr>
 
@@ -161,23 +165,23 @@
 
     <form>
 
-        <label>Select Subject</label><br><br>
+        <label for="assign_subject">Select Subject</label><br><br>
 
-        <select>
+        <select id="assign_subject" name="subject" required aria-required="true">
 
-            <option>Web Development</option>
-            <option>Java Programming</option>
-            <option>Database Management</option>
-            <option>Operating System</option>
-            <option>Computer Networks</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Java Programming">Java Programming</option>
+            <option value="Database Management">Database Management</option>
+            <option value="Operating System">Operating System</option>
+            <option value="Computer Networks">Computer Networks</option>
 
         </select>
 
         <br><br>
 
-        <label>Select File</label><br><br>
+        <label for="assign_file">Select File</label><br><br>
 
-        <input type="file">
+        <input type="file" id="assign_file" name="file" required aria-required="true">
 
         <br><br>
 
@@ -258,5 +262,6 @@
 
 <script src="js/script.js"></script>
 
+    </main>
 </body>
 </html>

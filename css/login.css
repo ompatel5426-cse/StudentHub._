@@ -36,5 +36,7 @@
     cursor: pointer;
 }
 .remember-wrap a {
-    color: #6C63FF;
+    color: #4F46E5;
 }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }

@@ -173,7 +173,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($ins->execute()) {
             $new_id = $conn->insert_id;
             $enrol_no = sprintf("SH2026-%04d", $new_id);
-            $conn->query("UPDATE students SET enrollment_no = '$enrol_no' WHERE student_id = $new_id");
+            $enrol_stmt = $conn->prepare("UPDATE students SET enrollment_no = ? WHERE student_id = ?");
+            if ($enrol_stmt) {
+                $enrol_stmt->bind_param("si", $enrol_no, $new_id);
+                $enrol_stmt->execute();
+                $enrol_stmt->close();
+            }
 
             $_SESSION['flash_success'] = "Student '$name' (#$new_id / $enrol_no) created successfully by Admin!";
             log_audit_action($conn, 'STUDENT_CREATE', "Admin created student #$new_id ($name, $email).");
@@ -315,7 +320,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($student_id <= 0) {
             $_SESSION['flash_error'] = "Invalid student ID.";
         } else {
-            $s_info = $conn->query("SELECT name, email FROM students WHERE student_id = $student_id LIMIT 1");
+            $s_stmt = $conn->prepare("SELECT name, email FROM students WHERE student_id = ? LIMIT 1");
+            $s_stmt->bind_param("i", $student_id);
+            $s_stmt->execute();
+            $s_info = $s_stmt->get_result();
             $s_name = "Student #$student_id";
             if ($s_info && $sr = $s_info->fetch_assoc()) {
                 $s_name = $sr['name'];
@@ -340,7 +348,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($student_id <= 0) {
             $_SESSION['flash_error'] = "Invalid student ID.";
         } else {
-            $s_info = $conn->query("SELECT name, email FROM students WHERE student_id = $student_id AND status = 'pending' LIMIT 1");
+            $s_stmt = $conn->prepare("SELECT name, email FROM students WHERE student_id = ? AND status = 'pending' LIMIT 1");
+            $s_stmt->bind_param("i", $student_id);
+            $s_stmt->execute();
+            $s_info = $s_stmt->get_result();
             $s_name = "Student #$student_id";
             if ($s_info && $sr = $s_info->fetch_assoc()) {
                 $s_name = $sr['name'];
@@ -538,6 +549,8 @@ if ($c_res) {
     <link rel="stylesheet" href="../css/manage_students.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <!-- NAVBAR -->
     <nav class="admin-nav">
@@ -554,6 +567,8 @@ if ($c_res) {
             <a href="logout.php" class="btn-logout">Logout ⏻</a>
         </div>
     </nav>
+    <main id="main-content">
+
 
     <!-- CONTENT -->
     <div class="page-wrap">
@@ -663,17 +678,17 @@ if ($c_res) {
         <div class="table-card">
             <div class="table-responsive">
                 <table class="crud-table">
-                    <thead>
+                    <th scope="col"ead>
                         <tr>
-                            <th style="width:45px;">Sr.</th>
-                            <th>ID & Enrol</th>
-                            <th>Full Name</th>
-                            <th>Email Address</th>
-                            <th>Mobile</th>
-                            <th>Course / Year</th>
-                            <th>Source</th>
-                            <th>Status</th>
-                            <th style="text-align:center;">Actions</th>
+                            <th scope="col" style="width:45px;">Sr.</th>
+                            <th scope="col">ID & Enrol</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Email Address</th>
+                            <th scope="col">Mobile</th>
+                            <th scope="col">Course / Year</th>
+                            <th scope="col">Source</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" style="text-align:center;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -830,16 +845,16 @@ if ($c_res) {
                 <div id="marksLoading" style="text-align:center; padding:20px; color:#64748b; font-size:13px;">Loading student marks...</div>
                 <div id="marksTableContainer" style="display:none; overflow-x:auto;">
                     <table class="crud-table" style="font-size:12px;">
-                        <thead>
+                        <th scope="col"ead>
                             <tr>
-                                <th>Semester</th>
-                                <th>Subject</th>
-                                <th>Code</th>
-                                <th>Internal (40)</th>
-                                <th>External (60)</th>
-                                <th>Total (100)</th>
-                                <th>Grade</th>
-                                <th>Action</th>
+                                <th scope="col">Semester</th>
+                                <th scope="col">Subject</th>
+                                <th scope="col">Code</th>
+                                <th scope="col">Internal (40)</th>
+                                <th scope="col">External (60)</th>
+                                <th scope="col">Total (100)</th>
+                                <th scope="col">Grade</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody id="marksTableBody">
@@ -1055,5 +1070,6 @@ if ($c_res) {
 
     <!-- JAVASCRIPT FOR MODALS & MARKS -->
     <script src="../js/manage_students.js"></script>
+    </main>
 </body>
 </html>

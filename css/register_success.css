@@ -102,7 +102,7 @@ p.subtitle {
 .btn-primary {
     display: inline-block;
     padding: 12px 26px;
-    background: #6C63FF;
+    background: #4F46E5;
     color: white;
     text-decoration: none;
     border-radius: 10px;
@@ -131,3 +131,5 @@ p.subtitle {
 .btn-outline:hover {
     background: #e2e8f0;
 }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }

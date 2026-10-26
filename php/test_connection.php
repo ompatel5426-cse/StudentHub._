@@ -29,6 +29,10 @@ $student = $stmt->fetch();
 </head>
 
 <body>
+    <main id="main-content">
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
 <div class="box">
 
@@ -45,27 +49,27 @@ $student = $stmt->fetch();
         <table>
 
             <tr>
-                <th>Student ID</th>
+                <th scope="col">Student ID</th>
                 <td><?= htmlspecialchars($student["student_id"]) ?></td>
             </tr>
 
             <tr>
-                <th>Name</th>
+                <th scope="col">Name</th>
                 <td><?= htmlspecialchars($student["name"]) ?></td>
             </tr>
 
             <tr>
-                <th>Email</th>
+                <th scope="col">Email</th>
                 <td><?= htmlspecialchars($student["email"]) ?></td>
             </tr>
 
             <tr>
-                <th>Course</th>
+                <th scope="col">Course</th>
                 <td><?= htmlspecialchars($student["course"]) ?></td>
             </tr>
 
             <tr>
-                <th>Year</th>
+                <th scope="col">Year</th>
                 <td><?= htmlspecialchars($student["year"]) ?></td>
             </tr>
 
@@ -79,5 +83,6 @@ $student = $stmt->fetch();
 
 </div>
 
+    </main>
 </body>
 </html>

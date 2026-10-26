@@ -16,6 +16,8 @@
 
 
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <!-- ================= NAVBAR ================= -->
 
@@ -70,18 +72,20 @@
 
             <div class="search-box">
 
+                <label for="searchInput" class="sr-only">Search Events</label>
                 <span>🔍</span>
-
                 <input
                     type="text"
                     id="searchInput"
+                    aria-label="Search events by title or keyword"
                     placeholder="Search events..."
                 >
 
             </div>
 
 
-            <select id="categoryFilter">
+            <label for="categoryFilter" class="sr-only">Category Filter</label>
+            <select id="categoryFilter" aria-label="Filter events by category">
 
                 <option value="all">
                     All Categories
@@ -110,7 +114,8 @@
             </select>
 
 
-            <select id="sortOption">
+            <label for="sortOption" class="sr-only">Sort Events</label>
+            <select id="sortOption" aria-label="Sort events">
 
                 <option value="default">
                     Sort By
@@ -145,7 +150,7 @@
 
     <!-- ================= EVENTS ================= -->
 
-    <main>
+    <main id="main-content">
 
         <div id="eventContainer"></div>
 

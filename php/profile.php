@@ -69,12 +69,20 @@ if (!$student) {
 }
 
 // Query student's event registrations count
-$reg_count_res = $conn->query("SELECT COUNT(*) FROM registrations WHERE student_id = $student_id");
+$rc_stmt = $conn->prepare("SELECT COUNT(*) FROM registrations WHERE student_id = ?");
+$rc_stmt->bind_param("i", $student_id);
+$rc_stmt->execute();
+$reg_count_res = $rc_stmt->get_result();
 $total_registrations = $reg_count_res ? (int)$reg_count_res->fetch_row()[0] : 0;
+$rc_stmt->close();
 
 // Query student's marks count
-$marks_count_res = $conn->query("SELECT COUNT(*) FROM student_marks WHERE student_id = $student_id");
+$mc_stmt = $conn->prepare("SELECT COUNT(*) FROM student_marks WHERE student_id = ?");
+$mc_stmt->bind_param("i", $student_id);
+$mc_stmt->execute();
+$marks_count_res = $mc_stmt->get_result();
 $total_marks_records = $marks_count_res ? (int)$marks_count_res->fetch_row()[0] : 0;
+$mc_stmt->close();
 
 $enrollment_display = !empty($student['enrollment_no']) ? $student['enrollment_no'] : sprintf('SH2026-%04d', $student['student_id']);
 ?>
@@ -88,6 +96,8 @@ $enrollment_display = !empty($student['enrollment_no']) ? $student['enrollment_n
     <link rel="stylesheet" href="../css/profile.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <!-- Header Navigation -->
     <header>
@@ -104,7 +114,7 @@ $enrollment_display = !empty($student['enrollment_no']) ? $student['enrollment_n
         </nav>
     </header>
 
-    <main class="profile-container">
+    <main id="main-content" class="profile-container">
 
         <?php if (!empty($success_msg)): ?>
             <div class="alert-banner success">

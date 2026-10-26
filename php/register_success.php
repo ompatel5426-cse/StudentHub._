@@ -37,6 +37,10 @@ $is_pending = ($student['status'] ?? '') === 'pending';
     </style>
 </head>
 <body>
+    <main id="main-content">
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
 <div class="success-box">
     <?php if ($is_pending): ?>
@@ -98,5 +102,6 @@ $is_pending = ($student['status'] ?? '') === 'pending';
     </div>
 </div>
 
+    </main>
 </body>
 </html>

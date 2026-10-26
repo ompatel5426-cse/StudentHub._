@@ -74,6 +74,8 @@ if ($has_marks && $total_max > 0) {
     <link rel="stylesheet" href="../css/results.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <!-- ================= NAVBAR ================= -->
     <header>
@@ -91,7 +93,7 @@ if ($has_marks && $total_max > 0) {
     </header>
 
     <!-- ================= MAIN CONTENT ================= -->
-    <main class="results-container">
+    <main id="main-content" class="results-container">
 
         <!-- Page Header Card -->
         <section class="page-title-card">
@@ -188,17 +190,17 @@ if ($has_marks && $total_max > 0) {
 
                 <div class="table-responsive">
                     <table class="marks-table">
-                        <thead>
+                        <th scope="col"ead>
                             <tr>
-                                <th style="width:50px;">Sr.</th>
-                                <th>Semester</th>
-                                <th>Subject Code</th>
-                                <th>Subject Name</th>
-                                <th style="text-align:center;">Internal (40)</th>
-                                <th style="text-align:center;">External (60)</th>
-                                <th style="text-align:center;">Total (100)</th>
-                                <th style="text-align:center;">Grade</th>
-                                <th style="text-align:center;">Status</th>
+                                <th scope="col" style="width:50px;">Sr.</th>
+                                <th scope="col">Semester</th>
+                                <th scope="col">Subject Code</th>
+                                <th scope="col">Subject Name</th>
+                                <th scope="col" style="text-align:center;">Internal (40)</th>
+                                <th scope="col" style="text-align:center;">External (60)</th>
+                                <th scope="col" style="text-align:center;">Total (100)</th>
+                                <th scope="col" style="text-align:center;">Grade</th>
+                                <th scope="col" style="text-align:center;">Status</th>
                             </tr>
                         </thead>
                         <tbody>

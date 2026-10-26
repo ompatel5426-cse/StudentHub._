@@ -61,6 +61,8 @@ if ($actions_res) {
     <link rel="stylesheet" href="../css/audit_logs.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <nav class="admin-nav">
         <div>
@@ -76,6 +78,8 @@ if ($actions_res) {
             <a href="logout.php" class="btn-logout">Logout ⏻</a>
         </div>
     </nav>
+    <main id="main-content">
+
 
     <div class="page-wrap">
 
@@ -119,15 +123,15 @@ if ($actions_res) {
         <div class="table-card">
             <div class="table-responsive">
                 <table class="log-table">
-                    <thead>
+                    <th scope="col"ead>
                         <tr>
-                            <th style="width:40px;">Sr.</th>
-                            <th>Timestamp</th>
-                            <th>User Email</th>
-                            <th>Role</th>
-                            <th>Action</th>
-                            <th>Action Details</th>
-                            <th>IP Address</th>
+                            <th scope="col" style="width:40px;">Sr.</th>
+                            <th scope="col">Timestamp</th>
+                            <th scope="col">User Email</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Action Details</th>
+                            <th scope="col">IP Address</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -169,5 +173,6 @@ if ($actions_res) {
 
     </div>
 
+    </main>
 </body>
 </html>

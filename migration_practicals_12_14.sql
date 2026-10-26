@@ -10,6 +10,9 @@ ADD COLUMN IF NOT EXISTS category VARCHAR(50) NOT NULL DEFAULT 'Workshop' AFTER 
 ADD COLUMN IF NOT EXISTS status ENUM('open', 'closed') NOT NULL DEFAULT 'open' AFTER category,
 ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER status;
 
+-- Ensure events table has unique key on event_name for safe re-runs
+ALTER TABLE events ADD UNIQUE KEY IF NOT EXISTS unique_event_name (event_name);
+
 -- Seed additional sample events if events table has few records
 INSERT INTO events (event_name, event_date, venue, description, category, status)
 VALUES 

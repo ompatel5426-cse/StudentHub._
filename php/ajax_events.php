@@ -21,6 +21,8 @@ $csrf_token = get_csrf_token();
     <link rel="stylesheet" href="../css/ajax_events.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <nav class="admin-nav">
         <div>
@@ -36,6 +38,8 @@ $csrf_token = get_csrf_token();
             <a href="logout.php" class="btn-logout">Logout ⏻</a>
         </div>
     </nav>
+    <main id="main-content">
+
 
     <div class="page-wrap">
 
@@ -51,7 +55,7 @@ $csrf_token = get_csrf_token();
             </div>
         </div>
 
-        <div id="toast" class="toast">
+        <div id="toast" class="toast" role="status" aria-live="polite">
             <span id="toastMsg"></span>
             <span style="cursor:pointer;" onclick="hideToast()">✕</span>
         </div>
@@ -86,15 +90,15 @@ $csrf_token = get_csrf_token();
             <!-- Table View -->
             <div class="table-box">
                 <table class="ajax-table">
-                    <thead>
+                    <th scope="col"ead>
                         <tr>
-                            <th style="width:40px;">#</th>
-                            <th>Poster</th>
-                            <th>Title & Details</th>
-                            <th>Category</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th style="text-align:center;">Actions</th>
+                            <th scope="col" style="width:40px;">#</th>
+                            <th scope="col">Poster</th>
+                            <th scope="col">Title & Details</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" style="text-align:center;">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="eventsTableBody">
@@ -189,5 +193,6 @@ $csrf_token = get_csrf_token();
 
     <!-- JAVASCRIPT FETCH LOGIC -->
     <script src="../js/ajax_events.js"></script>
+    </main>
 </body>
 </html>

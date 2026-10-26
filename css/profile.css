@@ -85,7 +85,7 @@
 }
 
 .btn-edit-profile {
-    background: #6C63FF;
+    background: #4F46E5;
     color: white;
     border: none;
     padding: 12px 24px;
@@ -255,7 +255,7 @@
     background: none;
     border: none;
     font-size: 24px;
-    color: #94a3b8;
+    color: #475569;
     cursor: pointer;
 }
 
@@ -282,8 +282,8 @@
 }
 
 .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
-    border-color: #6C63FF;
-    outline: none;
+    border-color: #4F46E5;
+    outline: 2px solid transparent;
     box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
 }
 
@@ -307,7 +307,7 @@
 }
 
 .btn-save {
-    background: #6C63FF;
+    background: #4F46E5;
     color: white;
     border: none;
     padding: 11px 26px;
@@ -342,3 +342,5 @@
     color: #b91c1c;
     border: 1px solid #fecaca;
 }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }

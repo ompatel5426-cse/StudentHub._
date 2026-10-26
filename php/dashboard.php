@@ -20,9 +20,15 @@ $student_id = (int)($_SESSION['student_id'] ?? 0);
 
 // Check if marks are added for this student
 $marks_count = 0;
-$m_chk = $conn->query("SELECT COUNT(*) FROM student_marks WHERE student_id = $student_id");
-if ($m_chk) {
-    $marks_count = (int)$m_chk->fetch_row()[0];
+$mc_stmt = $conn->prepare("SELECT COUNT(*) FROM student_marks WHERE student_id = ?");
+if ($mc_stmt) {
+    $mc_stmt->bind_param("i", $student_id);
+    $mc_stmt->execute();
+    $m_res = $mc_stmt->get_result();
+    if ($m_res) {
+        $marks_count = (int)$m_res->fetch_row()[0];
+    }
+    $mc_stmt->close();
 }
 
 // Check for upcoming open events
@@ -42,6 +48,8 @@ if ($e_chk && $e_row = $e_chk->fetch_assoc()) {
     <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <!-- ================= NAVBAR ================= -->
     <nav class="dash-nav">
@@ -68,7 +76,7 @@ if ($e_chk && $e_row = $e_chk->fetch_assoc()) {
     </nav>
 
     <!-- ================= DASHBOARD BODY ================= -->
-    <main class="dashboard-container">
+    <main id="main-content" class="dashboard-container">
 
         <!-- Welcome Banner -->
         <section class="welcome-card">

@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         // Query user with prepared statement
         $stmt = $conn->prepare(
-            "SELECT student_id, name, email, mobile, course, year, gender, role, status, password 
+            "SELECT student_id, name, email, mobile, course, year, gender, role, status, enrollment_no, password 
              FROM students 
              WHERE email = ? 
              LIMIT 1"
@@ -128,6 +128,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
 
     <!-- ================= HEADER ================= -->
     <header>
@@ -144,6 +146,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <a href="login.php" style="color:#6C63FF; font-weight:700;">Login</a>
         </nav>
     </header>
+    <main id="main-content">
+
 
     <!-- ================= LOGIN SECTION ================= -->
     <section class="login-section">
@@ -175,17 +179,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <input type="hidden" name="csrf_token" value="<?= e(get_csrf_token()) ?>">
 
-                <p>Email Address</p>
+                <label for="login_email" style="display:block; font-size:13px; font-weight:600; color:#334155; margin-bottom:6px;">Email Address</label>
                 <input
                     type="email"
-                    name="email"
-                    placeholder="Enter your email"
+                    name="email" id="login_email" placeholder="Enter your email" aria-required="true"
                     value="<?= isset($email) ? e($email) : '' ?>"
                     required
                     autocomplete="username"
                 >
 
-                <p>Password</p>
+                <label for="login_password" style="display:block; font-size:13px; font-weight:600; color:#334155; margin-bottom:6px; margin-top:14px;">Password</label>
                 <input
                     type="password"
                     name="password"
@@ -198,7 +201,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <label>
                         <input type="checkbox" name="remember" value="1"> Remember Me
                     </label>
-                    <a href="#">Forgot Password?</a>
+                    <a href="forgot_password.php">Forgot Password?</a>
                 </div>
 
                 <button type="submit">
@@ -234,5 +237,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
     </footer>
 
+    </main>
 </body>
 </html>

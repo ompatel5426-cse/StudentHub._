@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS events (
     event_name VARCHAR(150) NOT NULL,
     event_date DATE NOT NULL,
     venue VARCHAR(150),
-    description TEXT
+    description TEXT,
+    UNIQUE KEY unique_event_name (event_name)
 ) ENGINE=InnoDB;
 
 
@@ -69,8 +70,8 @@ VALUES
     'Computer Science Engineering',
     '3rd Year',
     'Male',
-    'test123'
-);
+    '$2y$10$i8Avy4xPlJj4aoLSBsm/5ek9T7RyC6IzAfLZ6E5N4t46ESF7/1g8C'
+) ON DUPLICATE KEY UPDATE password = VALUES(password);
 
 
 INSERT INTO events

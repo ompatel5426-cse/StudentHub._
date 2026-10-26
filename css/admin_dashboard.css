@@ -12,11 +12,11 @@ nav.admin-nav {
     box-shadow: 0 4px 15px rgba(0,0,0,0.15); position: sticky; top: 0; z-index: 100;
 }
 .brand-text { font-size: 24px; font-weight: 700; color: #818cf8; }
-.admin-tag { background: #ef4444; color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; margin-left: 8px; }
+.admin-tag { background: #dc2626; color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; margin-left: 8px; }
 .admin-nav-links { display: flex; align-items: center; gap: 20px; }
 .admin-nav-links a { color: #cbd5e1; text-decoration: none; font-size: 14px; font-weight: 500; }
 .admin-nav-links a:hover { color: white; }
-.btn-logout { background: #ef4444 !important; color: white !important; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
+.btn-logout { background: #dc2626 !important; color: white !important; padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
 
 .admin-container { padding: 40px 8%; max-width: 1350px; margin: 0 auto; }
 
@@ -30,7 +30,7 @@ nav.admin-nav {
 .top-banner p { color: #c7d2fe; font-size: 14px; }
 
 .btn-action-primary {
-    background: #6C63FF; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none;
+    background: #4F46E5; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none;
     font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 6px;
 }
 .btn-action-outline {
@@ -77,7 +77,7 @@ nav.admin-nav {
 .chart-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 13px; }
 .chart-label { width: 110px; font-weight: 600; color: #475569; }
 .chart-bar-container { flex: 1; height: 24px; background: #f1f5f9; border-radius: 6px; overflow: hidden; display: flex; }
-.chart-bar-fill { height: 100%; background: linear-gradient(90deg, #6C63FF, #818cf8); border-radius: 6px; transition: width 0.5s ease; }
+.chart-bar-fill { height: 100%; background: linear-gradient(90deg, #4F46E5, #818cf8); border-radius: 6px; transition: width 0.5s ease; }
 .chart-val { width: 35px; text-align: right; font-weight: 700; color: #0f172a; }
 
 /* Tables */
@@ -93,3 +93,5 @@ table.dash-table tr:hover { background: #f8fafc; }
 
 .badge-act { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; font-family: monospace; }
 .act-log { background: #dbeafe; color: #1e40af; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }
